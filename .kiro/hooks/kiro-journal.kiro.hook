@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Kiro usage journal",
+  "description": "When a spec or steering file changes, append a dated one-line note to docs/kiro-journal.md describing what changed and which Kiro feature was used, to feed the hackathon write-up.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [".kiro/specs/**/*.md", ".kiro/steering/*.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A Kiro spec or steering file was just edited. Append one dated bullet to docs/kiro-journal.md summarising what changed and which Kiro feature (spec, steering, hook, MCP, Crew, PBT) it relates to. Keep it to one line. Do not modify any other file."
+  }
+}
