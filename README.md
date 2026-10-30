@@ -1,11 +1,11 @@
-# 🎃 Kiroween26
+# 🎃 Green Screen Séance
 
 My entry for [Kiroween 2026](https://kiroween.devpost.com/) — built with [Kiro](https://kiro.dev) between 30 Oct and 4 Dec 2026.
 
-> **Status:** project started 30 Oct 2026. Category and concept being finalised.
+> **Status:** project started 30 Oct 2026. Category chosen; build in progress.
 
 ## Category
-_TBC — Resurrection / Frankenstein / Skeleton Crew / Costume Contest_
+**Frankenstein** — a 1970s COBOL/3270 green screen stitched to modern AI agents via MCP.
 
 ## What it does
 _Coming soon._
