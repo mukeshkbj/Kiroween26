@@ -18,14 +18,13 @@ The `/.kiro` directory at the root of this repo is intentionally committed (it i
 
 | Kiro feature | Where | Notes |
 |---|---|---|
-| Steering docs | `.kiro/steering/` | product, tech and structure guidance |
-| Specs | `.kiro/specs/` | requirements → design → tasks per feature |
-| Agent hooks | `.kiro/hooks/` | automated workflows |
+| Steering docs | `.kiro/steering/` | _TBC_ |
+| Specs | `.kiro/specs/` | _TBC_ |
+| Agent hooks | `.kiro/hooks/` | _TBC_ |
 | MCP | `.kiro/settings/mcp.json` | _TBC_ |
 | Kiro Crew / custom agents | _TBC_ | |
 | Property-based testing | _TBC_ | |
 
-A running log of Kiro usage is kept in [`docs/kiro-journal.md`](docs/kiro-journal.md) to feed the final write-up.
 
 ## Licence
 [MIT](LICENSE)
