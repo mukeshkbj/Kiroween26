@@ -1,0 +1,13 @@
+services:
+  legacy:
+    # TK4- (MVS 3.8j on Hercules). Auto-IPLs on start; 3270 becomes reachable
+    # after ~1 minute. Extended by legacy/Dockerfile to bake in the Séance
+    # Insurance app (see the legacy-environment spec).
+    image: skunklabz/tk4-hercules:latest
+    container_name: gss-legacy
+    ports:
+      - "${TN3270_PORT:-3270}:3270"
+      - "${HERCULES_CONSOLE_PORT:-8038}:8038"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped

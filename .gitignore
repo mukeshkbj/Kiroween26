@@ -6,3 +6,21 @@ build/
 *.log
 .DS_Store
 # NOTE: never ignore .kiro/ — required by Kiroween rules
+
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+*.pyc
+.hypothesis/
+
+# Binaries — downloaded by scripts/setup-s3270.ps1, never committed
+.tools/
+
+# Throwaway probe scripts
+bridge/_*_probe.py
+bridge/_diff_probe.py
+bridge/_raw_probe.py
+bridge/_s3270_probe.py
+bridge/_probe.py
