@@ -97,7 +97,21 @@ An MCP tool can be called by the model. So `confirm_action(action_id)` being cal
 | `client-approval` | **Explicit opt-in only; never a silent fallback.** The MCP client's own per-call approval prompt (Kiro's tool approval) is the gate. Requires `confirm_action` to NOT be auto-approved; `.kiro/settings/mcp.json` lists only `read_screen`, `list_fields`, `get_audit_log` in `autoApprove`. | not enforceable by the server, so the audit records `confirmed_by: client-approval(weakest):<client>` and relies on config |
 | `oob` (**the demo path**) | Our own seance-agent plus web UI use this: the UI confirmation modal is the human gate. Confirmation comes from a separate local channel (the web UI's backend calling a local confirm endpoint). `confirm_action` over MCP only reports status. | no oob channel is attached |
 
-Elicitation in `mcp` 2.x: the `Resolve`/`Elicit` mechanism is the SDK's preferred way and carries the question over whichever transport era the connection supports; `ctx.elicit()` works for legacy connections. Task 3.3 verifies which one Kiro's client actually answers and picks the implementation accordingly; the choice is isolated in `safety.py` behind a `Confirmer` interface so the rest is unaffected.
+#### Elicitation spike results (task 3.3, `mcp==2.3.0`, in-process `Client(server)`)
+| Client | Negotiated | Result |
+|---|---|---|
+| elicitation callback, accepts | 2026-07-28 | `AcceptedElicitation(data=Confirm(confirm=True))`; key sent |
+| elicitation callback, declines / cancels | 2026-07-28 | `DeclinedElicitation` / `CancelledElicitation`; no key |
+| elicitation callback, accepts, `mode="legacy"` | 2025-11-25 | same as above (resolver works on both eras) |
+| no elicitation capability | either | a bare `Elicit` makes the call raise; the tool body never runs (fail-closed, but as an unhandled error) |
+
+Decisions that follow:
+- **Use a resolver** (`Annotated[..., Resolve(fn)]`), not `ctx.elicit()`. `ctx.elicit()` is a server-to-client request that does not exist on 2026-07-28 connections. The resolved parameter does not appear in the tool's input schema, so the **model cannot supply a confirmation itself**.
+- **Check capability in the resolver.** It reads `ctx.client_capabilities.elicitation`. When that is absent it returns a typed `ConfirmationUnavailable` value instead of `Elicit`, so the tool can answer cleanly with `confirmation_unavailable` and audit it, rather than crash.
+- **Trap found:** a value a resolver returns directly reaches the tool **wrapped as `AcceptedElicitation`** (`AcceptedElicitation(data=ConfirmationUnavailable(...))`). A naive `case AcceptedElicitation():` would turn "could not ask the user" into "the user accepted" and commit. The tool therefore commits only on `AcceptedElicitation` whose `data` is exactly a `Confirm` with `confirm=True`. Everything else is a refusal. A dedicated unit test covers this.
+- **Resolvers must be side-effect free.** On 2026-07-28 the resolver runs once per round trip (twice for one elicited call). It only looks things up; all auditing and state changes happen in the tool body.
+- **Kiro IDE support is not documented.** kiro.dev documents elicitation forms and says the *CLI* supports it from 2.34; the IDE is not stated. Task 6.4 checks this live. If the IDE cannot elicit, the server stays read-only for Kiro, as decided in review. It never falls back silently.
+- Client identity for `confirmed_by` comes from `ctx.session.client_params.client_info.name` when the client sends it (optional on 2026-07-28), else `unknown`.
 
 Layered under all modes is the **operator switch** `SEANCE_ALLOW_COMMIT` (default off, REQ-012a): even a confirmed action is blocked while off. It lives in the server's process environment, so no tool argument can flip it.
 
