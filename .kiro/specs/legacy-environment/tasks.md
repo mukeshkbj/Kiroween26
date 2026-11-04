@@ -4,7 +4,7 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 
 ## 1. Container baseline
 - [x] 1.1 `legacy/docker-compose.yml`: `legacy` service from a custom `gss-legacy` image; ports from `.env` (defaults 3270/8038).
-- [ ] 1.2 `legacy/Dockerfile`: extend `skunklabz/tk4-hercules`; layer in our app source + setup scripts (not KICKS).
+- [x] 1.2 `legacy/Dockerfile`: extend `skunklabz/tk4-hercules`; layer in our app source + setup scripts (not KICKS).
 - [x] 1.3 `.env.example` with `TN3270_HOST`, `TN3270_PORT`, `HERCULES_CONSOLE_PORT`, `MVS_USER`, `MVS_PASSWORD`. Gitignore `.env`.
 - [x] 1.4 Smoke test: `docker-compose up` reaches a 3270 port that responds (TCP open). Cold-IPL time noted.
 
