@@ -38,8 +38,8 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 
 ## 6. Live + Kiro (REQ-003, REQ-020)
 - [x] 6.1 Integration test against `gss-legacy` via in-process `Client(server)`: connect, read the welcome screen, list fields, CLEAR executes, `fill_field` + ENTER returns a pending action and leaves the screen unchanged, confirm with a test confirmer executes it, disconnect. Never completes a TSO logon. Must pass 3 runs in a row.
-- [ ] 6.2 Add the server to `.kiro/settings/mcp.json`; `autoApprove` only `read_screen`, `list_fields`, `get_audit_log`. Verify Kiro lists the tools.
-- [ ] 6.3 Hand-written key policy for the demo app's screens (read-only keys per `screen_id`), so enquiry and navigation do not need confirmation while updates still do. Spirit-map replaces it later.
+- [ ] 6.2 Add the server to `.kiro/settings/mcp.json`; `autoApprove` only `read_screen`, `list_fields`, `get_audit_log`. Verify Kiro lists the tools. **Config written to `mcp-server/kiro-mcp.json`** (a permission rule blocks the agent from writing `.kiro/settings/`; the user copies it in). The launch line was verified from the repo root against live TK4-: 7 tools listed, welcome screen read, ENTER pending, confirm refused `read_only`, all audited. Still to check: whether Kiro wants raw or `mcp_<server>_<tool>` names in `autoApprove`.
+- [ ] 6.3 **Deferred: the demo app does not exist yet (KICKS parked).** Finding for when it does: `RealBridgePort` builds `Bridge` without `volatile_regions`, so a screen with a paint-time clock (the TK4- welcome screen) gets a new `screen_id` on every repaint and a per-`screen_id` key policy would not match it. Pass volatile regions through settings when the policy lands. Hand-written key policy for the demo app's screens (read-only keys per `screen_id`), so enquiry and navigation do not need confirmation while updates still do. Spirit-map replaces it later.
 - [ ] 6.4 Drive the green screen from Kiro (read the welcome screen, find the logon field) and capture a screenshot plus one surprise in `docs/kiro-journal.md` for the write-up.
 
 ## 7. Hooks and docs

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "green-screen-seance": {
+      "command": "mcp-server/.venv/Scripts/python.exe",
+      "args": ["-m", "seance_mcp"],
+      "env": {
+        "TN3270_HOST": "127.0.0.1",
+        "TN3270_PORT": "3270",
+        "SEANCE_ALLOW_COMMIT": "0",
+        "SEANCE_CONFIRM_MODE": "elicit",
+        "AUDIT_LOG_PATH": "docs/audit/kiro-audit.jsonl"
+      },
+      "disabled": false,
+      "autoApprove": ["read_screen", "list_fields", "get_audit_log"]
+    }
+  }
+}
