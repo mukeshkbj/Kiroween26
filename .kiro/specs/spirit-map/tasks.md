@@ -10,9 +10,9 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 0.3 Contract examples exist under `docs/contracts/examples/` (tool pack, key policy, SpiritMapView).
 
 ## 1. Scaffold (by 7 Nov)
-- [ ] 1.1 `spirit-map/` package (`pyproject.toml`, Python >=3.12, `src/seance_spirit/`). Pin with `==`: `pydantic`, `anyio`, `hypothesis`, `pytest`, `jsonschema`; install `../bridge` and `../mcp-server` editable. `anthropic` and `boto3` as optional extras, pinned.
-- [ ] 1.2 `.env.example` (LLM vars from contracts section 9, `GSS_LIVE_OK=0`), `README.md` with the "LLM names, never decides safety" principle up front.
-- [ ] 1.3 Register markers `integration` and `llm`; both skip by default.
+- [x] 1.1 `spirit-map/` package (`pyproject.toml`, Python >=3.12, `src/seance_spirit/`). Pin with `==`: `pydantic`, `anyio`, `hypothesis`, `pytest`, `jsonschema`; install `../bridge` and `../mcp-server` editable. `anthropic` and `boto3` as optional extras, pinned.
+- [x] 1.2 `.env.example` (LLM vars from contracts section 9, `GSS_LIVE_OK=0`), `README.md` with the "LLM names, never decides safety" principle up front.
+- [x] 1.3 Register markers `integration` and `llm`; both skip by default.
 
 ## 2. Policy first (REQ-001 to REQ-004, REQ-033)
 - [ ] 2.1 `seed.py`: `ExploreSeed` with validation (seed that fills a hidden/credential field is an error; unknown keys are errors).
