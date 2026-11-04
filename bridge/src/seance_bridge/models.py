@@ -93,4 +93,5 @@ class ScreenModel(BaseModel):
     rows: tuple[str, ...]     # 24 strings of length 80
     cursor: tuple[int, int]
     fields: tuple[Field, ...]
-    screen_id: str            # stable hash; ignores unprotected/hidden values
+    screen_id: str            # stable hash; ignores unprotected/hidden/volatile
+    volatile: tuple[int, ...] = ()   # flat positions masked out of screen_id

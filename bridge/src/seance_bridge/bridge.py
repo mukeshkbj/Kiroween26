@@ -7,13 +7,16 @@ press flags commit-capable keys via the returned action metadata.
 from __future__ import annotations
 
 import re
+import time
+from collections.abc import Sequence
 
 from .errors import FieldValidationError
 from .keys import COMMIT_CAPABLE, Key
-from .models import COLS, Field, ScreenModel
-from .parser import ScreenParser
+from .models import BUFFER_SIZE, COLS, Field, ScreenModel
+from .parser import ScreenParser, diff_positions
 from .session import Session
 
+_MAX_REPAINT_RETRIES = 3
 _NUMERIC_RE = re.compile(r"^[+-]?\d+(\.\d+)?$")
 
 
@@ -32,10 +35,22 @@ class Bridge:
         port: int = 3270,
         wait_timeout_ms: int = 5000,
         session: Session | None = None,
+        volatile_regions: Sequence[tuple[int, int, int]] = (),
+        volatile_gap_s: float = 0.15,
     ):
+        """``volatile_regions``: known (row, col, length) spans to always exclude
+        from screen_id, for stamps that are fixed at paint time (so two reads
+        agree) but differ between repaints, e.g. the TK4- welcome Date/Time."""
         self._host = host
         self._port = port
         self._timeout_s = wait_timeout_ms / 1000.0
+        self._volatile_gap_s = volatile_gap_s
+        self._static_volatile = frozenset(
+            r * COLS + c + i
+            for r, c, n in volatile_regions
+            for i in range(n)
+            if 0 <= r * COLS + c + i < BUFFER_SIZE
+        )
         self._parser = ScreenParser()
         self._session = session or Session()
 
@@ -54,7 +69,23 @@ class Bridge:
     # -- operations ------------------------------------------------------
 
     def read_screen(self) -> ScreenModel:
-        return self._parser.parse(self._session.read_buffer())
+        """Read the screen twice; positions that changed are volatile.
+
+        Volatile positions (a live clock, say) stay visible in ``rows`` but are
+        excluded from ``screen_id``. If the field layout differs between the two
+        reads the screen was mid-repaint, so we read again (bounded).
+        """
+        first = self._session.read_buffer()
+        for _ in range(_MAX_REPAINT_RETRIES):
+            time.sleep(self._volatile_gap_s)
+            second = self._session.read_buffer()
+            if second.field_starts == first.field_starts:
+                break
+            first = second
+        else:
+            second = self._session.read_buffer()
+        volatile = diff_positions(first, second) | self._static_volatile
+        return self._parser.parse(second, volatile)
 
     def fill_field(self, field_ref: int | tuple[int, int], value: str) -> ScreenModel:
         screen = self.read_screen()

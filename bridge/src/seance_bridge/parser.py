@@ -22,6 +22,15 @@ from .models import COLS, ROWS, BUFFER_SIZE, Buffer, Field, FieldAttrs, FieldSta
 _PLACEHOLDER = "\x00"
 
 
+def diff_positions(a: Buffer, b: Buffer) -> frozenset[int]:
+    """Flat positions whose character differs between two reads of one screen.
+
+    Used to find volatile regions (live clock, date). Only text is compared;
+    attribute/layout changes mean a different screen, not a volatile region.
+    """
+    return frozenset(i for i, (x, y) in enumerate(zip(a.text, b.text)) if x != y)
+
+
 @dataclass(frozen=True)
 class _FieldRegion:
     index: int
@@ -33,7 +42,8 @@ class _FieldRegion:
 class ScreenParser:
     """Turn a decoded Buffer into a structured, deterministic ScreenModel."""
 
-    def parse(self, buffer: Buffer) -> ScreenModel:
+    def parse(self, buffer: Buffer, volatile: frozenset[int] = frozenset()) -> ScreenModel:
+        """Parse a Buffer. ``volatile`` = flat positions excluded from screen_id."""
         text = buffer.text
         if len(text) != BUFFER_SIZE:
             raise ValueError(
@@ -90,12 +100,14 @@ class ScreenParser:
             )
 
         rows = tuple("".join(grid[i * COLS:(i + 1) * COLS]) for i in range(ROWS))
-        screen_id = self._screen_id(text, regions)
+        volatile = frozenset(p for p in volatile if 0 <= p < BUFFER_SIZE)
+        screen_id = self._screen_id(text, regions, volatile)
         return ScreenModel(
             rows=rows,
             cursor=(buffer.cursor_row, buffer.cursor_col),
             fields=tuple(fields),
             screen_id=screen_id,
+            volatile=tuple(sorted(volatile)),
         )
 
     # --- internals -------------------------------------------------------
@@ -114,11 +126,16 @@ class ScreenParser:
             regions.append(_FieldRegion(index=i, begin=begin, end=end, attrs=fs.attrs))
         return regions
 
-    def _screen_id(self, text: str, regions: list[_FieldRegion]) -> str:
-        # Positions excluded from the hash: anything a user can type (unprotected)
-        # or that is hidden (secret). Including these would make screen_id depend
-        # on typed values or leak secrets into the hash.
+    def _screen_id(
+        self, text: str, regions: list[_FieldRegion], volatile: frozenset[int]
+    ) -> str:
+        # Positions excluded from the hash: anything a user can type (unprotected),
+        # anything hidden (secret), and volatile positions (clock/date text that
+        # changes between reads). Including these would make screen_id depend on
+        # typed values / the clock, or leak secrets into the hash.
         excluded = [False] * BUFFER_SIZE
+        for p in volatile:
+            excluded[p] = True
         for r in regions:
             if (not r.attrs.protected) or r.attrs.hidden:
                 for p in range(r.begin, r.end):
@@ -129,12 +146,13 @@ class ScreenParser:
         for p in range(BUFFER_SIZE):
             parts.append(_PLACEHOLDER if excluded[p] else text[p])
         # Append the field structure so layout/attribute changes are detected even
-        # when the visible text is identical.
+        # when the visible text is identical. MDT is deliberately NOT included:
+        # typing into a field sets it, which would change the id (REQ-006).
         for r in regions:
             a = r.attrs
             parts.append(
                 f"|{r.begin}:{int(a.protected)},{int(a.numeric)},"
-                f"{int(a.hidden)},{int(a.intensified)},{int(a.mdt)}"
+                f"{int(a.hidden)},{int(a.intensified)}"
             )
         return hashlib.sha256("".join(parts).encode("utf-8")).hexdigest()
 

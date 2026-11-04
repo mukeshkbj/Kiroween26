@@ -69,20 +69,25 @@ def arbitrary_buffer(draw) -> Buffer:
 
 
 def change_unprotected_data(buf: Buffer) -> Buffer:
-    """Return a copy with every unprotected, non-hidden field's data changed.
+    """Return a copy as if the user had typed into every unprotected field.
 
-    Used to prove screen_id is invariant under typed-value changes.
+    Real typing changes the field's data AND sets its MDT (modified) bit, so we
+    do both. Used to prove screen_id is invariant under typed-value changes.
     """
     text = list(buf.text)
     starts = sorted(buf.field_starts, key=lambda f: f.pos)
+    flipped: list[FieldStart] = []
     for i, fs in enumerate(starts):
-        if not fs.attrs.protected and not fs.attrs.hidden:
-            begin, end = _data_region(starts, i)
-            for p in range(begin, end):
-                text[p] = "Q" if text[p] != "Q" else "Z"
+        if not fs.attrs.protected:
+            if not fs.attrs.hidden:
+                begin, end = _data_region(starts, i)
+                for p in range(begin, end):
+                    text[p] = "Q" if text[p] != "Q" else "Z"
+            fs = FieldStart(pos=fs.pos, attrs=fs.attrs.model_copy(update={"mdt": not fs.attrs.mdt}))
+        flipped.append(fs)
     return Buffer(
         text="".join(text),
-        field_starts=buf.field_starts,
+        field_starts=tuple(flipped),
         cursor_row=buf.cursor_row,
         cursor_col=buf.cursor_col,
     )

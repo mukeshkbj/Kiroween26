@@ -9,14 +9,14 @@ description = "3270 screen-bridge: turns a 3270 screen into a structured, determ
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "pydantic>=2.7,<3",
+    "pydantic==2.14.2",
 ]
 
 [project.optional-dependencies]
 # The session layer drives s3270 directly via subprocess (stdlib only).
 dev = [
-    "pytest>=8.2,<9",
-    "hypothesis>=6.100,<7",
+    "pytest==8.4.2",
+    "hypothesis==6.170.14",
 ]
 
 [tool.setuptools.packages.find]

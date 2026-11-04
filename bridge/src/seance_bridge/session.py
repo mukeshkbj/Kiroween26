@@ -1,25 +1,25 @@
 """Session: a thin subprocess wrapper around s3270.
 
 s3270 runs in peer-script mode: it reads commands from stdin and writes responses
-to stdout. Every command completes with a two-line message -- a status line, then
-``ok`` or ``error``. Data-returning commands (ReadBuffer, Query) write their data
-first, then the status line, then ``ok``/``error``.
+to stdout. Every command completes with a status line, then ``ok`` or ``error``.
+Data-returning commands (ReadBuffer, Ascii, Wait errors) emit their data lines
+first, each prefixed with ``data: ``; the status line is never prefixed.
 
 The status line has 12 blank-separated fields; we use field 0 (keyboard: U/L/E)
-and fields 8-9 (cursor row/col, 1-based in x3270).
-
-NOTE: this layer needs a real s3270 binary + a reachable 3270 host, so it is only
-exercised by the integration test (skipped when TK4- is down). The exact status
-field offsets and cursor base are confirmed against real TK4- then.
+and fields 8-9 (cursor row/col, **0-origin**, same base as MoveCursor).
 """
 from __future__ import annotations
 
+import math
 import os
 import subprocess
 import time
 
 from .errors import KeyboardTimeoutError, SessionError
+from .models import Buffer
 from .readbuffer import parse_readbuffer_ascii
+
+_DATA_PREFIX = "data: "
 
 
 def _resolve_s3270_path(explicit: str | None) -> str:
@@ -33,12 +33,24 @@ def _resolve_s3270_path(explicit: str | None) -> str:
     env = os.environ.get("S3270_PATH")
     if env and os.path.isfile(env):
         return env
-    # repo root is three dirs above this file (bridge/src/seance_bridge/session.py)
+    # repo root is four dirs above this file (bridge/src/seance_bridge/session.py)
     repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     candidate = os.path.join(repo_root, ".tools", "s3270.exe")
     if os.path.isfile(candidate):
         return candidate
     return "s3270"
+
+
+def quote_string_arg(text: str) -> str:
+    """Return ``text`` as a double-quoted s3270 argument.
+
+    Backslash and double quote are escaped. Control characters are rejected:
+    a raw newline would end the command line (command injection into the s3270
+    script channel) and ``\\n`` style escapes would press keys.
+    """
+    if any(ord(c) < 0x20 or ord(c) == 0x7F for c in text):
+        raise SessionError("control characters are not allowed in typed text")
+    return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
 class Session:
@@ -48,13 +60,21 @@ class Session:
 
     # -- lifecycle -------------------------------------------------------
 
-    def connect(self, host: str, port: int = 3270) -> None:
+    def connect(self, host: str, port: int = 3270, settle_timeout_s: float = 20.0) -> None:
+        """Connect and wait for a stable first screen.
+
+        TK4- paints the Hercules banner first and moves on to the VTAM welcome
+        screen a moment later, so we (1) wait for an input field, then (2) wait
+        until the screen stops changing. A host whose first screen has no input
+        field (banner only) is legitimate, so an InputField timeout is not fatal.
+        """
         try:
             self._proc = subprocess.Popen(
                 [self._path],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 text=True,
+                encoding="latin-1",
                 bufsize=1,
             )
         except FileNotFoundError as exc:
@@ -63,6 +83,8 @@ class Session:
         _, _, ok = self._exec(f"Connect({host}:{port})")
         if not ok:
             raise SessionError(f"Connect({host}:{port}) failed")
+        self._exec(f"Wait({math.ceil(settle_timeout_s)},InputField)")
+        self.wait_stable(settle_timeout_s)
 
     def disconnect(self) -> None:
         if self._proc is None:
@@ -83,37 +105,43 @@ class Session:
     # -- low-level protocol ---------------------------------------------
 
     def _exec(self, command: str) -> tuple[list[str], str, bool]:
+        """Run one command. Returns (data lines without prefix, status, ok)."""
         proc = self._proc
         if proc is None or proc.stdin is None or proc.stdout is None:
             raise SessionError("session not connected")
-        proc.stdin.write(command + "\n")
-        proc.stdin.flush()
-        lines: list[str] = []
+        if "\n" in command or "\r" in command:
+            raise SessionError("command must be a single line")
+        try:
+            proc.stdin.write(command + "\n")
+            proc.stdin.flush()
+        except OSError as exc:
+            raise SessionError("s3270 pipe closed") from exc
+        data: list[str] = []
+        status = ""
         while True:
             line = proc.stdout.readline()
             if not line:
                 raise SessionError("s3270 closed unexpectedly")
-            line = line.rstrip("\n")
+            line = line.rstrip("\r\n")
             if line == "ok":
-                status = lines[-1] if lines else ""
-                return lines[:-1], status, True
+                return data, status, True
             if line == "error":
-                status = lines[-1] if lines else ""
-                return lines[:-1], status, False
-            lines.append(line)
+                return data, status, False
+            if line.startswith(_DATA_PREFIX):
+                data.append(line[len(_DATA_PREFIX):])
+            else:
+                status = line  # the (unprefixed) status line precedes ok/error
 
     @staticmethod
     def _parse_status(status: str) -> tuple[str, int, int]:
-        """Return (keyboard_state, cursor_row_0based, cursor_col_0based)."""
+        """Return (keyboard_state, cursor_row, cursor_col), cursor 0-origin."""
         fields = status.split()
         kb = fields[0] if fields else "L"
         crow = ccol = 0
-        # x3270 status: fields 8 and 9 are cursor row/col (1-based); confirm at
-        # integration time. Fail soft to (0,0) if the shape differs.
         if len(fields) >= 10:
             try:
-                crow = max(0, int(fields[8]) - 1)
-                ccol = max(0, int(fields[9]) - 1)
+                crow = max(0, int(fields[8]))
+                ccol = max(0, int(fields[9]))
             except ValueError:
                 pass
         return kb, crow, ccol
@@ -121,40 +149,60 @@ class Session:
     # -- operations ------------------------------------------------------
 
     def wait_unlock(self, timeout_s: float) -> None:
-        """Poll until the keyboard unlocks, or raise KeyboardTimeoutError.
+        """Block in s3270 ``Wait(Unlock)``; raise KeyboardTimeoutError on expiry.
 
         Never resends a key: an ambiguous acknowledgement is a safe failure.
         """
-        deadline = time.monotonic() + timeout_s
-        while time.monotonic() < deadline:
-            _, status, _ = self._exec("Query")
-            kb, _, _ = self._parse_status(status)
-            if kb == "U":
-                return
-            time.sleep(0.05)
-        raise KeyboardTimeoutError("keyboard still locked after key press; not resending")
+        _, _, ok = self._exec(f"Wait({max(1, math.ceil(timeout_s))},Unlock)")
+        if not ok:
+            raise KeyboardTimeoutError("keyboard still locked after key press; not resending")
 
-    def read_buffer(self):
-        """Read the screen and return a decoded Buffer (cursor from status)."""
+    def _raw_buffer(self) -> tuple[list[str], str]:
         data, status, ok = self._exec("ReadBuffer(Ascii)")
         if not ok:
             raise SessionError(f"ReadBuffer failed: {status}")
+        return data, status
+
+    def wait_stable(self, timeout_s: float, interval_s: float = 0.4, quiet_reads: int = 3) -> None:
+        """Wait until the raw screen is identical for ``quiet_reads`` reads in a row."""
+        deadline = time.monotonic() + timeout_s
+        last: list[str] | None = None
+        same = 0
+        while time.monotonic() < deadline:
+            data, _ = self._raw_buffer()
+            same = same + 1 if data == last else 1
+            if same >= quiet_reads:
+                return
+            last = data
+            time.sleep(interval_s)
+        # Never settled (e.g. a screen that animates). Not fatal: callers that
+        # care mask volatile regions instead.
+
+    def read_buffer(self) -> Buffer:
+        """Read the screen and return a decoded Buffer (cursor from status)."""
+        data, status = self._raw_buffer()
         _, crow, ccol = self._parse_status(status)
-        return parse_readbuffer_ascii("\n".join(data), cursor_row=crow, cursor_col=ccol)
+        return parse_readbuffer_ascii(data, cursor_row=crow, cursor_col=ccol)
+
+    def ascii_rows(self, rows: int = 24, cols: int = 80) -> list[str]:
+        """Rows as s3270 itself renders them via ``Ascii()`` (reference for tests)."""
+        data, status, ok = self._exec("Ascii()")
+        if not ok:
+            raise SessionError(f"Ascii failed: {status}")
+        padded = [line.ljust(cols)[:cols] for line in data[:rows]]
+        return padded + [" " * cols] * (rows - len(padded))
 
     def send_string(self, text: str) -> None:
-        # Escape characters that are special in the x3270 action grammar. A full
-        # escape is confirmed at integration time; this covers the common case.
-        safe = text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
-        _, _, ok = self._exec(f"String({safe})")
+        arg = quote_string_arg(text)
+        _, _, ok = self._exec(f"String({arg})")
         if not ok:
-            raise SessionError(f"String({safe!r}) failed")
+            raise SessionError("String() failed")
 
     def cursor_move(self, row: int, col: int) -> None:
-        # x3270 cursor is 1-based; confirm at integration time.
-        _, _, ok = self._exec(f"CursorMove({row + 1},{col + 1})")
+        """Move the cursor; ``MoveCursor(row,col)`` is 0-origin."""
+        _, _, ok = self._exec(f"MoveCursor({row},{col})")
         if not ok:
-            raise SessionError(f"CursorMove({row},{col}) failed")
+            raise SessionError(f"MoveCursor({row},{col}) failed")
 
     def press_key(self, key: str, timeout_s: float = 5.0) -> None:
         _, _, ok = self._exec(key)

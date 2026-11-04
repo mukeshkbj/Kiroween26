@@ -40,31 +40,43 @@ def _attrs_from_c0(mask: int) -> FieldAttrs:
     )
 
 
+_DATA_PREFIX = "data: "
+
+
 def _hex_to_char(code: int) -> str:
     if code == 0x00:
         return " "  # NULL displays as a blank
     if 0x20 <= code <= 0x7E:
         return chr(code)
+    if 0xA0 <= code <= 0xFF:
+        return chr(code)  # same Latin-1 glyph that Ascii() shows for this code
     return " "
 
 
 def parse_readbuffer_ascii(
-    output: str,
+    output: str | list[str],
     cursor_row: int = 0,
     cursor_col: int = 0,
     rows: int = 24,
     cols: int = 80,
 ) -> Buffer:
-    """Parse s3270 ``ReadBuffer(Ascii)`` text into a Buffer."""
+    """Parse s3270 ``ReadBuffer(Ascii)`` output into a Buffer.
+
+    Line-aware: output line N is screen row N and starts at position N*cols, so a
+    short, long or odd line can never shift any other row. A leading ``data: ``
+    prefix (s3270 peer-script mode) is stripped if still present. ``output`` may
+    be a list of lines or one newline-joined string.
+    """
     size = rows * cols
     grid = [" "] * size
     field_starts: list[FieldStart] = []
 
-    # ReadBuffer dumps one screen row per output line. Each line's tokens fill
-    # that row left-to-right; a short row leaves the remainder blank.
-    for row_index, line in enumerate(output.splitlines()):
+    lines = output.split("\n") if isinstance(output, str) else list(output)
+    for row_index, line in enumerate(lines):
         if row_index >= rows:
             break
+        if line.startswith(_DATA_PREFIX):
+            line = line[len(_DATA_PREFIX):]
         col = 0
         for tok in line.split():
             if col >= cols:

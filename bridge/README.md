@@ -9,9 +9,7 @@ project idea works.
 
 - `models.py` — `Buffer`, `Field`, `ScreenModel`, `FieldAttrs`.
 - `parser.py` — `ScreenParser`: `Buffer` → `ScreenModel` (pure, property-tested).
-- `orders.py` — `decode_orders`: raw 3270 datastream → `Buffer`.
-- `readbuffer.py` — `parse_readbuffer_ascii`: s3270 `ReadBuffer(Ascii)` text → `Buffer` (validated by the integration test).
-- `attrs.py` — decode a 3270 attribute byte into `FieldAttrs`.
+- `readbuffer.py` — `parse_readbuffer_ascii`: s3270 `ReadBuffer(Ascii)` output → `Buffer` (line-aware: output line N is row N; validated row by row against `Ascii()` by the integration test).
 - `session.py` — subprocess wrapper around `s3270` (needs the binary + a 3270 host).
 - `bridge.py` — `Bridge` facade: `connect`, `read_screen`, `fill_field`, `press`, `disconnect`.
 
@@ -23,7 +21,14 @@ placeholder. So:
 
 - the same screen is recognised again after values are typed;
 - typing into an input field never changes the id;
-- hidden values never influence the id (let alone appear in the output).
+- hidden values never influence the id (let alone appear in the output);
+- the MDT (modified) bit is ignored, because typing sets it.
+
+**Volatile regions.** `read_screen()` reads the screen twice; any position that
+differs between the two reads is reported in `ScreenModel.volatile` and excluded
+from `screen_id` (it stays visible in `rows`). Some stamps are fixed at paint
+time, so two quick reads agree but a repaint differs (the TK4- welcome screen's
+Date/Time). Pass those as `Bridge(volatile_regions=[(row, col, length)])`.
 
 ## Safety
 
