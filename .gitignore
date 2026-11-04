@@ -29,3 +29,10 @@ docs/audit/
 
 # Live-container marker: per worktree, only Agent A's (docs/contracts.md 2.1)
 .gss-live-ok
+
+# Per-component runtime data and local config (never committed)
+agent/.env
+web/.env.local
+agent/events.jsonl
+*.audit.jsonl
+coverage/

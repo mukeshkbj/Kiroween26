@@ -25,3 +25,9 @@ inclusion: always
 - `web/` talks only to the FastAPI backend (HTTP + websocket), never directly to the 3270 session.
 - Each component is independently runnable and testable.
 - Specs live under `.kiro/specs/<name>/` (requirements.md, design.md, tasks.md).
+
+## Addendum (2026-11-04): spirit-map, scripts, contracts, ownership
+- `spirit-map/` (package `seance_spirit`) is the explorer, labeller, generator and tool-pack runtime. It depends on `bridge/` and `mcp-server/`; it never imports `agent/` or `web/`. Its artefacts live in `docs/spirit-map/<app_id>/`.
+- `scripts/` holds the merge gate (`gate.ps1`, `check-ownership.ps1`), the journal hook and setup helpers. `docs/contracts.md` and `docs/contracts/` (generated schemas and examples) are the shared interface contracts.
+- Folder ownership for the parallel build is in `docs/contracts.md` section 1 (A `legacy/`, B `spirit-map/`, C `web/`, D `agent/`, integrator everything shared). Nobody edits another owner's folder; ask with a request file in `docs/handoff/<letter>/`.
+- Only Agent A touches the live `gss-legacy` container; everyone else uses `seance_mcp.fake` (`docs/contracts.md` section 2).

@@ -16,6 +16,12 @@ $path = ($Matches[0] -replace '\\+', '/')
 
 $repo = Split-Path -Parent $PSScriptRoot
 $journal = Join-Path $repo "docs\kiro-journal.md"
+# Parallel build (docs/contracts.md section 1): on an agent branch (agent/a-..., b-..., c-..., d-...) write to that
+# agent's own journal so branches never edit the shared file; the integrator merges them into kiro-journal.md.
+$branch = (& git -C $repo branch --show-current 2>$null)
+if ($branch -match '^agent/([a-d])-') {
+    $journal = Join-Path $repo ("docs\handoff\{0}\journal.md" -f $Matches[1])
+}
 $line = "- $(Get-Date -Format 'yyyy-MM-dd'): ``$path`` changed"
 
 if (-not (Test-Path $journal)) {
