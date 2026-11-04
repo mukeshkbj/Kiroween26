@@ -31,7 +31,7 @@ class Allow:
 
 @dataclass(frozen=True)
 class Deny:
-    reason: str  # "denied_key" | "denied_screen" | "commit_capable"
+    reason: str  # "denied_key" | "denied_screen" | "denied_hint" | "commit_capable"
     allowed: bool = False
 
 
@@ -95,7 +95,7 @@ class EffectivePolicy:
         if any(k in d.screen_keys.get(ref, ()) for ref in (sid, nid)):
             return Deny("denied_key")
         if k in self._hints.get(screen_id, frozenset()):
-            return Deny("denied_key")
+            return Deny("denied_hint")
         if any(k in self.seed.declared_read_only.get(ref, ()) for ref in (sid, nid)):
             return Allow("declared")
         if k in self.approved.get(screen_id, frozenset()):
@@ -104,11 +104,15 @@ class EffectivePolicy:
             return Allow("not_commit_capable")
         return Deny("commit_capable")
 
-    def read_only_keys(self, screen_id: str) -> frozenset[str]:
-        """Keys the exploration service's gate must treat as read-only on this screen:
-        only those a human declared or approved *and* that no deny overrides."""
+    def declared_keys(self, screen_id: str) -> frozenset[str]:
+        """Keys a human declared read-only (seed) or approved (key-policy.json) for this
+        screen, read straight from the data. No deny logic and no ``may_press`` here, so the
+        service gate built on it stays independent of the rules above."""
         sid, nid = _refs(screen_id)
-        declared = set(self.approved.get(screen_id, ())) | {
+        return frozenset(self.approved.get(screen_id, ())) | frozenset(
             k for ref in (sid, nid) for k in self.seed.declared_read_only.get(ref, ())
-        }
-        return frozenset(k for k in declared if self.may_press(k, screen_id).allowed)
+        )
+
+    def read_only_keys(self, screen_id: str) -> frozenset[str]:
+        """Declared or approved keys that no deny overrides."""
+        return frozenset(k for k in self.declared_keys(screen_id) if self.may_press(k, screen_id).allowed)

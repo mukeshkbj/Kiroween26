@@ -22,9 +22,9 @@ MUTANTS = {
     "drop per-screen key deny": (
         '        if any(k in d.screen_keys.get(ref, ()) for ref in (sid, nid)):\n            return Deny("denied_key")\n', ""),
     "text hint no longer denies": (
-        '        if k in self._hints.get(screen_id, frozenset()):\n            return Deny("denied_key")\n', ""),
+        '        if k in self._hints.get(screen_id, frozenset()):\n            return Deny("denied_hint")\n', ""),
     "text hint relaxes (allows what it names)": (
-        '        if k in self._hints.get(screen_id, frozenset()):\n            return Deny("denied_key")\n',
+        '        if k in self._hints.get(screen_id, frozenset()):\n            return Deny("denied_hint")\n',
         '        if k in self._hints.get(screen_id, frozenset()):\n            return Allow("declared")\n'),
     "allow before deny": (
         "        d = self.seed.deny\n",

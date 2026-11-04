@@ -81,7 +81,7 @@ class Deny(_Strict):
 class Budgets(_Strict):
     max_screens: int = Field(default=50, ge=1, le=1000)
     max_steps: int = Field(default=300, ge=1, le=10000)
-    max_depth: int = Field(default=8, ge=1, le=100)
+    max_depth: int = Field(default=8, ge=0, le=100)
     max_seconds: float = Field(default=600.0, gt=0)
     fanout: int = Field(default=6, ge=1, le=50)
 
@@ -97,6 +97,13 @@ class ExploreSeed(_Strict):
     start_recipe: list[KeyName] = []
     # Recommended volatile regions (row, col, len), recorded in the map for the generator.
     volatile: list[tuple[int, int, int]] = []
+
+    @model_validator(mode="after")
+    def _probe_names_unique(self) -> "ExploreSeed":
+        names = [p.name for p in self.probes]
+        if len(set(names)) != len(names):
+            raise ValueError("probe names must be unique (edges refer to probes by name)")
+        return self
 
     @model_validator(mode="after")
     def _start_recipe_is_safe(self) -> "ExploreSeed":

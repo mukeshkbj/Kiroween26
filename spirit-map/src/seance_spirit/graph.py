@@ -45,16 +45,19 @@ def field_key_base(label: str) -> str:
     return key
 
 
-def assign_field_keys(labels: Iterable[str]) -> list[str]:
-    """Keys for fields in reading order. Repeated labels get ``_2``, ``_3`` by position."""
+def assign_field_keys(labels: Iterable[str], positions: Iterable[tuple[int, int]] | None = None) -> list[str]:
+    """Keys for fields in reading order. Repeated labels get ``_2``, ``_3`` by position.
+    A field with no label is named after its cell (``r6c1``) when positions are given."""
+    pos = list(positions) if positions is not None else None
     seen: dict[str, int] = {}
     out: list[str] = []
-    for label in labels:
+    for i, label in enumerate(labels):
         base = field_key_base(label)
+        if not re.search(r"[A-Za-z0-9]", label or "") and pos is not None:
+            base = f"r{pos[i][0]}c{pos[i][1]}"
         seen[base] = seen.get(base, 0) + 1
         out.append(base if seen[base] == 1 else f"{base}_{seen[base]}")
     return out
-
 
 def label_from_rows(rows: list[str], row: int, col: int) -> str:
     """The same label rule the MCP tools use (text left of the field), on stored rows."""
@@ -132,7 +135,7 @@ class RunInfo(_M):
     status: RunStatus = "completed"
     reason: str | None = None
     steps: int = 0
-    budgets: dict[str, float] = {}
+    budgets: dict[str, int] = {}
 
 
 class SpiritMap(_M):

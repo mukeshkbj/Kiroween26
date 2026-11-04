@@ -27,11 +27,11 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 3.3 Property tests: ids stable under reorder; merge is idempotent; write then read is identity; sentinel never survives a write.
 
 ## 4. Explorer on FakeBridge (REQ-001 to REQ-008) (by 10 Nov)
-- [ ] 4.1 `strategies.fake_apps()` (random apps with mutating and hidden-field screens).
-- [ ] 4.2 `explorer.py`: frontier search, return-path discipline, halting (`lost`, `ambiguous_ack`, session loss), budgets, attach mode, harvest.
-- [ ] 4.3 Property tests REQ-033 (explorer safety, own bookkeeping, mutation-checked), REQ-034 (completeness), REQ-032 (replay, with `replay.py`).
-- [ ] 4.4 Hand-written `fake-insurance` seed and a deterministic run that yields the 5-screen map (menu, enquiry, result, list, update, confirm frontier); commit `docs/spirit-map/fake-insurance/`.
-- [ ] 4.5 Milestone: `explore` + `replay` green on `fake-insurance`; summary to `docs/handoff/b/`.
+- [x] 4.1 `strategies.fake_apps()` (random apps with mutating and hidden-field screens).
+- [x] 4.2 `explorer.py`: frontier search, return-path discipline, halting (`lost`, `ambiguous_ack`, session loss), budgets, attach mode, harvest.
+- [x] 4.3 Property tests REQ-033 (explorer safety, own bookkeeping, mutation-checked), REQ-034 (completeness), REQ-032 (replay, with `replay.py`).
+- [x] 4.4 Hand-written `fake-insurance` seed and a deterministic run that yields the 5-screen map (menu, enquiry, result, list, update, confirm frontier); commit `docs/spirit-map/fake-insurance/`.
+- [x] 4.5 Milestone: `explore` + `replay` green on `fake-insurance`; summary to `docs/handoff/b/`.
 
 ## 5. Labelling (REQ-014 to REQ-018) (by 13 Nov)
 - [ ] 5.1 `labels.py` schema + sanitising; `labeller.py` heuristic mode.
