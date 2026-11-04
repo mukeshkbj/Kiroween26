@@ -22,7 +22,8 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 - [ ] 3.5 Run KFIX customization (HLQ=HERC01, since the unpack used the user id), create system datasets (LODINTRA, LODTEMP). Increase DYNAMNBR in IKJACCNT. **BLOCKED after 2 attempts (time-box).**
   - Attempt 1: KFIX in batch TSO with `YES` stacked in SYSTSIN. In batch `&SYSUID` is blank and `READ` gets no input, so the prompt loops forever (1M lines, cancelled, S222).
   - Attempt 2: copy KFIX to `HERC01.KFIX.CLIST`, patch it with TSO EDIT, then run it. Both `CHANGE` commands said `TEXT NOT FOUND`, so it looped again (`TIME=1` stopped it, S322). Root cause: the CLIST has line numbers like `00180000`, and my range `1 99999` only covered the first nine lines.
-  - Proposed attempt 3 (not run): the range `1 99999999` is already in `kicks-kfix.jcl`. Alternative: do KFIX interactively over 3270 via the bridge (it is designed to be run from a TSO terminal).
+  - Attempt 3 (range `1 99999999`): the patch took effect (HLQ 1 = HERC01 selected, "LOOKS LIKE TURNKEY MVS"). It then failed with RC=12: `IKJ56228I DATA SET KICKS.V1R5M0.CB2 NOT IN CATALOG`. KFIX uses unqualified dataset names and relies on the TSO PROFILE PREFIX, which is blank in batch. Likely next fix: add `PROFILE PREFIX(HERC01)` before the EXEC. **KICKS parked here (time-box), per review.**
+- [ ] 3.5-followup **Dogfooding:** once mcp-server works, run KFIX interactively over 3270 *through our own bridge / MCP server* (log on to TSO, `PROFILE PREFIX(HERC01)`, `EXEC KFIX`, answer the prompt). A good write-up story: our own tool finishing the install of the legacy app it will later drive.
 - [ ] 3.6 Verify KICKS starts: `EXEC 'KICKS.KICKSSYS.V1R5M0.CLIST(KICKS)'` shows the banner screen.
 
 ## 4. Séance Insurance app — KICKS transactions (A)
