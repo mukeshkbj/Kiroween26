@@ -15,10 +15,11 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 1.3 Register markers `integration` and `llm`; both skip by default.
 
 ## 2. Policy first (REQ-001 to REQ-004, REQ-033)
-- [ ] 2.1 `seed.py`: `ExploreSeed` with validation (seed that fills a hidden/credential field is an error; unknown keys are errors).
-- [ ] 2.2 `policy.py`: pure `EffectivePolicy.may_press`. Deny beats allow. Text hints can only add denies.
-- [ ] 2.3 Unit tests: deny wins; commit-capable key denied by default; declared key allowed only on its screen; hint cannot relax.
-- [ ] 2.4 Mutation-check list recorded in tasks as each rule is added (remove rule -> a test fails).
+- [x] 2.1 `seed.py`: `ExploreSeed` with validation (seed that fills a hidden/credential field is an error; unknown keys are errors).
+- [x] 2.2 `policy.py`: pure `EffectivePolicy.may_press`. Deny beats allow. Text hints can only add denies.
+- [x] 2.3 Unit tests: deny wins; commit-capable key denied by default; declared key allowed only on its screen; hint cannot relax.
+- [x] 2.4 Mutation-check list recorded in tasks as each rule is added (remove rule -> a test fails).
+  Recorded: `tests/test_policy_mutations.py` builds 10 mutants of `policy.py` (drop global/screen/per-screen deny, drop hint deny, hint relaxes, allow-before-deny, commit check removed, declared keys on every screen, approved policy ignores screen, hints cleared) and requires each to fail `policy_invariants.check`. All killed.
 
 ## 3. Graph and store (REQ-009 to REQ-013)
 - [ ] 3.1 `graph.py`: nodes, edges, frontier; stable ids; merge; drift; shortest read-only path.
