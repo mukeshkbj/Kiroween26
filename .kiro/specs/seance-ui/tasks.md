@@ -9,9 +9,9 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 0.2 New dev dependencies (`fast-check`, `vitest-axe`, `dagre`, Testing Library) approved by the user 2026-11-04; exact versions in `.kiro/steering/tech.md`.
 
 ## 1. Scaffold (by 9 Nov)
-- [ ] 1.1 Vite + React + TypeScript (strict) in `web/`; pin all versions exactly; Vitest, Testing Library, `vitest-axe`, `fast-check`, `dagre`.
-- [ ] 1.2 `config.ts` (`VITE_AGENT_URL`, `VITE_MODE=live|mock`), `.env.example` (no secrets), `strings.ts`.
-- [ ] 1.3 `protocol/types.ts` and `guards.ts` from contracts sections 3 and 4; conformance test over all committed examples (REQ-030).
+- [x] 1.1 Vite + React + TypeScript (strict) in `web/`; pin all versions exactly; Vitest, Testing Library, `vitest-axe`, `fast-check`, `dagre`.
+- [x] 1.2 `config.ts` (`VITE_AGENT_URL`, `VITE_MODE=live|mock`), `.env.example` (no secrets), `strings.ts`.
+- [x] 1.3 `protocol/types.ts` and `guards.ts` from contracts sections 3 and 4; conformance test over all committed examples (REQ-030).
 
 ## 2. Pure core (REQ-011, REQ-023, REQ-026, REQ-027) (by 11 Nov)
 - [ ] 2.1 `state/reducer.ts` and `selectors.ts`; `test/arbitraries.ts` generative grammar for event sequences.

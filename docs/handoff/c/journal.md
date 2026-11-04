@@ -1,0 +1,1 @@
+2026-11-04 (C, task 1): Pinned stack from tech.md installed first time (113 packages, no peer errors); TypeScript 7 + Vite 8 + Vitest 5 typecheck and build clean. Surprise: @types/node is not in the pinned table, so contract examples are loaded with import.meta.glob ?raw instead of fs, which also keeps tests free of Node-only APIs.
