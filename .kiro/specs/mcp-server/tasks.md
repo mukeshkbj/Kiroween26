@@ -11,9 +11,9 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 - [x] 1.4 Register the `integration` marker; integration tests skip unless `TN3270_HOST` is set (same convention as bridge).
 
 ## 2. Audit log (REQ-013, REQ-014)
-- [ ] 2.1 `audit.py`: `AuditEntry`, `AuditLog.append/read/verify`; append-only file, `fsync`, hash chain.
-- [ ] 2.2 Redaction inside `append`: hidden fields -> `<hidden>`, credential-like names -> `<redacted>`.
-- [ ] 2.3 Property tests: chain verifies for any operation sequence; any single-byte tamper is detected; redaction idempotent and never leaks the original value.
+- [x] 2.1 `audit.py`: `AuditEntry`, `AuditLog.append/read/verify`; append-only file, `fsync`, hash chain.
+- [x] 2.2 Redaction inside `append`: hidden fields -> `<hidden>`, credential-like names -> `<redacted>`.
+- [x] 2.3 Property tests: chain verifies for any operation sequence; any single-byte tamper is detected; redaction idempotent and never leaks the original value.
 
 ## 3. Safety gate (REQ-008b, REQ-009, REQ-010, REQ-012, REQ-012a, REQ-012b, REQ-016)
 - [ ] 3.1 `safety.py`: `PendingAction`, `may_commit(key, screen_id)` with the key-policy override table (ships empty), injected clock.
