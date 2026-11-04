@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Journal spec and steering changes",
+      "trigger": "PostFileSave",
+      "description": "When a spec or steering markdown file is saved, append a dated line to docs/kiro-journal.md (deduplicated per day and file).",
+      "matcher": "\\.kiro[/\\\\](specs|steering)[/\\\\].*\\.md$",
+      "action": {
+        "type": "command",
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/journal-hook.ps1",
+        "timeout": 30
+      }
+    }
+  ]
+}

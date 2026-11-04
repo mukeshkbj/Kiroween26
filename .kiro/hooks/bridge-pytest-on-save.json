@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run bridge pytest on save",
+      "trigger": "PostFileSave",
+      "description": "When a Python file under bridge/src or bridge/tests is saved, run the bridge test suite (integration tests skip unless TN3270_HOST is set).",
+      "matcher": "bridge[/\\\\](src|tests)[/\\\\].*\\.py$",
+      "action": {
+        "type": "command",
+        "command": "bridge\\.venv\\Scripts\\python.exe -m pytest bridge -o addopts=-ra --no-header -q",
+        "timeout": 180
+      }
+    }
+  ]
+}
