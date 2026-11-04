@@ -6,11 +6,14 @@ conversation), so the port itself holds no lock. Tests inject a fake port.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Protocol
 
 import anyio
 
 from seance_bridge import Bridge, Key, ScreenModel
+
+from .config import TK4_CLOCK_REGIONS
 
 
 class BridgePort(Protocol):
@@ -29,9 +32,18 @@ class BridgePort(Protocol):
 
 
 class RealBridgePort:
-    def __init__(self, wait_timeout_ms: int = 5000):
+    def __init__(
+        self,
+        wait_timeout_ms: int = 5000,
+        volatile_regions: Sequence[tuple[int, int, int]] = TK4_CLOCK_REGIONS,
+    ):
         self._timeout_ms = wait_timeout_ms
+        self._volatile_regions = tuple(volatile_regions)
         self._bridge: Bridge | None = None
+
+    def _make_bridge(self, host: str, port: int) -> Bridge:
+        return Bridge(host, port, wait_timeout_ms=self._timeout_ms,
+                      volatile_regions=self._volatile_regions)
 
     @property
     def connected(self) -> bool:
@@ -44,7 +56,7 @@ class RealBridgePort:
 
     async def connect(self, host: str, port: int) -> ScreenModel:
         await self.disconnect()
-        bridge = Bridge(host, port, wait_timeout_ms=self._timeout_ms)
+        bridge = self._make_bridge(host, port)
         await anyio.to_thread.run_sync(bridge.connect)
         self._bridge = bridge
         return await self.read_screen()

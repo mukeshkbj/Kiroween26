@@ -37,7 +37,7 @@ def main() -> None:
         ttl_s=settings.pending_ttl_s,
         policy=KeyPolicy.load(_abs(settings.key_policy_path)),
     )
-    service = SeanceService(settings, RealBridgePort(settings.wait_timeout_ms), audit, gate)
+    service = SeanceService(settings, RealBridgePort(settings.wait_timeout_ms, settings.volatile_regions), audit, gate)
     log.info(
         "starting: host=%s:%s allow_commit=%s confirm_mode=%s audit=%s",
         settings.host, settings.port, settings.allow_commit, settings.confirm_mode.value, audit.path,

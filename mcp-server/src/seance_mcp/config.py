@@ -19,6 +19,32 @@ class ConfirmMode(StrEnum):
     CLIENT_APPROVAL = "client-approval"
 
 
+Region = tuple[int, int, int]  # (row, col, length), 0-origin
+
+# TK4- VTAM welcome screen: the Date and Time stamps (top right) are fixed at
+# paint time, so two reads agree but every repaint differs. Masked by default so
+# screen_id (and the safety gate's stale-screen check) stays stable.
+TK4_CLOCK_REGIONS: tuple[Region, ...] = ((0, 64, 16), (1, 64, 16))
+
+
+def parse_regions(raw: str) -> tuple[Region, ...]:
+    """Parse ``row,col,len;row,col,len``. ``none`` disables masking. Bad input is an error."""
+    if raw.strip().lower() == "none":
+        return ()
+    out: list[Region] = []
+    for part in raw.split(";"):
+        if not part.strip():
+            continue
+        try:
+            r, c, n = (int(x) for x in part.split(","))
+        except ValueError:
+            raise ValueError(f"VOLATILE_REGIONS: bad region {part!r}; want row,col,len") from None
+        if r < 0 or c < 0 or n <= 0:
+            raise ValueError(f"VOLATILE_REGIONS: out-of-range region {part!r}")
+        out.append((r, c, n))
+    return tuple(out)
+
+
 class Settings(BaseModel):
     model_config = ConfigDict(frozen=True)
 
@@ -30,6 +56,7 @@ class Settings(BaseModel):
     pending_ttl_s: float = 300.0
     audit_log_path: Path = Path("docs/audit/audit.jsonl")
     key_policy_path: Path | None = None
+    volatile_regions: tuple[Region, ...] = TK4_CLOCK_REGIONS
 
     @field_validator("pending_ttl_s")
     @classmethod
@@ -62,4 +89,7 @@ class Settings(BaseModel):
             v = get(key)
             if v is not None:
                 data[field] = v
+        regions = get("VOLATILE_REGIONS")
+        if regions is not None:
+            data["volatile_regions"] = parse_regions(regions)
         return cls.model_validate(data)
