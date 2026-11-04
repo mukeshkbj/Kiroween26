@@ -32,9 +32,9 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 - [x] 4.6 Property test: bridge `arbitrary_buffer` sentinel never appears in any tool output or audit file.
 
 ## 5. Resources + entrypoint (REQ-001, REQ-017, REQ-018)
-- [ ] 5.1 `render.py` and the `screen://current` resource; `audit://log` resource.
-- [ ] 5.2 `__main__.py`: `python -m seance_mcp` serves stdio; logs go to stderr only (stdout is the protocol channel).
-- [ ] 5.3 `mcp-server/README.md`: run, env vars, the confirmation trust model in plain words, the Windows/POSIX launch commands.
+- [x] 5.1 `render.py` and the `screen://current` resource; `audit://log` resource.
+- [x] 5.2 `__main__.py`: `python -m seance_mcp` serves stdio; logs go to stderr only (stdout is the protocol channel).
+- [x] 5.3 `mcp-server/README.md`: run, env vars, the confirmation trust model in plain words, the Windows/POSIX launch commands.
 
 ## 6. Live + Kiro (REQ-003, REQ-020)
 - [ ] 6.1 Integration test against `gss-legacy` via in-process `Client(server)`: connect, read the welcome screen, list fields, CLEAR executes, `fill_field` + ENTER returns a pending action and leaves the screen unchanged, confirm with a test confirmer executes it, disconnect. Never completes a TSO logon. Must pass 3 runs in a row.
