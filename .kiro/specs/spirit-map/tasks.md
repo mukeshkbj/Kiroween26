@@ -22,9 +22,9 @@ Ordered so the safety machinery and its property tests exist before the explorer
   Recorded: `tests/test_policy_mutations.py` builds 10 mutants of `policy.py` (drop global/screen/per-screen deny, drop hint deny, hint relaxes, allow-before-deny, commit check removed, declared keys on every screen, approved policy ignores screen, hints cleared) and requires each to fail `policy_invariants.check`. All killed.
 
 ## 3. Graph and store (REQ-009 to REQ-013)
-- [ ] 3.1 `graph.py`: nodes, edges, frontier; stable ids; merge; drift; shortest read-only path.
-- [ ] 3.2 `store.py`: atomic write, canonical ordering, leak check.
-- [ ] 3.3 Property tests: ids stable under reorder; merge is idempotent; write then read is identity; sentinel never survives a write.
+- [x] 3.1 `graph.py`: nodes, edges, frontier; stable ids; merge; drift; shortest read-only path.
+- [x] 3.2 `store.py`: atomic write, canonical ordering, leak check.
+- [x] 3.3 Property tests: ids stable under reorder; merge is idempotent; write then read is identity; sentinel never survives a write.
 
 ## 4. Explorer on FakeBridge (REQ-001 to REQ-008) (by 10 Nov)
 - [ ] 4.1 `strategies.fake_apps()` (random apps with mutating and hidden-field screens).
