@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seance-bridge"
+version = "0.1.0"
+description = "3270 screen-bridge: turns a 3270 screen into a structured, deterministic ScreenModel. (Green Screen Séance)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+# The session layer drives s3270 directly via subprocess (stdlib only).
+dev = [
+    "pytest>=8.2,<9",
+    "hypothesis>=6.100,<7",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests needing a live TK4- 3270 session (skipped when TN3270_HOST unset)",
+]
+addopts = "-ra -q"

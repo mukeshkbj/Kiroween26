@@ -1,0 +1,94 @@
+"""Bridge: the public facade combining Session + ScreenParser.
+
+Exposes the API the requirements specify: connect, read_screen, fill_field,
+press, disconnect. fill_field validates field constraints before typing;
+press flags commit-capable keys via the returned action metadata.
+"""
+from __future__ import annotations
+
+import re
+
+from .errors import FieldValidationError
+from .keys import COMMIT_CAPABLE, Key
+from .models import COLS, Field, ScreenModel
+from .parser import ScreenParser
+from .session import Session
+
+_NUMERIC_RE = re.compile(r"^[+-]?\d+(\.\d+)?$")
+
+
+class PressResult:
+    """Result of press(): the new screen plus whether it may commit data."""
+
+    def __init__(self, screen: ScreenModel, may_commit: bool):
+        self.screen = screen
+        self.may_commit = may_commit
+
+
+class Bridge:
+    def __init__(
+        self,
+        host: str,
+        port: int = 3270,
+        wait_timeout_ms: int = 5000,
+        session: Session | None = None,
+    ):
+        self._host = host
+        self._port = port
+        self._timeout_s = wait_timeout_ms / 1000.0
+        self._parser = ScreenParser()
+        self._session = session or Session()
+
+    # -- lifecycle -------------------------------------------------------
+
+    def connect(self) -> None:
+        self._session.connect(self._host, self._port)
+
+    def disconnect(self) -> None:
+        self._session.disconnect()
+
+    @property
+    def session(self) -> Session:
+        return self._session
+
+    # -- operations ------------------------------------------------------
+
+    def read_screen(self) -> ScreenModel:
+        return self._parser.parse(self._session.read_buffer())
+
+    def fill_field(self, field_ref: int | tuple[int, int], value: str) -> ScreenModel:
+        screen = self.read_screen()
+        field = self._resolve_field(screen, field_ref)
+
+        if field.protected:
+            raise FieldValidationError(f"field {field.index} is protected")
+        if len(value) > field.length:
+            raise FieldValidationError(
+                f"value too long: {len(value)} > field length {field.length}"
+            )
+        if field.numeric and not _NUMERIC_RE.match(value):
+            raise FieldValidationError(f"field {field.index} is numeric; value not numeric: {value!r}")
+
+        self._session.cursor_move(field.row, field.col)
+        self._session.send_string(value)
+        return self.read_screen()
+
+    def press(self, key: Key) -> PressResult:
+        self._session.press_key(key.value, self._timeout_s)
+        screen = self.read_screen()
+        return PressResult(screen=screen, may_commit=key in COMMIT_CAPABLE)
+
+    # -- helpers ---------------------------------------------------------
+
+    @staticmethod
+    def _resolve_field(screen: ScreenModel, field_ref: int | tuple[int, int]) -> Field:
+        if isinstance(field_ref, int):
+            for f in screen.fields:
+                if f.index == field_ref:
+                    return f
+            raise FieldValidationError(f"no field with index {field_ref}")
+        row, col = field_ref
+        f = ScreenParser.field_at(screen, row, col)
+        if f is None:
+            raise FieldValidationError(f"no field covers ({row},{col})")
+        return f
