@@ -16,12 +16,12 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 - [x] 2.3 Property tests: chain verifies for any operation sequence; any single-byte tamper is detected; redaction idempotent and never leaks the original value.
 
 ## 3. Safety gate (REQ-008b, REQ-009, REQ-010, REQ-012, REQ-012a, REQ-012b, REQ-016)
-- [ ] 3.1 `safety.py`: `PendingAction`, `may_commit(key, screen_id)` with the key-policy override table (ships empty), injected clock.
-- [ ] 3.2 `SafetyGate`: propose / confirm / expire / stale-screen check / single pending action / `needs_resync` after ambiguous ack / `SEANCE_ALLOW_COMMIT` block.
+- [x] 3.1 `safety.py`: `PendingAction`, `may_commit(key, screen_id)` with the key-policy override table (ships empty), injected clock.
+- [x] 3.2 `SafetyGate`: propose / confirm / expire / stale-screen check / single pending action / `needs_resync` after ambiguous ack / `SEANCE_ALLOW_COMMIT` block.
 - [x] 3.3-spike Elicitation spike done; results and decisions in design.md ("Elicitation spike results").
-- [ ] 3.3 `Confirmer` interface with `elicit`, `client-approval`, `oob` implementations. **Spike first:** write a 20-line server and check whether Kiro's MCP client answers elicitation (`Resolve`/`Elicit`, and `ctx.elicit()` for legacy). Record the result in design.md and pick the default accordingly. Fail closed when the mode cannot be honoured.
-- [ ] 3.4 Stateful Hypothesis test (`RuleBasedStateMachine`) on the gate: no commit-capable key ever reaches the fake bridge without exactly one matching, unexpired, same-screen confirmation.
-- [ ] 3.5 Unit tests: double confirm, expiry, stale screen, read-only block, elicit declined, ambiguous ack sends the key exactly once.
+- [x] 3.3 `Confirmer` interface (as built: `decide_elicit/decide_client_approval/decide_oob`; MCP resolver wiring is in 4.2) with `elicit`, `client-approval`, `oob` implementations. **Spike first:** write a 20-line server and check whether Kiro's MCP client answers elicitation (`Resolve`/`Elicit`, and `ctx.elicit()` for legacy). Record the result in design.md and pick the default accordingly. Fail closed when the mode cannot be honoured.
+- [x] 3.4 Stateful Hypothesis test (`RuleBasedStateMachine`) on the gate: no commit-capable key ever reaches the fake bridge without exactly one matching, unexpired, same-screen confirmation.
+- [x] 3.5 Unit tests: double confirm, expiry, stale screen, read-only block, elicit declined, ambiguous ack sends the key exactly once.
 
 ## 4. Port + tools (REQ-001, REQ-002, REQ-004 to REQ-011)
 - [ ] 4.1 `port.py`: `BridgePort` Protocol; real adapter running `Bridge` calls in a worker thread under one `anyio.Lock`; `FakeBridge` for tests.
