@@ -1,4 +1,4 @@
-# Contracts — Green Screen Seance
+# Contracts â€” Green Screen Seance
 
 **Status:** v1, approved. **Applies to:** every agent (A legacy, B spirit-map, C web, D agent) and the integrator.
 **Precedence:** this document beats any spec on interface questions (formats, ownership, who may touch what). Safety rules in `.kiro/steering/mainframe-safety.md` beat this document. If you think a contract is wrong, do not work around it: file a request (section 12).
@@ -407,6 +407,14 @@ Seed data: 8 policies `P0000001` to `P0000008`. Reset restores them (legacy-envi
 
 So the only commit in the app is ENTER on `confirm`. This is also what unblocks **mcp-server 6.3**: until B's approved policy exists, the integrator may ship this table by hand for the fake and later the real screens.
 
+### 10.4 Output fields and `screen_id` (found in P0.1)
+`screen_id` hashes **protected** text. Output fields (holder, status, premium, last updated, list rows, the message line) are protected fields whose text changes with the data, so without care **every policy would be a different screen** and no per-screen key policy could match the result screens. The fix is the bridge's existing volatile-region mechanism (the same one used for the TK4- clock): the demo app's output spans are masked out of `screen_id`.
+
+- The single list is `DEMO_VOLATILE_REGIONS` in `seance_mcp.fake`; `fake_insurance()` applies it to every screen, exactly as the real app's config must.
+- **A** MUST mirror those spans (row, col, length, 0-origin) in the legacy app's layout and document the same list as `VOLATILE_REGIONS` for the real app (`legacy/README.md`, `legacy/volatile-regions.txt`). If A moves a field, A files a request and the integrator updates the constant and the fake in one change.
+- **B** treats the `volatile` spans reported per node as part of node identity and emits the recommended `VOLATILE_REGIONS` string with each tool pack.
+- Captures may carry an optional per-screen `"volatile": [[row, col, len], ...]`; `FakeApp.from_capture` rebuilds each screen and fails with `CaptureError` if the recomputed `screen_id` differs from the recorded one.
+
 ### 10.3 Expected generated tools (acceptance for B)
 `lookup_policy(policy_number)` [read], `list_policies(page?)` [read], `update_policy(policy_number, status?, premium?)` [commit, ends with `propose` on `confirm`]. Names may be overridden but the three behaviours must exist.
 
@@ -440,4 +448,5 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
-Change log: (none yet)
+Change log:
+- 2026-11-04 (P0.1, additive): section 10.4 added (output fields are volatile regions); captures may carry per-screen `volatile` spans.
