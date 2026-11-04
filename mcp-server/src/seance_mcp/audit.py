@@ -22,6 +22,8 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from .subscribers import Subscribers
+
 HIDDEN = "<hidden>"
 REDACTED = "<redacted>"
 _GENESIS = "0" * 64
@@ -78,6 +80,12 @@ class AuditLog:
             raise ValueError(f"audit log {self._path} fails verification at seq {broken}")
         self._seq = entries[-1].seq if entries else 0
         self._last = entries[-1].hash if entries else _GENESIS
+        self._subs = Subscribers()
+
+    def subscribe(self, cb: Callable[[AuditEntry], None]) -> Callable[[], None]:
+        """Call ``cb(entry)`` after each durable append (entries are already redacted).
+        Callbacks must be fast and cannot fail an append. Returns unsubscribe."""
+        return self._subs.add(cb)
 
     @property
     def path(self) -> Path:
@@ -122,7 +130,8 @@ class AuditLog:
                 os.fsync(f.fileno())
             self._seq += 1
             self._last = h
-            return entry
+        self._subs.emit(entry)  # outside the write lock; isolated from failures
+        return entry
 
     def _lines(self) -> list[str]:
         # errors="replace": a corrupted multi-byte character must show up as a

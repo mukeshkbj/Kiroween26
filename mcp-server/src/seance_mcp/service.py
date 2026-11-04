@@ -8,6 +8,9 @@ is audited, including refusals.
 """
 from __future__ import annotations
 
+import contextlib
+from collections.abc import AsyncIterator, Callable
+
 import anyio
 
 from seance_bridge import (
@@ -19,8 +22,9 @@ from seance_bridge import (
     SessionError,
 )
 
-from .audit import AuditEntry, AuditLog
+from .audit import AuditEntry, AuditLog, redact
 from .config import Settings
+from .observe import FieldTarget, OpCallback, OpEvent, Subscribers
 from .port import BridgePort
 from .safety import Decision, GateError, SafetyGate
 from .screens import (
@@ -53,6 +57,39 @@ class SeanceService:
         self.gate = gate
         self._lock = anyio.Lock()
         self._last_screen_id: str | None = None
+        self._ops = Subscribers()
+        self._cur: OpEvent | None = None
+
+    # -- observers (live step events; see observe.py) ---------------------
+
+    def observe(self, cb: OpCallback) -> Callable[[], None]:
+        """Subscribe to start/end events of each primitive operation. Returns unsubscribe."""
+        return self._ops.add(cb)
+
+    def _begin(self, tool: str, **kw: object) -> None:
+        ev = OpEvent(tool=tool, phase="start", **kw)  # type: ignore[arg-type]
+        self._cur = ev
+        self._ops.emit(ev)
+
+    def _end(self, outcome: str, screen_after: ScreenOut | None = None, **update: object) -> None:
+        cur, self._cur = self._cur, None
+        if cur is None:
+            return
+        self._ops.emit(cur.model_copy(update={"phase": "end", "outcome": outcome, "screen_after": screen_after, **update}))
+
+    @contextlib.asynccontextmanager
+    async def _trace(self, tool: str) -> AsyncIterator[None]:
+        """Guarantee exactly one end event per operation, even on refusal or error."""
+        self._cur = None
+        try:
+            yield
+        except BaseException as exc:
+            if self._cur is None:
+                self._begin(tool)
+            self._end(exc.code if isinstance(exc, GateError) else "error")
+            raise
+        finally:
+            self._cur = None
 
     # -- helpers ----------------------------------------------------------
 
@@ -88,7 +125,8 @@ class SeanceService:
 
     async def connect(self, host: str | None = None, port: int | None = None) -> ScreenOut:
         h, p = host or self.settings.host, port or self.settings.port
-        async with self._lock:
+        async with self._lock, self._trace("connect"):
+            self._begin("connect")
             try:
                 s = await self.port.connect(h, p)
             except ScreenBridgeError as exc:
@@ -96,7 +134,9 @@ class SeanceService:
             self._last_screen_id = s.screen_id
             self.gate.resynced()
             self.audit.append("connect", "ok", screen_id=s.screen_id, detail=f"{h}:{p}")
-            return screen_out(s)
+            out = screen_out(s)
+            self._end("ok", out)
+            return out
 
     async def disconnect(self) -> None:
         async with self._lock:
@@ -104,7 +144,8 @@ class SeanceService:
             self.audit.append("disconnect", "ok")
 
     async def read_screen(self) -> ScreenOut:
-        async with self._lock:
+        async with self._lock, self._trace("read_screen"):
+            self._begin("read_screen")
             self._require_connected("read_screen")
             try:
                 s = await self._read()
@@ -112,20 +153,24 @@ class SeanceService:
                 raise self._bridge_error("read_screen", exc) from None
             self.gate.resynced()  # the caller has now seen the real screen
             self.audit.append("read_screen", "ok", screen_id=s.screen_id)
-            return screen_out(s)
+            out = screen_out(s)
+            self._end("ok", out)
+            return out
 
     async def list_fields(self) -> list[FieldOut]:
-        async with self._lock:
+        async with self._lock, self._trace("list_fields"):
+            self._begin("list_fields")
             self._require_connected("list_fields")
             try:
                 s = await self._read()
             except ScreenBridgeError as exc:
                 raise self._bridge_error("list_fields", exc) from None
             self.audit.append("list_fields", "ok", screen_id=s.screen_id)
+            self._end("ok", screen_out(s))
             return fields_out(s)
 
     async def fill_field(self, field_ref: int | tuple[int, int], value: str) -> ScreenOut:
-        async with self._lock:
+        async with self._lock, self._trace("fill_field"):
             self._require_connected("fill_field")
             if len(value) > MAX_VALUE_LEN:
                 raise GateError("field_invalid", "value is longer than the screen")
@@ -141,17 +186,29 @@ class SeanceService:
                 "field_hidden": bool(target and target.hidden),
                 "field_label": field_label(before, target) if target else None,
             }
+            self._begin(
+                "fill_field",
+                screen_before=screen_out(before),
+                field=_ref_str(field_ref),
+                target=None if target is None else FieldTarget(
+                    index=target.index, row=target.row, col=target.col, length=target.length,
+                    label=str(kw["field_label"] or "")),
+                value=redact(value, hidden=bool(target and target.hidden),
+                             label=kw["field_label"]),  # type: ignore[arg-type]
+            )
             try:
                 after = await self.port.fill_field(field_ref, value)
             except ScreenBridgeError as exc:
                 raise self._bridge_error("fill_field", exc, **kw) from None
             self._last_screen_id = after.screen_id
             self.audit.append("fill_field", "ok", **kw)  # type: ignore[arg-type]
-            return screen_out(after)
+            out = screen_out(after)
+            self._end("ok", out)
+            return out
 
     async def press_key(self, key: str) -> PressOut:
         k = parse_key(key)
-        async with self._lock:
+        async with self._lock, self._trace("press_key"):
             self._require_connected("press_key")
             try:
                 self.gate.ensure_synced()
@@ -162,6 +219,7 @@ class SeanceService:
                 s = await self._read()
             except ScreenBridgeError as exc:
                 raise self._bridge_error("press_key", exc, key=k.value) from None
+            self._begin("press_key", screen_before=screen_out(s), key=k.value)
 
             if self.gate.may_commit(k, s.screen_id):
                 action, old = self.gate.propose(k, s.screen_id, snapshot(s))
@@ -170,6 +228,7 @@ class SeanceService:
                                       key=old.key, screen_id=old.screen_id)
                 self.audit.append("press_key", "proposed", action_id=action.action_id,
                                   key=k.value, screen_id=s.screen_id)
+                self._end("pending", action_id=action.action_id)
                 return PressOut(
                     status="pending",
                     message=(
@@ -185,10 +244,12 @@ class SeanceService:
                 raise self._bridge_error("press_key", exc, key=k.value, screen_id=s.screen_id) from None
             self._last_screen_id = after.screen_id
             self.audit.append("press_key", "ok", key=k.value, screen_id=s.screen_id)
-            return PressOut(status="executed", message=f"sent {k.value}", screen=screen_out(after))
+            out = screen_out(after)
+            self._end("ok", out)
+            return PressOut(status="executed", message=f"sent {k.value}", screen=out)
 
     async def confirm_action(self, action_id: str, decision: Decision) -> ScreenOut:
-        async with self._lock:
+        async with self._lock, self._trace("confirm_action"):
             self._require_connected("confirm_action")
             try:
                 self.gate.ensure_synced()
@@ -211,13 +272,17 @@ class SeanceService:
                 "screen_id": action.screen_id,
                 "confirmed_by": decision.confirmed_by,
             }
+            self._begin("confirm_action", screen_before=screen_out(current), key=action.key,
+                        action_id=action.action_id)
             try:
                 after = await self.port.press(Key(action.key))
             except ScreenBridgeError as exc:
                 raise self._bridge_error("confirm_action", exc, **kw) from None
             self._last_screen_id = after.screen_id
             self.audit.append("confirm_action", "ok", **kw)  # type: ignore[arg-type]
-            return screen_out(after)
+            out = screen_out(after)
+            self._end("ok", out)
+            return out
 
     async def deny_action(self, action_id: str, who: str) -> None:
         """A human declined a pending action (oob channel, not an MCP tool).
