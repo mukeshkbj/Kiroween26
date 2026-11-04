@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seance-mcp"
+version = "0.1.0"
+description = "MCP server exposing the Green Screen Seance 3270 bridge, with confirmation and audit."
+readme = "README.md"
+requires-python = ">=3.12"
+# seance-bridge is installed editable from ../bridge (see README).
+dependencies = [
+    "mcp==2.3.0",
+    "pydantic==2.14.2",
+    "anyio==4.16.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.4.2",
+    "hypothesis==6.170.14",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: needs a live TK4- 3270 session (skipped when TN3270_HOST unset)",
+]
+addopts = "-ra"

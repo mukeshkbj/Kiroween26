@@ -24,3 +24,5 @@ bridge/_diff_probe.py
 bridge/_raw_probe.py
 bridge/_s3270_probe.py
 bridge/_probe.py
+# Audit logs are runtime data
+docs/audit/

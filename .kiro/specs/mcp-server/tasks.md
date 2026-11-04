@@ -5,10 +5,10 @@ Ordered so the safety layer is built and proven against a fake bridge first (no 
 Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes against `gss-legacy`). Known gaps carried over from screen-bridge: reconnect (its task 4.4) and field wraparound (8.9). Neither blocks this spec; `session_lost` is surfaced instead of reconnecting.
 
 ## 1. Scaffold
-- [ ] 1.1 Create `mcp-server/` package (`pyproject.toml`, Python >=3.12, `src/seance_mcp/`). Pin with `==`: `mcp` (2.x), `pydantic`, `anyio` as needed; dev: `pytest`, `hypothesis`, `pytest-asyncio` or `anyio`'s pytest plugin. Install `../bridge` editable.
-- [ ] 1.2 `.env.example` with `TN3270_HOST`, `TN3270_PORT`, `WAIT_TIMEOUT_MS`, `SEANCE_ALLOW_COMMIT=0`, `SEANCE_CONFIRM_MODE=elicit`, `PENDING_TTL_S=300`, `AUDIT_LOG_PATH`, `KEY_POLICY_PATH`. Gitignore the audit log directory.
-- [ ] 1.3 `config.py`: env -> `Settings` (pydantic), safe defaults, validation (e.g. unknown confirm mode is an error, not a silent fallback).
-- [ ] 1.4 Register the `integration` marker; integration tests skip unless `TN3270_HOST` is set (same convention as bridge).
+- [x] 1.1 Create `mcp-server/` package (`pyproject.toml`, Python >=3.12, `src/seance_mcp/`). Pin with `==`: `mcp` (2.x), `pydantic`, `anyio` as needed; dev: `pytest`, `hypothesis`, `pytest-asyncio` or `anyio`'s pytest plugin. Install `../bridge` editable.
+- [x] 1.2 `.env.example` with `TN3270_HOST`, `TN3270_PORT`, `WAIT_TIMEOUT_MS`, `SEANCE_ALLOW_COMMIT=0`, `SEANCE_CONFIRM_MODE=elicit`, `PENDING_TTL_S=300`, `AUDIT_LOG_PATH`, `KEY_POLICY_PATH`. Gitignore the audit log directory.
+- [x] 1.3 `config.py`: env -> `Settings` (pydantic), safe defaults, validation (e.g. unknown confirm mode is an error, not a silent fallback).
+- [x] 1.4 Register the `integration` marker; integration tests skip unless `TN3270_HOST` is set (same convention as bridge).
 
 ## 2. Audit log (REQ-013, REQ-014)
 - [ ] 2.1 `audit.py`: `AuditEntry`, `AuditLog.append/read/verify`; append-only file, `fsync`, hash chain.
