@@ -185,9 +185,9 @@ Roles and nouns come from labels (or overrides); the shapes (paths, fields, keys
 `pattern` for `policy_number` comes from the field (length 8, not numeric) intersected with a conservative alphabet. The full tool and result envelope are in `docs/contracts.md` section 6.
 
 ### Runtime
-`run_tool(service, pack, tool, args)`:
+`run_tool(recipe_service, pack, tool, args)` (`recipe_service` is `seance_mcp.toolpack.RecipeService`):
 1. Validate `args` against `input_schema` (reject extras).
-2. `goto`: read screen; map `screen_id` to node; if unknown -> `unknown_start`; else take the shortest path over **read-only edges** to the target node, pressing through `service.press_key` (each press is audited; none can be commit-capable under the effective policy, and if the gate still says pending the run aborts `unexpected_pending`).
+2. `goto`: read screen; map `screen_id` to node; if unknown -> `unknown_start`; else take the shortest path over **read-only edges** to the target node, pressing through `recipe_service.press_key` (each press is audited; none can be commit-capable under the effective policy, and if the gate still says pending the run aborts `unexpected_pending`).
 3. `fill`: resolve `field` key to an index with the node's layout; verify the current `screen_id` equals the node's; call `service.fill_field`.
 4. `press`: `service.press_key`; if the result is `pending` and the step is not `propose`, abort `unexpected_pending`. Check `expect`.
 5. `extract`: read from the screen the value of the named fields; never hidden; sanitised by the existing conversion.
@@ -197,7 +197,7 @@ Roles and nouns come from labels (or overrides); the shapes (paths, fields, keys
 The runtime never calls `confirm_action`, never retries, and returns the trace so the agent can stream the planchette path.
 
 ### Registration
-`register(server, service, pack, approvals)` loops tools, skips any whose `def_hash` is not approved, and adds each as an MCP tool with the tool's JSON Schema as `inputSchema`. The Python signature is `(**kwargs)` validated by the runtime, so the SDK's dynamic registration is a small adapter; the SDK API for dynamic tool registration is checked in task 6.1 (risk below).
+`register(server, recipe_service, tools, pack)` receives only tools that mcp-server already verified (well-formed, hash-true, human-approved) and adds each as an MCP tool with the tool's JSON Schema as `inputSchema`. The Python signature is `(**kwargs)` validated by the runtime, so the SDK's dynamic registration is a small adapter; the SDK API for dynamic tool registration is checked in task 6.1 (risk below).
 
 ## Testing strategy
 The strategies are the point.

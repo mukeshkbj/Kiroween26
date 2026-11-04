@@ -14,18 +14,12 @@ from mcp.server import MCPServer
 
 from .audit import AuditLog
 from .config import Settings
+from .paths import REPO_ROOT, resolve_path
 from .port import BridgePort, RealBridgePort
 from .safety import KeyPolicy, SafetyGate
 from .server import build_server
 from .service import SeanceService
-
-REPO_ROOT = Path(__file__).resolve().parents[3]  # mcp-server/src/seance_mcp/factory.py
-
-
-def resolve_path(p: Path | None, root: Path = REPO_ROOT) -> Path | None:
-    if p is None:
-        return None
-    return p if p.is_absolute() else root / p
+from .toolpack import Registrar
 
 
 def build_service(
@@ -35,6 +29,7 @@ def build_service(
     audit_path: Path | None = None,
     clock: Callable[[], float] | None = None,
     root: Path = REPO_ROOT,
+    registrar: Registrar | None = None,
 ) -> tuple[MCPServer, SeanceService]:
     """Return ``(server, service)`` sharing one gate, audit log and port.
 
@@ -53,4 +48,4 @@ def build_service(
     )
     real = port or RealBridgePort(settings.wait_timeout_ms, settings.volatile_regions)
     service = SeanceService(settings, real, audit, gate)
-    return build_server(service), service
+    return build_server(service, registrar), service

@@ -57,6 +57,9 @@ class Settings(BaseModel):
     audit_log_path: Path = Path("docs/audit/audit.jsonl")
     key_policy_path: Path | None = None
     volatile_regions: tuple[Region, ...] = TK4_CLOCK_REGIONS
+    generated_tools_path: Path | None = None
+    tool_approvals_path: Path | None = None  # default: tool-approvals.json next to the pack
+    allow_unreviewed_tools: bool = False
 
     @field_validator("pending_ttl_s")
     @classmethod
@@ -76,8 +79,13 @@ class Settings(BaseModel):
         allow = get("SEANCE_ALLOW_COMMIT") or "0"
         if allow not in ("0", "1"):
             raise ValueError("SEANCE_ALLOW_COMMIT must be 0 or 1")
-        data: dict[str, object] = {"allow_commit": allow == "1"}
+        unreviewed = get("SEANCE_ALLOW_UNREVIEWED_TOOLS") or "0"
+        if unreviewed not in ("0", "1"):
+            raise ValueError("SEANCE_ALLOW_UNREVIEWED_TOOLS must be 0 or 1")
+        data: dict[str, object] = {"allow_commit": allow == "1", "allow_unreviewed_tools": unreviewed == "1"}
         for key, field in (
+            ("GENERATED_TOOLS_PATH", "generated_tools_path"),
+            ("TOOL_APPROVALS_PATH", "tool_approvals_path"),
             ("TN3270_HOST", "host"),
             ("TN3270_PORT", "port"),
             ("WAIT_TIMEOUT_MS", "wait_timeout_ms"),

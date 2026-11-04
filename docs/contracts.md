@@ -263,6 +263,7 @@ Rules:
 - `name` matches `^[a-z][a-z0-9_]{2,40}$`, is unique in the pack, and never equals a generic tool (`connect`, `read_screen`, `list_fields`, `fill_field`, `press_key`, `confirm_action`, `get_audit_log`).
 - `kind` is `"read"` or `"commit"` and is computed from the graph and the effective key policy, never from labels. `commit` tools end in a `propose` step.
 - `input_schema`/`output_schema`: JSON Schema (2020-12 subset: `type`, `properties`, `required`, `additionalProperties: false`, `maxLength`, `pattern`, `enum`, `minimum`, `maximum`, `description`). Strings carry `maxLength`.
+- Hook: mcp-server calls `seance_spirit.register(server, recipe_service, tools, pack) -> list[str]` with only approved tools. `recipe_service` offers `read_screen`, `list_fields`, `fill_field`, `press_key` only (no confirm, deny, gate, audit). Config: `GENERATED_TOOLS_PATH`, `TOOL_APPROVALS_PATH` (default `tool-approvals.json` next to the pack).
 - `def_hash` = SHA-256 of the canonical JSON (sorted keys, no whitespace) of the tool without `def_hash` and `provenance`. mcp-server registers a tool only if its `def_hash` is listed in `tool-approvals.json` (or `SEANCE_ALLOW_UNREVIEWED_TOOLS=1`, FakeBridge work only, audited at startup).
 - A tool MUST NOT take a hidden or credential-labelled field as a parameter.
 
@@ -449,4 +450,5 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
 Change log:
+- 2026-11-04 (P0.5, clarification): section 6.1 states the exact `register` signature and the `RecipeService` facade; approval enforcement lives in mcp-server.
 - 2026-11-04 (P0.1, additive): section 10.4 added (output fields are volatile regions); captures may carry per-screen `volatile` spans.

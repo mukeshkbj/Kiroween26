@@ -6,7 +6,7 @@ Ordered so the safety machinery and its property tests exist before the explorer
 
 ## 0. Prerequisites (integrator, parallel-plan P0; blocked until done)
 - [ ] 0.1 `seance_mcp.fake` exports `FakePort` and `FakeApp` (value-aware transitions, records every key and a `dirty` flag). Today `FakePort` lives in `mcp-server/tests` and ignores field values.
-- [ ] 0.2 `mcp-server` has `build_service(settings, port)` factory and the tool-pack load hook (`GENERATED_TOOLS_PATH`).
+- [x] 0.2 `mcp-server` has `build_service(settings, port)` and the tool-pack hook (`seance_mcp.toolpack`, `GENERATED_TOOLS_PATH`, `TOOL_APPROVALS_PATH`, `SEANCE_ALLOW_UNREVIEWED_TOOLS`). Done in P0.2/P0.5.
 - [ ] 0.3 Contract examples exist under `docs/contracts/examples/` (tool pack, key policy, SpiritMapView).
 
 ## 1. Scaffold (by 7 Nov)
