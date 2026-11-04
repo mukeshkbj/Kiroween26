@@ -19,3 +19,5 @@ How Kiro was used on Green Screen Seance: spec and steering changes, in order.
 - 2026-11-04: `.kiro/specs/seance-ui/requirements.md` changed
 - 2026-11-04: `.kiro/specs/seance-ui/design.md` changed
 - 2026-11-04: `.kiro/specs/seance-ui/tasks.md` changed
+- 2026-11-04: `.kiro/steering/tech.md` changed
+- 2026-11-04: `.kiro/specs/legacy-environment/tasks.md` changed

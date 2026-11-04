@@ -22,7 +22,7 @@ flowchart LR
 `web/` talks only to the agent (HTTP + websocket). It does not import any Python package or know about the 3270 session.
 
 ## Stack
-React 18, Vite, TypeScript (strict), Vitest, Testing Library, `vitest-axe`, `fast-check` (property tests), `dagre` (graph layout). State in plain React context + `useReducer`; no Redux. All versions pinned exactly. New to the stack versus `tech.md`: `fast-check`, `vitest-axe`, `dagre` and Testing Library; each exists to satisfy a requirement here (property tests, a11y tests, deterministic graph layout). To confirm with the user before the first `npm install`.
+React, Vite, TypeScript (strict), Vitest, Testing Library, `vitest-axe`, `fast-check` (property tests), `dagre` (graph layout). State in plain React context + `useReducer`; no Redux. Exact versions are pinned in `.kiro/steering/tech.md` ("Frontend pinned versions"); `fast-check`, `vitest-axe`, `dagre` and Testing Library were approved by the user on 2026-11-04, each tied to a requirement here (property tests, a11y tests, deterministic graph layout).
 
 ## Layout
 ```

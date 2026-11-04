@@ -6,7 +6,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 
 ## 0. Prerequisites (integrator, parallel-plan P0; blocked until done)
 - [ ] 0.1 `docs/contracts/examples/` has event examples, transcripts (`lookup`, `commit-approve`, `commit-deny`, `commit-expire`, `injection`, `session-lost`, `read-only`) and `SpiritMapView`/audit REST examples.
-- [ ] 0.2 User confirms the new dev dependencies (`fast-check`, `vitest-axe`, `dagre`, Testing Library).
+- [x] 0.2 New dev dependencies (`fast-check`, `vitest-axe`, `dagre`, Testing Library) approved by the user 2026-11-04; exact versions in `.kiro/steering/tech.md`.
 
 ## 1. Scaffold (by 9 Nov)
 - [ ] 1.1 Vite + React + TypeScript (strict) in `web/`; pin all versions exactly; Vitest, Testing Library, `vitest-axe`, `fast-check`, `dagre`.

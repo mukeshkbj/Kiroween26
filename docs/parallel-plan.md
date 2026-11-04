@@ -1,9 +1,9 @@
 # Parallel plan — Green Screen Seance
 
-**Status:** draft for review, 2026-11-04. Nothing here has been started.
+**Status:** approved by the user 2026-11-04 (contracts approved as `contracts-v1`). 
 **Read first:** `docs/contracts.md` (ownership, protocol, live-container rule). This plan says who works where, in what order work lands, and when.
 
-Assumptions to confirm: the hard deadline is not in the repo; this plan treats **Tue 1 Dec 2026** as the last working day. Dates are the milestones you gave.
+**Real deadline: Fri 4 Dec 2026, 2:00 PM PT (10 PM UK).** **Tue 1 Dec is the last working day for code.** Wed 2 and Thu 3 Dec are for the submission write-up, video and blog (no feature work). Fri 4 Dec morning (UK) is buffer only: submit well before 10 PM UK, not at it.
 
 ---
 
@@ -23,7 +23,7 @@ Proposed mapping to Kiro tools (a proposal, not a constraint):
 - **D: Kiro IDE sub-agent or Crew.** Backend with many small safety tests.
 - **C: Kiro IDE sub-agent or Crew.** Benefits from visual review; you will want to look at screenshots daily.
 
-Caveat to verify before starting: Kiro IDE sub-agents run inside one workspace folder. If they share a working tree, branch isolation is lost. Give each agent its own worktree and open that folder as its workspace (or set its working directory to it) and check with `git branch --show-current` in the first command it runs. For Crew, confirm how it assigns a working directory. Do not start anyone until this is confirmed.
+**Isolation is by folder (decided 2026-11-04).** Each parallel agent is its own Kiro IDE window (or Kiro Crew) opened directly on its own worktree folder. Kiro IDE sub-agents are used only for read-only research inside one worktree (for example the context-gatherer); they never write. **Every agent's first command is `git branch --show-current`** and it must print its own branch (`agent/a-legacy`, `agent/b-spirit-map`, `agent/c-seance-ui`, `agent/d-seance-agent`). If it does not, stop and tell the user. The integrator is the main checkout (`D:\Kiro\Kiroween26`, branch `main`).
 
 ---
 
@@ -69,7 +69,7 @@ These are the shared prerequisites other agents' specs name as "blocked until do
 | P0.7 | `docs/contracts/examples/`: event JSON, seven transcripts, REST responses, a tool pack, a key policy, a capture, `SpiritMapView`; plus JSON Schemas generated from the Pydantic models | shared test fixtures for C and D | C, D |
 | P0.8 | `scripts/check-ownership.ps1` and `scripts/gate.ps1` (runs each component's tests that exist) | merge gates | all |
 | P0.9 | `.gitattributes` (`docs/kiro-journal.md merge=union`), `.gitignore` (`.gss-live-ok`, `docs/audit/`, `agent/.env`, `web/node_modules`), update `structure.md` with `spirit-map/`, point the journal hook at `docs/handoff/<letter>/journal.md` when `GSS_AGENT` is set | avoid merge conflicts | all |
-| P0.10 | User decisions (section 9): new web dev dependencies, KICKS fallback rule, Kiro tooling per agent | unblock C and A | C, A |
+| P0.10 | User decisions (section 9) | done 2026-11-04 | C, A |
 
 P0 exit: all existing tests pass (`bridge`, `mcp-server`), new tests for P0.1 to P0.6 pass, `contracts-v1` tag pushed.
 
@@ -132,7 +132,9 @@ Today is Wed 4 Nov.
 | Sat 28 | docs: root README, journal merge | | | | spec-vs-vibe experiment (audit drawer) |
 | Sun 29 | demo script and recording prep | live run #3 | | | |
 | Mon 30 | **feature freeze**; final gate; demo path three times in a row (A runs it) | | | | |
-| **Tue 1 Dec** | buffer, submission write-up, tag `v1.0` | | | | |
+| **Tue 1 Dec** | last code day: final gate, tag `v1.0` | | | | |
+| Wed 2 and Thu 3 Dec | submission write-up, video, blog (README claims checked against what really runs; stand-in vs real stated honestly) | screenshots / recording help on request | | | |
+| **Fri 4 Dec, 2:00 PM PT (10 PM UK)** | **deadline.** Submit by Thu 3 Dec evening UK; Friday is buffer only | | | | |
 
 Hard rules for the dates:
 - A milestone is met only when its acceptance (right column of that row) is demonstrated, not when code exists.
@@ -158,7 +160,7 @@ Hard rules for the dates:
 
 | Risk | Impact | Mitigation / decision |
 |---|---|---|
-| **KICKS install stays blocked** (legacy-environment 3.5, two attempts; third patched but failed on missing `PROFILE PREFIX`) | no real demo app by 10 Nov | **Decision with you on Sun 8 Nov.** Order: (1) one more attempt with `PROFILE PREFIX(HERC01)`, or interactive KFIX through our own MCP server; (2) research a TK4- full-screen alternative; (3) a small Python TN3270 server in docker serving the same five screens, labelled honestly as a stand-in. The pipeline, agent and UI work unchanged on any of them because they run on `fake_insurance` and captures. |
+| **KICKS install stays blocked** (legacy-environment 3.5, two attempts; third patched but failed on missing `PROFILE PREFIX`) | no real demo app by 10 Nov | **Go/no-go on Sun 8 Nov (agreed).** Go path: one more attempt with `PROFILE PREFIX(HERC01)`, or interactive KFIX through our own MCP server. **No-go fallback (agreed):** the business logic for the insurance app is a **COBOL program on TK4-** (compiled with the proven COBUCLG route), and the five insurance screens are served by a **clearly labelled Python TN3270 stand-in** in docker that calls it. The demo still shows the **real TK4- built-in screens live**. The README says plainly which parts are real mainframe (TK4-, COBOL, built-in screens) and which is a stand-in (the five insurance screens' terminal layer). The pipeline, agent and UI work unchanged on any of them because they run on `fake_insurance` and captures. |
 | P0 slips | all four agents blocked | P0 has priority over everything else for the integrator; items are ordered by who needs them (P0.1 to P0.4 first) |
 | Contract drift between D and C | integration pain on 24 Nov | shared examples, conformance tests both sides, weekly integration checkpoints, only the integrator edits the contract |
 | A agent touches the live container | corrupted demo state | live guard (P0.6), marker file only in A's worktree, ownership check, plan section 2 |
@@ -183,14 +185,14 @@ Hard rules for the dates:
 
 ---
 
-## 9. Decisions needed from you
+## 9. Decisions (2026-11-04)
 
-1. **Approve `docs/contracts.md`** (especially: the in-process agent with oob approval, the human-approved key policy rule, the ownership of `bridge/` and `mcp-server/` by the integrator, and the live-container marker file).
-2. **New web dev dependencies:** `fast-check`, `vitest-axe`, `dagre`, Testing Library (needed for the property-based and accessibility requirements). `tech.md` lists only Vitest today.
-3. **Tooling per agent** (section 1) and how Kiro Crew assigns working directories.
-4. **KICKS fallback rule** for 8 Nov (section 7).
-5. **Deadline:** confirm 1 Dec as the last working day.
-6. Who is the integrator on days you are away (merge gate, live runs): if it is only you, the schedule has a single point of failure.
+1. `docs/contracts.md` approved as `contracts-v1`.
+2. Web dev dependencies approved and pinned in `.kiro/steering/tech.md`.
+3. KICKS go/no-go on Sun 8 Nov; fallback as in section 7.
+4. Deadline Fri 4 Dec 2026, 2:00 PM PT; last code day Tue 1 Dec; 2 to 3 Dec write-up, video, blog.
+5. Isolation by folder (section 1).
+6. Still open: who covers the integrator role when the user is away (merge gate, live runs). With one integrator the schedule has a single point of failure.
 
 ---
 

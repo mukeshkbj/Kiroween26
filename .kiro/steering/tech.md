@@ -12,7 +12,31 @@ inclusion: always
 
 ## Testing
 - **Backend:** `pytest`. Property-based tests with **Hypothesis** for the screen parser and spirit-map replay (the judges call out property-based testing — use it for real, not as decoration).
-- **Frontend:** `Vitest`.
+- **Frontend:** `Vitest` with Testing Library (`@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`) on `jsdom`. Property-based tests with **fast-check** (event reducer, grid geometry, planchette scheduler). Automated accessibility checks with **vitest-axe**. Manual accessibility checks are recorded in `web/A11Y.md`.
+- **Graph layout:** `dagre` (deterministic layout; rendered as SVG by us).
+
+## Frontend pinned versions
+Looked up on npm on 2026-11-04 and approved by the user. Pin **exactly** (no `^`/`~`) in `web/package.json` and commit the lockfile. Agent C verifies they install and run together; any change is recorded here by the integrator via a request in `docs/handoff/c/`.
+
+| Package | Version |
+|---|---|
+| `fast-check` | 4.10.2 |
+| `vitest-axe` | 0.1.0 |
+| `axe-core` | 4.14.0 |
+| `dagre` | 0.8.5 |
+| `@types/dagre` | 0.7.54 |
+| `@testing-library/react` | 16.3.3 |
+| `@testing-library/user-event` | 14.6.8 |
+| `@testing-library/jest-dom` | 7.0.1 |
+| `jsdom` | 30.1.3 |
+| `react`, `react-dom` | 19.3.1 |
+| `@types/react`, `@types/react-dom` | 19.3.0 |
+| `vite` | 8.3.5 |
+| `@vitejs/plugin-react` | 6.2.1 |
+| `vitest` | 5.1.0 |
+| `typescript` | 7.0.2 |
+
+Known risk: `vitest-axe` 0.1.0 is old relative to `vitest` 5. If it does not work, C falls back to calling `axe-core` directly from a small test helper (same checks) and records that.
 - Integration tests that touch the live 3270 session are marked and **skipped if the TK4- container isn't running**, so CI/clone checks stay green.
 
 ## Conventions

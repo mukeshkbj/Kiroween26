@@ -1,6 +1,6 @@
 # Contracts — Green Screen Seance
 
-**Status:** v1 draft, for review. **Applies to:** every agent (A legacy, B spirit-map, C web, D agent) and the integrator.
+**Status:** v1, approved. **Applies to:** every agent (A legacy, B spirit-map, C web, D agent) and the integrator.
 **Precedence:** this document beats any spec on interface questions (formats, ownership, who may touch what). Safety rules in `.kiro/steering/mainframe-safety.md` beat this document. If you think a contract is wrong, do not work around it: file a request (section 12).
 
 Words: **MUST** and **MUST NOT** are rules a reviewer will check. **Integrator** is the main session / the user who owns shared code and merges.
@@ -438,4 +438,6 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 3. **Compatibility:** additive changes (new optional field, new event type) are allowed within `v: 1`; consumers MUST ignore unknowns. Removing or retyping a field is `v: 2`.
 4. **P0 items** the integrator delivers before agents branch (see `docs/parallel-plan.md`): `seance_mcp.fake`, `build_service`, `deny_oob`, service/audit observers, tool-pack hook, live guard, examples, `.gitattributes`, steering update.
 
-Version: contracts v1.0-draft, 2026-11-04.
+Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
+
+Change log: (none yet)
