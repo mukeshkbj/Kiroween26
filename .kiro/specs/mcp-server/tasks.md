@@ -37,7 +37,7 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 - [x] 5.3 `mcp-server/README.md`: run, env vars, the confirmation trust model in plain words, the Windows/POSIX launch commands.
 
 ## 6. Live + Kiro (REQ-003, REQ-020)
-- [ ] 6.1 Integration test against `gss-legacy` via in-process `Client(server)`: connect, read the welcome screen, list fields, CLEAR executes, `fill_field` + ENTER returns a pending action and leaves the screen unchanged, confirm with a test confirmer executes it, disconnect. Never completes a TSO logon. Must pass 3 runs in a row.
+- [x] 6.1 Integration test against `gss-legacy` via in-process `Client(server)`: connect, read the welcome screen, list fields, CLEAR executes, `fill_field` + ENTER returns a pending action and leaves the screen unchanged, confirm with a test confirmer executes it, disconnect. Never completes a TSO logon. Must pass 3 runs in a row.
 - [ ] 6.2 Add the server to `.kiro/settings/mcp.json`; `autoApprove` only `read_screen`, `list_fields`, `get_audit_log`. Verify Kiro lists the tools.
 - [ ] 6.3 Hand-written key policy for the demo app's screens (read-only keys per `screen_id`), so enquiry and navigation do not need confirmation while updates still do. Spirit-map replaces it later.
 - [ ] 6.4 Drive the green screen from Kiro (read the welcome screen, find the logon field) and capture a screenshot plus one surprise in `docs/kiro-journal.md` for the write-up.

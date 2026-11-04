@@ -165,6 +165,8 @@ Until bridge task 4.4 (reconnect) lands, a dropped session surfaces as `session_
 ### Integration (live TK4-, marked, skipped if not running)
 In-process `Client(server)` against the `gss-legacy` container: `connect` → `read_screen` (VTAM welcome, `Logon ===>` present) → `list_fields` shows an unprotected field at the cursor → `press_key(CLEAR)` (not in `COMMIT_CAPABLE`, so it executes immediately) → `fill_field` + `press_key(ENTER)` returns a **pending** action, the screen is unchanged and the audit log shows `proposed` → `confirm_action` with a test confirmer executes it. The typed text is a harmless, invalid logon command, and the test ends with `disconnect`; it never completes a TSO logon.
 
+*As built:* on TK4- the welcome screen's `Logon ===>` input goes straight to TSO logon as a user id, so the harmless value is the non-existent user id `XYZZY`. TK4- answers `IKJ56420I USERID XYZZY NOT AUTHORIZED TO USE TSO` / `REENTER`, and the test asserts exactly that. The full suite, including this live test, passed 3 consecutive runs against `gss-legacy`.
+
 ## Risks
 | Risk | Mitigation |
 |---|---|
