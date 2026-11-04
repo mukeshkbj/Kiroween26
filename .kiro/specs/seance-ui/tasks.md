@@ -14,8 +14,8 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 1.3 `protocol/types.ts` and `guards.ts` from contracts sections 3 and 4; conformance test over all committed examples (REQ-030).
 
 ## 2. Pure core (REQ-011, REQ-023, REQ-026, REQ-027) (by 11 Nov)
-- [ ] 2.1 `state/reducer.ts` and `selectors.ts`; `test/arbitraries.ts` generative grammar for event sequences.
-- [ ] 2.2 Property tests (fast-check): reducer invariants (REQ-026). Record mutation checks (remove seq de-dup, remove supersede rule, store a hidden value -> test fails).
+- [x] 2.1 `state/reducer.ts` and `selectors.ts`; `test/arbitraries.ts` generative grammar for event sequences.
+- [x] 2.2 Property tests (fast-check): reducer invariants (REQ-026). Record mutation checks (remove seq de-dup, remove supersede rule, store a hidden value -> test fails).
 - [ ] 2.3 `terminal/geometry.ts` + property tests (round trip, containment, no overlap).
 - [ ] 2.4 `planchette/scheduler.ts` + property tests (REQ-027).
 - [ ] 2.5 `ReplayTransport` and `WebSocketTransport` (hello, token, resume, backoff) behind the `Transport` interface; transport tests with a fake WebSocket.
