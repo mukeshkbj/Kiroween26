@@ -24,12 +24,12 @@ Prerequisite: screen-bridge go/no-go is green (done: 3 consecutive passes agains
 - [x] 3.5 Unit tests: double confirm, expiry, stale screen, read-only block, elicit declined, ambiguous ack sends the key exactly once.
 
 ## 4. Port + tools (REQ-001, REQ-002, REQ-004 to REQ-011)
-- [ ] 4.1 `port.py`: `BridgePort` Protocol; real adapter running `Bridge` calls in a worker thread under one `anyio.Lock`; `FakeBridge` for tests.
-- [ ] 4.2 `tools.py` + `server.py`: `connect`, `read_screen`, `list_fields`, `fill_field`, `press_key`, `confirm_action`, `get_audit_log` as typed tools with the untrusted-screen-text line in each description. Stable error codes.
-- [ ] 4.3 Screen text sanitising (strip control characters) applied at the single point where `ScreenModel` becomes tool output.
-- [ ] 4.4 Unit tests with `FakeBridge`: every tool's happy path, `not_connected`, field validation errors surfaced as `field_invalid`.
-- [ ] 4.5 Tests: hidden-value redaction end to end (result, audit file, errors); prompt-injection screen ("ignore previous instructions") returns as data only with zero extra bridge calls.
-- [ ] 4.6 Property test: bridge `arbitrary_buffer` sentinel never appears in any tool output or audit file.
+- [x] 4.1 `port.py`: `BridgePort` Protocol; real adapter running `Bridge` calls in a worker thread under one `anyio.Lock`; `FakeBridge` for tests.
+- [x] 4.2 `tools.py` + `server.py`: `connect`, `read_screen`, `list_fields`, `fill_field`, `press_key`, `confirm_action`, `get_audit_log` as typed tools with the untrusted-screen-text line in each description. Stable error codes.
+- [x] 4.3 Screen text sanitising (strip control characters) applied at the single point where `ScreenModel` becomes tool output.
+- [x] 4.4 Unit tests with `FakeBridge`: every tool's happy path, `not_connected`, field validation errors surfaced as `field_invalid`.
+- [x] 4.5 Tests: hidden-value redaction end to end (result, audit file, errors); prompt-injection screen ("ignore previous instructions") returns as data only with zero extra bridge calls.
+- [x] 4.6 Property test: bridge `arbitrary_buffer` sentinel never appears in any tool output or audit file.
 
 ## 5. Resources + entrypoint (REQ-001, REQ-017, REQ-018)
 - [ ] 5.1 `render.py` and the `screen://current` resource; `audit://log` resource.

@@ -98,7 +98,9 @@ class Bridge:
                 f"value too long: {len(value)} > field length {field.length}"
             )
         if field.numeric and not _NUMERIC_RE.match(value):
-            raise FieldValidationError(f"field {field.index} is numeric; value not numeric: {value!r}")
+            # Never echo the value: the field may be hidden (a PIN), and error
+            # messages end up in tool results and the audit log.
+            raise FieldValidationError(f"field {field.index} is numeric; value is not a number")
 
         self._session.cursor_move(field.row, field.col)
         self._session.send_string(value)

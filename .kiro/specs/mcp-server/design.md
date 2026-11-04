@@ -41,6 +41,15 @@ mcp-server/
 ## BridgePort
 `Bridge` is blocking (subprocess pipes), and the MCP server is async. `port.py` defines a `Protocol` with the five bridge calls the server needs. The real adapter runs each call in a worker thread (`anyio.to_thread.run_sync`) under a **single `anyio.Lock`**, because one s3270 process is strictly one conversation: two interleaved tool calls would corrupt it. Tests inject `FakeBridge` (a scripted list of `ScreenModel`s), so the whole safety layer is testable with no emulator.
 
+**As built:**
+- **Service layer.** Tool logic lives in `service.py` (`SeanceService`), independent of MCP. `server.py` only maps it to tools, runs the confirmation resolver and turns `GateError` into `ToolError("[code] message")`.
+- **The lock moved up** from the port to the service and covers *whole operations*, not single bridge calls. `press_key` is read-then-propose and `confirm_action` is read-then-authorize-then-send; interleaving those would break "the same screen the human saw".
+- **Output conversion.** `screens.py` is the single conversion point. It strips control characters, keeps hidden values null and derives field labels: the text left of the field, with a trailing `===>`/`:` joined to the word before it.
+- **Fake port.** `FakePort` (tests) builds screens from real bridge `Buffer`s through `ScreenParser`, so fake screens have genuine field layouts, hidden fields and `screen_id`s.
+- **No `from __future__ import annotations` in `server.py`.** The SDK evaluates annotations at registration and cannot see the resolver defined inside `build_server`.
+- **Bridge fix found here.** `fill_field`'s numeric validation error used to echo the typed value. For a hidden PIN that would have put the secret into the tool error and the audit `detail`. It is fixed in the bridge.
+- **Leak property findings.** Hidden values are already stripped by the bridge parser, so nulling them again in `screens.py` is an *equivalent* (defence-in-depth) check. The real entry point for a secret is the caller's own `fill_field` value. Making the service forget `field_hidden` when auditing is caught by the leak property test, but not by the unit test, whose password field is also caught by the credential-label rule.
+
 ## Tool surface
 All tools return pydantic models (structured output). Errors are raised as MCP tool errors with a stable `code` (`not_connected`, `field_invalid`, `keyboard_timeout`, `session_lost`, `unknown_action`, `action_expired`, `stale_screen`, `read_only`, `confirmation_unavailable`).
 
