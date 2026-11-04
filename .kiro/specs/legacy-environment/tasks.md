@@ -18,8 +18,11 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 - [ ] 3.2 Create a 3350 DASD volume with `dasdinit`; attach to running Hercules via HTTP console (`attach 351 3350 ...`).
 - [ ] 3.3 Submit ICKDSF JCL to init the volume, then IDCAMS JCL for the user catalog (UCKICKS0) + KICKS alias.
 - [x] 3.4a Upload the KICKS XMI and RECV370 it: `devinit 10c kicks.xmi ebcdic` mounts it on the 10C reader, `legacy/src/jcl/recv370-kicks.jcl` receives it into `HERC01.KICKS.V1R5M0.INSTALL` (28 members, RC=0000, 106,474 records read). Run via `legacy/scripts/submit-jcl.ps1`.
-- [ ] 3.4b Run the unpack jobstream (`$$V1R5M0` / `V1R5M0` members of the INSTALL library) to expand the embedded XMITs into KICKS datasets.
-- [ ] 3.5 Run KFIX customization (HLQ=KICKS), create system datasets (LODINTRA, LODTEMP). Increase DYNAMNBR in IKJACCNT.
+- [x] 3.4b Unpack: `legacy/src/jcl/kicks-unpack.jcl` (our own job, modelled on the KICKS-supplied one) RECV370s all 26 members into `HERC01.KICKS.V1R5M0.*` and `HERC01.KICKSSYS.V1R5M0.*`, every step RC=0000.
+- [ ] 3.5 Run KFIX customization (HLQ=HERC01, since the unpack used the user id), create system datasets (LODINTRA, LODTEMP). Increase DYNAMNBR in IKJACCNT. **BLOCKED after 2 attempts (time-box).**
+  - Attempt 1: KFIX in batch TSO with `YES` stacked in SYSTSIN. In batch `&SYSUID` is blank and `READ` gets no input, so the prompt loops forever (1M lines, cancelled, S222).
+  - Attempt 2: copy KFIX to `HERC01.KFIX.CLIST`, patch it with TSO EDIT, then run it. Both `CHANGE` commands said `TEXT NOT FOUND`, so it looped again (`TIME=1` stopped it, S322). Root cause: the CLIST has line numbers like `00180000`, and my range `1 99999` only covered the first nine lines.
+  - Proposed attempt 3 (not run): the range `1 99999999` is already in `kicks-kfix.jcl`. Alternative: do KFIX interactively over 3270 via the bridge (it is designed to be run from a TSO terminal).
 - [ ] 3.6 Verify KICKS starts: `EXEC 'KICKS.KICKSSYS.V1R5M0.CLIST(KICKS)'` shows the banner screen.
 
 ## 4. Séance Insurance app — KICKS transactions (A)
