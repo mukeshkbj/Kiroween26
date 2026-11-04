@@ -5,7 +5,7 @@ Owner: **Agent C**. Folder: `web/`, `.kiro/specs/seance-ui/`, `docs/handoff/c/`.
 Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exists before the look.
 
 ## 0. Prerequisites (integrator, parallel-plan P0; blocked until done)
-- [ ] 0.1 `docs/contracts/examples/` has event examples, transcripts (`lookup`, `commit-approve`, `commit-deny`, `commit-expire`, `injection`, `session-lost`, `read-only`) and `SpiritMapView`/audit REST examples.
+- [x] 0.1 `docs/contracts/examples/` has event examples, transcripts (`lookup`, `commit-approve`, `commit-deny`, `commit-expire`, `injection`, `session-lost`, `read-only`) and `SpiritMapView`/audit REST examples.
 - [x] 0.2 New dev dependencies (`fast-check`, `vitest-axe`, `dagre`, Testing Library) approved by the user 2026-11-04; exact versions in `.kiro/steering/tech.md`.
 
 ## 1. Scaffold (by 9 Nov)

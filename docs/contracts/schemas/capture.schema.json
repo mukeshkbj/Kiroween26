@@ -1,0 +1,234 @@
+{
+  "$defs": {
+    "CaptureFill": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ],
+      "title": "CaptureFill",
+      "type": "object"
+    },
+    "CaptureScreen": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "screen": {
+          "$ref": "#/$defs/ScreenOut"
+        },
+        "volatile": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Volatile",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "screen"
+      ],
+      "title": "CaptureScreen",
+      "type": "object"
+    },
+    "CaptureTransition": {
+      "properties": {
+        "fills": {
+          "items": {
+            "$ref": "#/$defs/CaptureFill"
+          },
+          "title": "Fills",
+          "type": "array"
+        },
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "key",
+        "fills",
+        "to"
+      ],
+      "title": "CaptureTransition",
+      "type": "object"
+    },
+    "FieldOut": {
+      "properties": {
+        "col": {
+          "title": "Col",
+          "type": "integer"
+        },
+        "hidden": {
+          "title": "Hidden",
+          "type": "boolean"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "intensified": {
+          "title": "Intensified",
+          "type": "boolean"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "length": {
+          "title": "Length",
+          "type": "integer"
+        },
+        "numeric": {
+          "title": "Numeric",
+          "type": "boolean"
+        },
+        "protected": {
+          "title": "Protected",
+          "type": "boolean"
+        },
+        "row": {
+          "title": "Row",
+          "type": "integer"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "index",
+        "row",
+        "col",
+        "length",
+        "protected",
+        "numeric",
+        "hidden",
+        "intensified",
+        "label",
+        "value"
+      ],
+      "title": "FieldOut",
+      "type": "object"
+    },
+    "ScreenOut": {
+      "properties": {
+        "cursor": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Cursor",
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/FieldOut"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "screen_id": {
+          "title": "Screen Id",
+          "type": "string"
+        },
+        "trust": {
+          "default": "untrusted-screen-data",
+          "title": "Trust",
+          "type": "string"
+        }
+      },
+      "required": [
+        "screen_id",
+        "cursor",
+        "rows",
+        "fields"
+      ],
+      "title": "ScreenOut",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "app_id": {
+      "title": "App Id",
+      "type": "string"
+    },
+    "captured_at": {
+      "title": "Captured At",
+      "type": "string"
+    },
+    "schema": {
+      "const": "gss.capture/1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "screens": {
+      "items": {
+        "$ref": "#/$defs/CaptureScreen"
+      },
+      "minItems": 1,
+      "title": "Screens",
+      "type": "array"
+    },
+    "transitions": {
+      "items": {
+        "$ref": "#/$defs/CaptureTransition"
+      },
+      "title": "Transitions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "app_id",
+    "captured_at",
+    "screens",
+    "transitions"
+  ],
+  "title": "Capture",
+  "type": "object"
+}

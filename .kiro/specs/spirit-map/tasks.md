@@ -5,9 +5,9 @@ Owner: **Agent B**. Folder: `spirit-map/`, `docs/spirit-map/**`, `.kiro/specs/sp
 Ordered so the safety machinery and its property tests exist before the explorer touches anything, and everything runs on FakeBridge first. Dates are the plan in `docs/parallel-plan.md`.
 
 ## 0. Prerequisites (integrator, parallel-plan P0; blocked until done)
-- [ ] 0.1 `seance_mcp.fake` exports `FakePort` and `FakeApp` (value-aware transitions, records every key and a `dirty` flag). Today `FakePort` lives in `mcp-server/tests` and ignores field values.
+- [x] 0.1 `seance_mcp.fake` exports `FakePort` and `FakeApp` (value-aware transitions, records every key and a `dirty` flag). Today `FakePort` lives in `mcp-server/tests` and ignores field values.
 - [x] 0.2 `mcp-server` has `build_service(settings, port)` and the tool-pack hook (`seance_mcp.toolpack`, `GENERATED_TOOLS_PATH`, `TOOL_APPROVALS_PATH`, `SEANCE_ALLOW_UNREVIEWED_TOOLS`). Done in P0.2/P0.5.
-- [ ] 0.3 Contract examples exist under `docs/contracts/examples/` (tool pack, key policy, SpiritMapView).
+- [x] 0.3 Contract examples exist under `docs/contracts/examples/` (tool pack, key policy, SpiritMapView).
 
 ## 1. Scaffold (by 7 Nov)
 - [ ] 1.1 `spirit-map/` package (`pyproject.toml`, Python >=3.12, `src/seance_spirit/`). Pin with `==`: `pydantic`, `anyio`, `hypothesis`, `pytest`, `jsonschema`; install `../bridge` and `../mcp-server` editable. `anthropic` and `boto3` as optional extras, pinned.

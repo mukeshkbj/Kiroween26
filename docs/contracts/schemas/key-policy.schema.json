@@ -1,0 +1,57 @@
+{
+  "$defs": {
+    "KeyPolicyEntry": {
+      "properties": {
+        "read_only_keys": {
+          "items": {
+            "enum": [
+              "ENTER",
+              "CLEAR",
+              "PA1",
+              "PA2",
+              "PA3",
+              "PF1",
+              "PF2",
+              "PF3",
+              "PF4",
+              "PF5",
+              "PF6",
+              "PF7",
+              "PF8",
+              "PF9",
+              "PF10",
+              "PF11",
+              "PF12",
+              "PF13",
+              "PF14",
+              "PF15",
+              "PF16",
+              "PF17",
+              "PF18",
+              "PF19",
+              "PF20",
+              "PF21",
+              "PF22",
+              "PF23",
+              "PF24"
+            ],
+            "type": "string"
+          },
+          "title": "Read Only Keys",
+          "type": "array"
+        }
+      },
+      "required": [
+        "read_only_keys"
+      ],
+      "title": "KeyPolicyEntry",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": {
+    "$ref": "#/$defs/KeyPolicyEntry"
+  },
+  "title": "KeyPolicyFile",
+  "type": "object"
+}

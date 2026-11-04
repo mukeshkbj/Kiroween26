@@ -1,0 +1,66 @@
+{
+  "$defs": {
+    "ClientLine": {
+      "properties": {
+        "dir": {
+          "const": "client",
+          "title": "Dir",
+          "type": "string"
+        },
+        "msg": {
+          "additionalProperties": true,
+          "title": "Msg",
+          "type": "object"
+        }
+      },
+      "required": [
+        "dir",
+        "msg"
+      ],
+      "title": "ClientLine",
+      "type": "object"
+    },
+    "ServerLine": {
+      "properties": {
+        "delay_ms": {
+          "minimum": 0,
+          "title": "Delay Ms",
+          "type": "integer"
+        },
+        "dir": {
+          "const": "server",
+          "title": "Dir",
+          "type": "string"
+        },
+        "event": {
+          "additionalProperties": true,
+          "title": "Event",
+          "type": "object"
+        }
+      },
+      "required": [
+        "dir",
+        "delay_ms",
+        "event"
+      ],
+      "title": "ServerLine",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "discriminator": {
+    "mapping": {
+      "client": "#/$defs/ClientLine",
+      "server": "#/$defs/ServerLine"
+    },
+    "propertyName": "dir"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ServerLine"
+    },
+    {
+      "$ref": "#/$defs/ClientLine"
+    }
+  ]
+}

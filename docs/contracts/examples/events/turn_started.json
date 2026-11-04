@@ -1,0 +1,11 @@
+{
+  "data": {
+    "user_message_id": "m_01"
+  },
+  "seq": 8,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.510Z",
+  "turn_id": "t_01",
+  "type": "turn_started",
+  "v": 1
+}

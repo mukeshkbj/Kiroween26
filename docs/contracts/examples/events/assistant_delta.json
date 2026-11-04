@@ -1,0 +1,12 @@
+{
+  "data": {
+    "message_id": "m_02",
+    "text": "Policy P0000003 belongs to A. ROSE. It is ACTIVE "
+  },
+  "seq": 31,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:04.080Z",
+  "turn_id": "t_01",
+  "type": "assistant_delta",
+  "v": 1
+}

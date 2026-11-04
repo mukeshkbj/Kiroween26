@@ -1,0 +1,14 @@
+{
+  "data": {
+    "action_id": "00000000-0000-0000-0000-000000000001",
+    "confirmed_by": "oob:web-ui:s_01",
+    "error_code": null,
+    "outcome": "approved"
+  },
+  "seq": 40,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:05.490Z",
+  "turn_id": "t_01",
+  "type": "confirmation_resolved",
+  "v": 1
+}

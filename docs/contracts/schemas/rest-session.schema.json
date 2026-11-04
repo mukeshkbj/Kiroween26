@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "token": {
+      "title": "Token",
+      "type": "string"
+    },
+    "v": {
+      "const": 1,
+      "title": "V",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "token",
+    "session_id",
+    "v"
+  ],
+  "title": "SessionResponse",
+  "type": "object"
+}

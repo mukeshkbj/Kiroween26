@@ -1,0 +1,12 @@
+{
+  "data": {
+    "message_id": "m_02",
+    "text": "Policy P0000003 belongs to A. ROSE. It is ACTIVE with a premium of 250.00, last updated 2026-10-21."
+  },
+  "seq": 33,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:04.210Z",
+  "turn_id": "t_01",
+  "type": "assistant_message",
+  "v": 1
+}

@@ -1,0 +1,601 @@
+{
+  "app_id": "fake-insurance",
+  "edges": [
+    {
+      "from": "n_ba02cc6364",
+      "id": "e_01",
+      "key": "ENTER",
+      "meaning": "Open policy enquiry",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_419888f22d"
+    },
+    {
+      "from": "n_ba02cc6364",
+      "id": "e_02",
+      "key": "ENTER",
+      "meaning": "Open the policy list",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_c5d11dedae"
+    },
+    {
+      "from": "n_ba02cc6364",
+      "id": "e_03",
+      "key": "ENTER",
+      "meaning": "Open policy update",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_96fa848aaa"
+    },
+    {
+      "from": "n_419888f22d",
+      "id": "e_04",
+      "key": "ENTER",
+      "meaning": "Look up the policy number",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_419888f22d"
+    },
+    {
+      "from": "n_419888f22d",
+      "id": "e_05",
+      "key": "PF3",
+      "meaning": "Back to the main menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_c5d11dedae",
+      "id": "e_06",
+      "key": "PF3",
+      "meaning": "Back to the main menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_c5d11dedae",
+      "id": "e_07",
+      "key": "PF8",
+      "meaning": "Next page",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_c5d11dedae"
+    },
+    {
+      "from": "n_96fa848aaa",
+      "id": "e_08",
+      "key": "ENTER",
+      "meaning": "Review the change",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_483e5fe116"
+    },
+    {
+      "from": "n_96fa848aaa",
+      "id": "e_09",
+      "key": "PF3",
+      "meaning": "Back to the main menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_483e5fe116",
+      "id": "e_10",
+      "key": "PF3",
+      "meaning": "Cancel the update",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_419888f22d",
+      "id": "e_11",
+      "key": "CLEAR",
+      "meaning": "Clear the screen and return to the menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_c5d11dedae",
+      "id": "e_12",
+      "key": "CLEAR",
+      "meaning": "Clear the screen and return to the menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_96fa848aaa",
+      "id": "e_13",
+      "key": "CLEAR",
+      "meaning": "Clear the screen and return to the menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    },
+    {
+      "from": "n_483e5fe116",
+      "id": "e_14",
+      "key": "CLEAR",
+      "meaning": "Clear the screen and return to the menu",
+      "read_only": true,
+      "status": "observed",
+      "to": "n_ba02cc6364"
+    }
+  ],
+  "frontier": [
+    {
+      "from": "n_483e5fe116",
+      "key": "ENTER",
+      "meaning": "Confirm and save the update",
+      "reason": "denied_commit"
+    }
+  ],
+  "generated_at": "2026-11-15T10:00:00.000Z",
+  "home": "n_ba02cc6364",
+  "nodes": [
+    {
+      "confidence": 0.9,
+      "fields": [
+        {
+          "business_name": "Menu option",
+          "col": 15,
+          "hidden": false,
+          "key": "option",
+          "label": "OPTION ===>",
+          "length": 1,
+          "protected": false,
+          "role": "selector",
+          "row": 7
+        },
+        {
+          "business_name": "Message",
+          "col": 1,
+          "hidden": false,
+          "key": "msg",
+          "label": "",
+          "length": 70,
+          "protected": true,
+          "role": "status",
+          "row": 22
+        }
+      ],
+      "id": "n_ba02cc6364",
+      "kind": "menu",
+      "name": "Main menu",
+      "needs_review": false,
+      "preview": [
+        " SEANCE INSURANCE - MAIN MENU                                                   ",
+        "                                                                                ",
+        "                                                                                ",
+        "   1  POLICY ENQUIRY                                                            ",
+        "   2  POLICY LIST                                                               ",
+        "   3  POLICY UPDATE                                                             ",
+        "                                                                                ",
+        "   OPTION ===>                                                                  ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=SELECT  CLEAR=EXIT                                                       "
+      ],
+      "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+      "visits": 3
+    },
+    {
+      "confidence": 0.9,
+      "fields": [
+        {
+          "business_name": "Policy number",
+          "col": 13,
+          "hidden": false,
+          "key": "polno",
+          "label": "POLNO ===>",
+          "length": 8,
+          "protected": false,
+          "role": "identifier",
+          "row": 3
+        },
+        {
+          "business_name": "Policy holder",
+          "col": 13,
+          "hidden": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "protected": true,
+          "role": "display",
+          "row": 5
+        },
+        {
+          "business_name": "Policy status",
+          "col": 13,
+          "hidden": false,
+          "key": "status",
+          "label": "STATUS:",
+          "length": 10,
+          "protected": true,
+          "role": "display",
+          "row": 6
+        },
+        {
+          "business_name": "Premium",
+          "col": 13,
+          "hidden": false,
+          "key": "premium",
+          "label": "PREMIUM:",
+          "length": 10,
+          "protected": true,
+          "role": "display",
+          "row": 7
+        },
+        {
+          "business_name": "Last updated",
+          "col": 13,
+          "hidden": false,
+          "key": "upddate",
+          "label": "UPDATED:",
+          "length": 10,
+          "protected": true,
+          "role": "display",
+          "row": 8
+        },
+        {
+          "business_name": "Message",
+          "col": 1,
+          "hidden": false,
+          "key": "msg",
+          "label": "",
+          "length": 70,
+          "protected": true,
+          "role": "status",
+          "row": 22
+        }
+      ],
+      "id": "n_419888f22d",
+      "kind": "enquiry",
+      "name": "Policy enquiry",
+      "needs_review": false,
+      "preview": [
+        " SEANCE INSURANCE - POLICY ENQUIRY                                              ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO ===>                                                                     ",
+        "                                                                                ",
+        " HOLDER:                                                                        ",
+        " STATUS:                                                                        ",
+        " PREMIUM:                                                                       ",
+        " UPDATED:                                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=LOOK UP  PF3=BACK                                                        "
+      ],
+      "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+      "visits": 3
+    },
+    {
+      "confidence": 0.9,
+      "fields": [
+        {
+          "business_name": "Row selector",
+          "col": 13,
+          "hidden": false,
+          "key": "select",
+          "label": "SELECT ===>",
+          "length": 2,
+          "protected": false,
+          "role": "selector",
+          "row": 3
+        },
+        {
+          "business_name": "Message",
+          "col": 1,
+          "hidden": false,
+          "key": "msg",
+          "label": "",
+          "length": 70,
+          "protected": true,
+          "role": "status",
+          "row": 22
+        }
+      ],
+      "id": "n_c5d11dedae",
+      "kind": "list",
+      "name": "Policy list",
+      "needs_review": false,
+      "preview": [
+        " SEANCE INSURANCE - POLICY LIST                                                 ",
+        "                                                                                ",
+        "                                                                                ",
+        " SELECT ===>                                                                    ",
+        "                                                                                ",
+        " POLNO     HOLDER               STATUS                                          ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " PF7=UP  PF8=DOWN  PF3=BACK                                                     "
+      ],
+      "screen_id": "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952",
+      "visits": 3
+    },
+    {
+      "confidence": 0.9,
+      "fields": [
+        {
+          "business_name": "Policy number",
+          "col": 13,
+          "hidden": false,
+          "key": "polno",
+          "label": "POLNO ===>",
+          "length": 8,
+          "protected": false,
+          "role": "identifier",
+          "row": 3
+        },
+        {
+          "business_name": "Policy status",
+          "col": 22,
+          "hidden": false,
+          "key": "status",
+          "label": "STATUS (A/L/C) ===>",
+          "length": 1,
+          "protected": false,
+          "role": "input",
+          "row": 5
+        },
+        {
+          "business_name": "Premium",
+          "col": 22,
+          "hidden": false,
+          "key": "premium",
+          "label": "PREMIUM ===>",
+          "length": 7,
+          "protected": false,
+          "role": "input",
+          "row": 6
+        },
+        {
+          "business_name": "Policy holder",
+          "col": 13,
+          "hidden": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "protected": true,
+          "role": "display",
+          "row": 8
+        },
+        {
+          "business_name": "Message",
+          "col": 1,
+          "hidden": false,
+          "key": "msg",
+          "label": "",
+          "length": 70,
+          "protected": true,
+          "role": "status",
+          "row": 22
+        }
+      ],
+      "id": "n_96fa848aaa",
+      "kind": "form",
+      "name": "Policy update",
+      "needs_review": false,
+      "preview": [
+        " SEANCE INSURANCE - POLICY UPDATE                                               ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO ===>                                                                     ",
+        "                                                                                ",
+        " STATUS (A/L/C) ===>                                                            ",
+        " PREMIUM ===>                                                                   ",
+        "                                                                                ",
+        " HOLDER:                                                                        ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=REVIEW CHANGE  PF3=BACK                                                  "
+      ],
+      "screen_id": "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a",
+      "visits": 3
+    },
+    {
+      "confidence": 0.9,
+      "fields": [
+        {
+          "business_name": "Policy number",
+          "col": 13,
+          "hidden": false,
+          "key": "polno",
+          "label": "POLNO:",
+          "length": 8,
+          "protected": true,
+          "role": "identifier",
+          "row": 3
+        },
+        {
+          "business_name": "Policy holder",
+          "col": 13,
+          "hidden": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "protected": true,
+          "role": "display",
+          "row": 4
+        },
+        {
+          "business_name": "Current status",
+          "col": 13,
+          "hidden": false,
+          "key": "old_status",
+          "label": "STATUS:",
+          "length": 1,
+          "protected": true,
+          "role": "display",
+          "row": 6
+        },
+        {
+          "business_name": "New status",
+          "col": 25,
+          "hidden": false,
+          "key": "new_status",
+          "label": "STATUS:",
+          "length": 1,
+          "protected": true,
+          "role": "display",
+          "row": 6
+        },
+        {
+          "business_name": "Current premium",
+          "col": 13,
+          "hidden": false,
+          "key": "old_premium",
+          "label": "PREMIUM:",
+          "length": 7,
+          "protected": true,
+          "role": "display",
+          "row": 7
+        },
+        {
+          "business_name": "New premium",
+          "col": 25,
+          "hidden": false,
+          "key": "new_premium",
+          "label": "PREMIUM:",
+          "length": 7,
+          "protected": true,
+          "role": "display",
+          "row": 7
+        },
+        {
+          "business_name": "Message",
+          "col": 1,
+          "hidden": false,
+          "key": "msg",
+          "label": "",
+          "length": 70,
+          "protected": true,
+          "role": "status",
+          "row": 22
+        }
+      ],
+      "id": "n_483e5fe116",
+      "kind": "confirm",
+      "name": "Confirm update",
+      "needs_review": false,
+      "preview": [
+        " SEANCE INSURANCE - CONFIRM UPDATE                                              ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO:                                                                         ",
+        " HOLDER:                                                                        ",
+        "             OLD         NEW                                                    ",
+        " STATUS:                                                                        ",
+        " PREMIUM:                                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
+      ],
+      "screen_id": "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
+      "visits": 3
+    }
+  ],
+  "tools": [
+    {
+      "approved": true,
+      "kind": "read",
+      "name": "lookup_policy",
+      "path": [
+        "n_ba02cc6364",
+        "n_419888f22d"
+      ]
+    },
+    {
+      "approved": true,
+      "kind": "read",
+      "name": "list_policies",
+      "path": [
+        "n_ba02cc6364",
+        "n_c5d11dedae"
+      ]
+    },
+    {
+      "approved": true,
+      "kind": "commit",
+      "name": "update_policy",
+      "path": [
+        "n_ba02cc6364",
+        "n_96fa848aaa",
+        "n_483e5fe116"
+      ]
+    }
+  ],
+  "version": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

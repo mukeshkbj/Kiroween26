@@ -1,0 +1,20 @@
+{
+  "data": {
+    "col": null,
+    "field_index": null,
+    "key": "Clear",
+    "label": null,
+    "length": null,
+    "mode": "key",
+    "row": null,
+    "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+    "step": 0,
+    "tool_call_id": "c_01"
+  },
+  "seq": 12,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:01.240Z",
+  "turn_id": "t_01",
+  "type": "field_focus",
+  "v": 1
+}

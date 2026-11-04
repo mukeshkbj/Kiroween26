@@ -1,0 +1,43 @@
+{
+  "apps": [
+    {
+      "app_id": "fake-insurance",
+      "description": "Five simulated screens. No mainframe.",
+      "has_map": true,
+      "kind": "fake",
+      "name": "Seance Insurance (simulated)",
+      "reachable": null,
+      "read_only": false,
+      "tools": {
+        "approved": 3,
+        "business": 3
+      }
+    },
+    {
+      "app_id": "tk4-builtins",
+      "description": "Real MVS 3.8j screens that need no logon.",
+      "has_map": false,
+      "kind": "live",
+      "name": "TK4- built-in screens",
+      "reachable": true,
+      "read_only": true,
+      "tools": {
+        "approved": 0,
+        "business": 0
+      }
+    },
+    {
+      "app_id": "seance-insurance",
+      "description": "The demo business app on the legacy system.",
+      "has_map": false,
+      "kind": "live",
+      "name": "Seance Insurance (KICKS)",
+      "reachable": false,
+      "read_only": false,
+      "tools": {
+        "approved": 0,
+        "business": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "data": {
+    "phase": "snapshot",
+    "screen": {
+      "cursor": [
+        7,
+        15
+      ],
+      "fields": [
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 0,
+          "intensified": false,
+          "label": "",
+          "length": 573,
+          "numeric": false,
+          "protected": true,
+          "row": 0,
+          "value": "SEANCE INSURANCE - MAIN MENU                                                                                                                                                                                                                      1  POLICY ENQUIRY                                                               2  POLICY LIST                                                                  3  POLICY UPDATE                                                                                                                                                OPTION ===>"
+        },
+        {
+          "col": 15,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "label": "OPTION ===>",
+          "length": 1,
+          "numeric": false,
+          "protected": false,
+          "row": 7,
+          "value": " "
+        },
+        {
+          "col": 17,
+          "hidden": false,
+          "index": 2,
+          "intensified": false,
+          "label": "OPTION ===>",
+          "length": 1183,
+          "numeric": false,
+          "protected": true,
+          "row": 7,
+          "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "protected": true,
+          "row": 22,
+          "value": "                                                                      "
+        },
+        {
+          "col": 72,
+          "hidden": false,
+          "index": 4,
+          "intensified": false,
+          "label": "",
+          "length": 88,
+          "numeric": false,
+          "protected": true,
+          "row": 22,
+          "value": "         ENTER=SELECT  CLEAR=EXIT                                                       "
+        }
+      ],
+      "rows": [
+        " SEANCE INSURANCE - MAIN MENU                                                   ",
+        "                                                                                ",
+        "                                                                                ",
+        "   1  POLICY ENQUIRY                                                            ",
+        "   2  POLICY LIST                                                               ",
+        "   3  POLICY UPDATE                                                             ",
+        "                                                                                ",
+        "   OPTION ===>                                                                  ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=SELECT  CLEAR=EXIT                                                       "
+      ],
+      "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+      "trust": "untrusted-screen-data"
+    },
+    "tool_call_id": null
+  },
+  "seq": 6,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.410Z",
+  "turn_id": null,
+  "type": "screen",
+  "v": 1
+}

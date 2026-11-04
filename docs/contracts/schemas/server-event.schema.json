@@ -1,0 +1,1827 @@
+{
+  "$defs": {
+    "AckData": {
+      "properties": {
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref"
+      ],
+      "title": "AckData",
+      "type": "object"
+    },
+    "AckEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/AckData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "ack",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "AckEvent",
+      "type": "object"
+    },
+    "AssistantDeltaData": {
+      "properties": {
+        "message_id": {
+          "title": "Message Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message_id",
+        "text"
+      ],
+      "title": "AssistantDeltaData",
+      "type": "object"
+    },
+    "AssistantDeltaEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/AssistantDeltaData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "assistant_delta",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "AssistantDeltaEvent",
+      "type": "object"
+    },
+    "AssistantMessageData": {
+      "properties": {
+        "message_id": {
+          "title": "Message Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message_id",
+        "text"
+      ],
+      "title": "AssistantMessageData",
+      "type": "object"
+    },
+    "AssistantMessageEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/AssistantMessageData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "assistant_message",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "AssistantMessageEvent",
+      "type": "object"
+    },
+    "AuditEntry": {
+      "properties": {
+        "action_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action Id"
+        },
+        "confirmed_by": {
+          "default": "n/a",
+          "title": "Confirmed By",
+          "type": "string"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "hash": {
+          "title": "Hash",
+          "type": "string"
+        },
+        "key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Key"
+        },
+        "outcome": {
+          "title": "Outcome",
+          "type": "string"
+        },
+        "prev_hash": {
+          "title": "Prev Hash",
+          "type": "string"
+        },
+        "screen_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Screen Id"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "ts": {
+          "title": "Ts",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "seq",
+        "ts",
+        "tool",
+        "outcome",
+        "prev_hash",
+        "hash"
+      ],
+      "title": "AuditEntry",
+      "type": "object"
+    },
+    "AuditEntryData": {
+      "properties": {
+        "entry": {
+          "$ref": "#/$defs/AuditEntry"
+        }
+      },
+      "required": [
+        "entry"
+      ],
+      "title": "AuditEntryData",
+      "type": "object"
+    },
+    "AuditEntryEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/AuditEntryData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "audit_entry",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "AuditEntryEvent",
+      "type": "object"
+    },
+    "ConfirmationRequiredData": {
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "agent_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Agent Summary"
+        },
+        "expires_in_s": {
+          "exclusiveMinimum": 0,
+          "title": "Expires In S",
+          "type": "number"
+        },
+        "field_snapshot": {
+          "items": {
+            "$ref": "#/$defs/FieldSnap"
+          },
+          "title": "Field Snapshot",
+          "type": "array"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "screen_id": {
+          "title": "Screen Id",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_id",
+        "tool_call_id",
+        "screen_id",
+        "key",
+        "field_snapshot",
+        "expires_in_s",
+        "read_only",
+        "agent_summary"
+      ],
+      "title": "ConfirmationRequiredData",
+      "type": "object"
+    },
+    "ConfirmationRequiredEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ConfirmationRequiredData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "confirmation_required",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ConfirmationRequiredEvent",
+      "type": "object"
+    },
+    "ConfirmationResolvedData": {
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "confirmed_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confirmed By"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "outcome": {
+          "enum": [
+            "approved",
+            "denied",
+            "expired",
+            "superseded",
+            "blocked_read_only",
+            "stale",
+            "error"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action_id",
+        "outcome",
+        "confirmed_by",
+        "error_code"
+      ],
+      "title": "ConfirmationResolvedData",
+      "type": "object"
+    },
+    "ConfirmationResolvedEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ConfirmationResolvedData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "confirmation_resolved",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ConfirmationResolvedEvent",
+      "type": "object"
+    },
+    "ErrorData": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "recoverable": {
+          "title": "Recoverable",
+          "type": "boolean"
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Ref"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "recoverable",
+        "ref"
+      ],
+      "title": "ErrorData",
+      "type": "object"
+    },
+    "ErrorEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ErrorData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "error",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ErrorEvent",
+      "type": "object"
+    },
+    "FieldFocusData": {
+      "properties": {
+        "col": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 80,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Col"
+        },
+        "field_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Field Index"
+        },
+        "key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Key"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Label"
+        },
+        "length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Length"
+        },
+        "mode": {
+          "enum": [
+            "read",
+            "fill",
+            "key"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "row": {
+          "anyOf": [
+            {
+              "exclusiveMaximum": 24,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Row"
+        },
+        "screen_id": {
+          "title": "Screen Id",
+          "type": "string"
+        },
+        "step": {
+          "minimum": 0,
+          "title": "Step",
+          "type": "integer"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_call_id",
+        "step",
+        "mode",
+        "screen_id",
+        "field_index",
+        "row",
+        "col",
+        "length",
+        "label",
+        "key"
+      ],
+      "title": "FieldFocusData",
+      "type": "object"
+    },
+    "FieldFocusEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/FieldFocusData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "field_focus",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "FieldFocusEvent",
+      "type": "object"
+    },
+    "FieldOut": {
+      "properties": {
+        "col": {
+          "title": "Col",
+          "type": "integer"
+        },
+        "hidden": {
+          "title": "Hidden",
+          "type": "boolean"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "intensified": {
+          "title": "Intensified",
+          "type": "boolean"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "length": {
+          "title": "Length",
+          "type": "integer"
+        },
+        "numeric": {
+          "title": "Numeric",
+          "type": "boolean"
+        },
+        "protected": {
+          "title": "Protected",
+          "type": "boolean"
+        },
+        "row": {
+          "title": "Row",
+          "type": "integer"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "index",
+        "row",
+        "col",
+        "length",
+        "protected",
+        "numeric",
+        "hidden",
+        "intensified",
+        "label",
+        "value"
+      ],
+      "title": "FieldOut",
+      "type": "object"
+    },
+    "FieldSnap": {
+      "description": "An unprotected field as the human saw it when the action was proposed.",
+      "properties": {
+        "col": {
+          "title": "Col",
+          "type": "integer"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "row": {
+          "title": "Row",
+          "type": "integer"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "index",
+        "row",
+        "col",
+        "label",
+        "value"
+      ],
+      "title": "FieldSnap",
+      "type": "object"
+    },
+    "LlmInfo": {
+      "properties": {
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "model",
+        "available"
+      ],
+      "title": "LlmInfo",
+      "type": "object"
+    },
+    "PongData": {
+      "properties": {},
+      "title": "PongData",
+      "type": "object"
+    },
+    "PongEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/PongData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "pong",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "PongEvent",
+      "type": "object"
+    },
+    "ScreenData": {
+      "properties": {
+        "phase": {
+          "enum": [
+            "before",
+            "after",
+            "snapshot"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "screen": {
+          "$ref": "#/$defs/ScreenOut"
+        },
+        "tool_call_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Tool Call Id"
+        }
+      },
+      "required": [
+        "phase",
+        "tool_call_id",
+        "screen"
+      ],
+      "title": "ScreenData",
+      "type": "object"
+    },
+    "ScreenEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ScreenData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "screen",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ScreenEvent",
+      "type": "object"
+    },
+    "ScreenOut": {
+      "properties": {
+        "cursor": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Cursor",
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/FieldOut"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "screen_id": {
+          "title": "Screen Id",
+          "type": "string"
+        },
+        "trust": {
+          "default": "untrusted-screen-data",
+          "title": "Trust",
+          "type": "string"
+        }
+      },
+      "required": [
+        "screen_id",
+        "cursor",
+        "rows",
+        "fields"
+      ],
+      "title": "ScreenOut",
+      "type": "object"
+    },
+    "SessionStateData": {
+      "properties": {
+        "app_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "App Id"
+        },
+        "confirm_mode": {
+          "const": "oob",
+          "title": "Confirm Mode",
+          "type": "string"
+        },
+        "controller": {
+          "default": true,
+          "title": "Controller",
+          "type": "boolean"
+        },
+        "llm": {
+          "$ref": "#/$defs/LlmInfo"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "resync": {
+          "default": false,
+          "title": "Resync",
+          "type": "boolean"
+        },
+        "state": {
+          "enum": [
+            "disconnected",
+            "connecting",
+            "connected",
+            "session_lost",
+            "error"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "tools": {
+          "$ref": "#/$defs/ToolCounts"
+        }
+      },
+      "required": [
+        "state",
+        "app_id",
+        "read_only",
+        "confirm_mode",
+        "llm",
+        "tools"
+      ],
+      "title": "SessionStateData",
+      "type": "object"
+    },
+    "SessionStateEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/SessionStateData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "session_state",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "SessionStateEvent",
+      "type": "object"
+    },
+    "ThinkingData": {
+      "properties": {
+        "summary": {
+          "maxLength": 300,
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "title": "ThinkingData",
+      "type": "object"
+    },
+    "ThinkingEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ThinkingData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "thinking",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ThinkingEvent",
+      "type": "object"
+    },
+    "ToolCallData": {
+      "properties": {
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "kind": {
+          "enum": [
+            "business",
+            "generic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "may_commit": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "May Commit"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool_call_id",
+        "tool",
+        "kind",
+        "arguments",
+        "may_commit"
+      ],
+      "title": "ToolCallData",
+      "type": "object"
+    },
+    "ToolCallEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ToolCallData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "tool_call",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ToolCallEvent",
+      "type": "object"
+    },
+    "ToolCounts": {
+      "properties": {
+        "business": {
+          "minimum": 0,
+          "title": "Business",
+          "type": "integer"
+        },
+        "generic": {
+          "minimum": 0,
+          "title": "Generic",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "business",
+        "generic"
+      ],
+      "title": "ToolCounts",
+      "type": "object"
+    },
+    "ToolResultData": {
+      "properties": {
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Result"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "pending",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "tool_call_id",
+        "status",
+        "error_code",
+        "summary",
+        "result",
+        "truncated"
+      ],
+      "title": "ToolResultData",
+      "type": "object"
+    },
+    "ToolResultEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/ToolResultData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "tool_result",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "ToolResultEvent",
+      "type": "object"
+    },
+    "TurnFinishedData": {
+      "properties": {
+        "reason": {
+          "enum": [
+            "completed",
+            "cancelled",
+            "error",
+            "max_steps"
+          ],
+          "title": "Reason",
+          "type": "string"
+        },
+        "usage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Usage"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "usage"
+      ],
+      "title": "TurnFinishedData",
+      "type": "object"
+    },
+    "TurnFinishedEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/TurnFinishedData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "turn_finished",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "TurnFinishedEvent",
+      "type": "object"
+    },
+    "TurnStartedData": {
+      "properties": {
+        "user_message_id": {
+          "title": "User Message Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_message_id"
+      ],
+      "title": "TurnStartedData",
+      "type": "object"
+    },
+    "TurnStartedEvent": {
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/TurnStartedData"
+        },
+        "seq": {
+          "minimum": 1,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "ts": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+          "title": "Ts",
+          "type": "string"
+        },
+        "turn_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Turn Id"
+        },
+        "type": {
+          "const": "turn_started",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "v",
+        "seq",
+        "ts",
+        "session_id",
+        "turn_id",
+        "type",
+        "data"
+      ],
+      "title": "TurnStartedEvent",
+      "type": "object"
+    },
+    "Usage": {
+      "properties": {
+        "input_tokens": {
+          "minimum": 0,
+          "title": "Input Tokens",
+          "type": "integer"
+        },
+        "output_tokens": {
+          "minimum": 0,
+          "title": "Output Tokens",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "input_tokens",
+        "output_tokens"
+      ],
+      "title": "Usage",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "discriminator": {
+    "mapping": {
+      "ack": "#/$defs/AckEvent",
+      "assistant_delta": "#/$defs/AssistantDeltaEvent",
+      "assistant_message": "#/$defs/AssistantMessageEvent",
+      "audit_entry": "#/$defs/AuditEntryEvent",
+      "confirmation_required": "#/$defs/ConfirmationRequiredEvent",
+      "confirmation_resolved": "#/$defs/ConfirmationResolvedEvent",
+      "error": "#/$defs/ErrorEvent",
+      "field_focus": "#/$defs/FieldFocusEvent",
+      "pong": "#/$defs/PongEvent",
+      "screen": "#/$defs/ScreenEvent",
+      "session_state": "#/$defs/SessionStateEvent",
+      "thinking": "#/$defs/ThinkingEvent",
+      "tool_call": "#/$defs/ToolCallEvent",
+      "tool_result": "#/$defs/ToolResultEvent",
+      "turn_finished": "#/$defs/TurnFinishedEvent",
+      "turn_started": "#/$defs/TurnStartedEvent"
+    },
+    "propertyName": "type"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/SessionStateEvent"
+    },
+    {
+      "$ref": "#/$defs/AckEvent"
+    },
+    {
+      "$ref": "#/$defs/TurnStartedEvent"
+    },
+    {
+      "$ref": "#/$defs/ThinkingEvent"
+    },
+    {
+      "$ref": "#/$defs/AssistantDeltaEvent"
+    },
+    {
+      "$ref": "#/$defs/AssistantMessageEvent"
+    },
+    {
+      "$ref": "#/$defs/ToolCallEvent"
+    },
+    {
+      "$ref": "#/$defs/ScreenEvent"
+    },
+    {
+      "$ref": "#/$defs/FieldFocusEvent"
+    },
+    {
+      "$ref": "#/$defs/ToolResultEvent"
+    },
+    {
+      "$ref": "#/$defs/ConfirmationRequiredEvent"
+    },
+    {
+      "$ref": "#/$defs/ConfirmationResolvedEvent"
+    },
+    {
+      "$ref": "#/$defs/AuditEntryEvent"
+    },
+    {
+      "$ref": "#/$defs/TurnFinishedEvent"
+    },
+    {
+      "$ref": "#/$defs/ErrorEvent"
+    },
+    {
+      "$ref": "#/$defs/PongEvent"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "data": {
+    "code": "observer_only",
+    "message": "This connection only observes.",
+    "recoverable": true,
+    "ref": "u_09"
+  },
+  "seq": 1,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.000Z",
+  "turn_id": null,
+  "type": "error",
+  "v": 1
+}

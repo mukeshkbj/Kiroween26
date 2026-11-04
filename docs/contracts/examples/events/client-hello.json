@@ -1,0 +1,8 @@
+{
+  "client": "seance-web/0.1.0",
+  "id": "h_01",
+  "resume_from": null,
+  "token": "tok_example",
+  "type": "hello",
+  "v": 1
+}

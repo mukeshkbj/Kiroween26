@@ -1,0 +1,428 @@
+{
+  "$defs": {
+    "Extract": {
+      "properties": {
+        "into": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Into",
+          "type": "object"
+        },
+        "node": {
+          "title": "Node",
+          "type": "string"
+        },
+        "op": {
+          "const": "extract",
+          "title": "Op",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "node",
+        "into"
+      ],
+      "title": "Extract",
+      "type": "object"
+    },
+    "ExtractList": {
+      "properties": {
+        "max_rows": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Rows",
+          "type": "integer"
+        },
+        "node": {
+          "title": "Node",
+          "type": "string"
+        },
+        "op": {
+          "const": "extract_list",
+          "title": "Op",
+          "type": "string"
+        },
+        "paginate": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paginate"
+        },
+        "row_fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Row Fields",
+          "type": "object"
+        }
+      },
+      "required": [
+        "op",
+        "node",
+        "row_fields",
+        "max_rows"
+      ],
+      "title": "ExtractList",
+      "type": "object"
+    },
+    "Fill": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "node": {
+          "title": "Node",
+          "type": "string"
+        },
+        "op": {
+          "const": "fill",
+          "title": "Op",
+          "type": "string"
+        },
+        "skip_if_absent": {
+          "default": false,
+          "title": "Skip If Absent",
+          "type": "boolean"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "op",
+        "node",
+        "field",
+        "value"
+      ],
+      "title": "Fill",
+      "type": "object"
+    },
+    "Goto": {
+      "properties": {
+        "node": {
+          "title": "Node",
+          "type": "string"
+        },
+        "op": {
+          "const": "goto",
+          "title": "Op",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "node"
+      ],
+      "title": "Goto",
+      "type": "object"
+    },
+    "Limits": {
+      "properties": {
+        "max_steps": {
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Max Steps",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_steps"
+      ],
+      "title": "Limits",
+      "type": "object"
+    },
+    "Press": {
+      "properties": {
+        "expect": {
+          "title": "Expect",
+          "type": "string"
+        },
+        "key": {
+          "enum": [
+            "ENTER",
+            "CLEAR",
+            "PA1",
+            "PA2",
+            "PA3",
+            "PF1",
+            "PF2",
+            "PF3",
+            "PF4",
+            "PF5",
+            "PF6",
+            "PF7",
+            "PF8",
+            "PF9",
+            "PF10",
+            "PF11",
+            "PF12",
+            "PF13",
+            "PF14",
+            "PF15",
+            "PF16",
+            "PF17",
+            "PF18",
+            "PF19",
+            "PF20",
+            "PF21",
+            "PF22",
+            "PF23",
+            "PF24"
+          ],
+          "title": "Key",
+          "type": "string"
+        },
+        "op": {
+          "const": "press",
+          "title": "Op",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "key",
+        "expect"
+      ],
+      "title": "Press",
+      "type": "object"
+    },
+    "Propose": {
+      "properties": {
+        "key": {
+          "enum": [
+            "ENTER",
+            "CLEAR",
+            "PA1",
+            "PA2",
+            "PA3",
+            "PF1",
+            "PF2",
+            "PF3",
+            "PF4",
+            "PF5",
+            "PF6",
+            "PF7",
+            "PF8",
+            "PF9",
+            "PF10",
+            "PF11",
+            "PF12",
+            "PF13",
+            "PF14",
+            "PF15",
+            "PF16",
+            "PF17",
+            "PF18",
+            "PF19",
+            "PF20",
+            "PF21",
+            "PF22",
+            "PF23",
+            "PF24"
+          ],
+          "title": "Key",
+          "type": "string"
+        },
+        "on": {
+          "title": "On",
+          "type": "string"
+        },
+        "op": {
+          "const": "propose",
+          "title": "Op",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op",
+        "key",
+        "on"
+      ],
+      "title": "Propose",
+      "type": "object"
+    },
+    "Tool": {
+      "properties": {
+        "def_hash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Def Hash",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 400,
+          "title": "Description",
+          "type": "string"
+        },
+        "input_schema": {
+          "additionalProperties": true,
+          "title": "Input Schema",
+          "type": "object"
+        },
+        "kind": {
+          "enum": [
+            "read",
+            "commit"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "limits": {
+          "$ref": "#/$defs/Limits"
+        },
+        "name": {
+          "pattern": "^[a-z][a-z0-9_]{2,40}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "output_schema": {
+          "additionalProperties": true,
+          "title": "Output Schema",
+          "type": "object"
+        },
+        "provenance": {
+          "additionalProperties": true,
+          "title": "Provenance",
+          "type": "object"
+        },
+        "recipe": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "extract": "#/$defs/Extract",
+                "extract_list": "#/$defs/ExtractList",
+                "fill": "#/$defs/Fill",
+                "goto": "#/$defs/Goto",
+                "press": "#/$defs/Press",
+                "propose": "#/$defs/Propose"
+              },
+              "propertyName": "op"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Goto"
+              },
+              {
+                "$ref": "#/$defs/Fill"
+              },
+              {
+                "$ref": "#/$defs/Press"
+              },
+              {
+                "$ref": "#/$defs/Extract"
+              },
+              {
+                "$ref": "#/$defs/ExtractList"
+              },
+              {
+                "$ref": "#/$defs/Propose"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Recipe",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "title",
+        "description",
+        "input_schema",
+        "output_schema",
+        "recipe",
+        "limits",
+        "provenance",
+        "def_hash"
+      ],
+      "title": "Tool",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "app_id": {
+      "title": "App Id",
+      "type": "string"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "generator": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Generator",
+      "type": "object"
+    },
+    "home": {
+      "title": "Home",
+      "type": "string"
+    },
+    "map_hash": {
+      "title": "Map Hash",
+      "type": "string"
+    },
+    "schema": {
+      "const": "gss.toolpack/1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "tools": {
+      "items": {
+        "$ref": "#/$defs/Tool"
+      },
+      "title": "Tools",
+      "type": "array"
+    },
+    "volatile_regions": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Volatile Regions"
+    }
+  },
+  "required": [
+    "schema",
+    "app_id",
+    "map_hash",
+    "generated_at",
+    "generator",
+    "home",
+    "tools"
+  ],
+  "title": "ToolPack",
+  "type": "object"
+}

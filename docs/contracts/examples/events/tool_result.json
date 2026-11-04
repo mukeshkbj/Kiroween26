@@ -1,0 +1,78 @@
+{
+  "data": {
+    "error_code": null,
+    "result": {
+      "data": {
+        "holder": "A. ROSE",
+        "last_updated": "2026-10-21",
+        "message": "",
+        "premium": "250.00",
+        "status": "ACTIVE"
+      },
+      "error": null,
+      "pending": null,
+      "status": "ok",
+      "trace": [
+        {
+          "field": null,
+          "key": "Clear",
+          "node": "n_ba02cc6364",
+          "op": "press",
+          "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+          "step": 0
+        },
+        {
+          "field": "OPTION ===>",
+          "key": null,
+          "node": "n_ba02cc6364",
+          "op": "fill",
+          "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+          "step": 1
+        },
+        {
+          "field": null,
+          "key": "Enter",
+          "node": "n_ba02cc6364",
+          "op": "press",
+          "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+          "step": 2
+        },
+        {
+          "field": "POLNO ===>",
+          "key": null,
+          "node": "n_419888f22d",
+          "op": "fill",
+          "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+          "step": 3
+        },
+        {
+          "field": null,
+          "key": "Enter",
+          "node": "n_419888f22d",
+          "op": "press",
+          "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+          "step": 4
+        },
+        {
+          "field": null,
+          "key": null,
+          "node": null,
+          "op": "extract",
+          "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+          "step": 5
+        }
+      ],
+      "trust": "untrusted-screen-data"
+    },
+    "status": "ok",
+    "summary": "Found policy P0000003",
+    "tool_call_id": "c_01",
+    "truncated": false
+  },
+  "seq": 30,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:03.990Z",
+  "turn_id": "t_01",
+  "type": "tool_result",
+  "v": 1
+}

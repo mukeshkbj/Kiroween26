@@ -1,0 +1,25 @@
+{
+  "data": {
+    "entry": {
+      "action_id": null,
+      "confirmed_by": "n/a",
+      "detail": "localhost:3270",
+      "field": null,
+      "hash": "c3668a39f9db1dac101f1302321b9a816951c769ba7e4c731b46a189ec0cad05",
+      "key": null,
+      "outcome": "ok",
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+      "seq": 1,
+      "tool": "connect",
+      "ts": "2026-11-24T10:00:00.200000+00:00",
+      "value": null
+    }
+  },
+  "seq": 4,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.230Z",
+  "turn_id": null,
+  "type": "audit_entry",
+  "v": 1
+}

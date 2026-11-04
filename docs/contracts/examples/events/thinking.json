@@ -1,0 +1,11 @@
+{
+  "data": {
+    "summary": "Looking up policy P0000003 with the policy lookup tool."
+  },
+  "seq": 9,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.710Z",
+  "turn_id": "t_01",
+  "type": "thinking",
+  "v": 1
+}

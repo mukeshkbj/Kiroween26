@@ -1,0 +1,18 @@
+{
+  "data": {
+    "action_id": "00000000-0000-0000-0000-000000000001",
+    "agent_summary": "Change the premium of policy P0000003 from 250.00 to 300.00",
+    "expires_in_s": 300.0,
+    "field_snapshot": [],
+    "key": "Enter",
+    "read_only": false,
+    "screen_id": "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
+    "tool_call_id": "c_01"
+  },
+  "seq": 35,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:04.870Z",
+  "turn_id": "t_01",
+  "type": "confirmation_required",
+  "v": 1
+}

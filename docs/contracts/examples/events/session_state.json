@@ -1,0 +1,25 @@
+{
+  "data": {
+    "app_id": null,
+    "confirm_mode": "oob",
+    "controller": true,
+    "llm": {
+      "available": true,
+      "model": "scripted-demo",
+      "provider": "scripted"
+    },
+    "read_only": false,
+    "resync": false,
+    "state": "disconnected",
+    "tools": {
+      "business": 3,
+      "generic": 4
+    }
+  },
+  "seq": 1,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.080Z",
+  "turn_id": null,
+  "type": "session_state",
+  "v": 1
+}

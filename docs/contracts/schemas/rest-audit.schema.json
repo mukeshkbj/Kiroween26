@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "AuditEntry": {
+      "properties": {
+        "action_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action Id"
+        },
+        "confirmed_by": {
+          "default": "n/a",
+          "title": "Confirmed By",
+          "type": "string"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "hash": {
+          "title": "Hash",
+          "type": "string"
+        },
+        "key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Key"
+        },
+        "outcome": {
+          "title": "Outcome",
+          "type": "string"
+        },
+        "prev_hash": {
+          "title": "Prev Hash",
+          "type": "string"
+        },
+        "screen_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Screen Id"
+        },
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "ts": {
+          "title": "Ts",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "seq",
+        "ts",
+        "tool",
+        "outcome",
+        "prev_hash",
+        "hash"
+      ],
+      "title": "AuditEntry",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "broken_seq": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Broken Seq"
+    },
+    "chain_ok": {
+      "title": "Chain Ok",
+      "type": "boolean"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/AuditEntry"
+      },
+      "title": "Entries",
+      "type": "array"
+    }
+  },
+  "required": [
+    "entries",
+    "chain_ok",
+    "broken_seq"
+  ],
+  "title": "AuditResponse",
+  "type": "object"
+}

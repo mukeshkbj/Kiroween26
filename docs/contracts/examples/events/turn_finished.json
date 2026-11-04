@@ -1,0 +1,12 @@
+{
+  "data": {
+    "reason": "completed",
+    "usage": null
+  },
+  "seq": 34,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:04.290Z",
+  "turn_id": "t_01",
+  "type": "turn_finished",
+  "v": 1
+}

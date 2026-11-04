@@ -1,0 +1,328 @@
+{
+  "$defs": {
+    "MapEdge": {
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "meaning": {
+          "title": "Meaning",
+          "type": "string"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "observed",
+            "declared"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "key",
+        "meaning",
+        "read_only",
+        "status"
+      ],
+      "title": "MapEdge",
+      "type": "object"
+    },
+    "MapField": {
+      "properties": {
+        "business_name": {
+          "title": "Business Name",
+          "type": "string"
+        },
+        "col": {
+          "exclusiveMaximum": 80,
+          "minimum": 0,
+          "title": "Col",
+          "type": "integer"
+        },
+        "hidden": {
+          "title": "Hidden",
+          "type": "boolean"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "length": {
+          "minimum": 0,
+          "title": "Length",
+          "type": "integer"
+        },
+        "protected": {
+          "title": "Protected",
+          "type": "boolean"
+        },
+        "role": {
+          "enum": [
+            "identifier",
+            "display",
+            "input",
+            "selector",
+            "status",
+            "other"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "row": {
+          "exclusiveMaximum": 24,
+          "minimum": 0,
+          "title": "Row",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "business_name",
+        "role",
+        "row",
+        "col",
+        "length",
+        "protected",
+        "hidden"
+      ],
+      "title": "MapField",
+      "type": "object"
+    },
+    "MapFrontier": {
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "meaning": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Meaning"
+        },
+        "reason": {
+          "enum": [
+            "denied_key",
+            "denied_screen",
+            "denied_commit",
+            "unsafe_field",
+            "budget",
+            "unvisited"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "key",
+        "reason"
+      ],
+      "title": "MapFrontier",
+      "type": "object"
+    },
+    "MapNode": {
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/MapField"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^n_[0-9a-f]{10}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "menu",
+            "enquiry",
+            "list",
+            "form",
+            "confirm",
+            "error",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "needs_review": {
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "preview": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 24,
+          "minItems": 24,
+          "title": "Preview",
+          "type": "array"
+        },
+        "screen_id": {
+          "title": "Screen Id",
+          "type": "string"
+        },
+        "visits": {
+          "minimum": 0,
+          "title": "Visits",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "screen_id",
+        "name",
+        "kind",
+        "confidence",
+        "needs_review",
+        "visits",
+        "preview",
+        "fields"
+      ],
+      "title": "MapNode",
+      "type": "object"
+    },
+    "MapTool": {
+      "properties": {
+        "approved": {
+          "title": "Approved",
+          "type": "boolean"
+        },
+        "kind": {
+          "enum": [
+            "read",
+            "commit"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "path": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Path",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "kind",
+        "approved",
+        "path"
+      ],
+      "title": "MapTool",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "app_id": {
+      "title": "App Id",
+      "type": "string"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/MapEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "frontier": {
+      "items": {
+        "$ref": "#/$defs/MapFrontier"
+      },
+      "title": "Frontier",
+      "type": "array"
+    },
+    "generated_at": {
+      "title": "Generated At",
+      "type": "string"
+    },
+    "home": {
+      "title": "Home",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/MapNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "tools": {
+      "items": {
+        "$ref": "#/$defs/MapTool"
+      },
+      "title": "Tools",
+      "type": "array"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "app_id",
+    "version",
+    "generated_at",
+    "home",
+    "nodes",
+    "edges",
+    "frontier",
+    "tools"
+  ],
+  "title": "SpiritMapView",
+  "type": "object"
+}

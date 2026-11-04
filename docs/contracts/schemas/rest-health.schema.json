@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "live_allowed": {
+      "title": "Live Allowed",
+      "type": "boolean"
+    },
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ok",
+    "version",
+    "live_allowed"
+  ],
+  "title": "HealthResponse",
+  "type": "object"
+}

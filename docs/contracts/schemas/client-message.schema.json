@@ -1,0 +1,222 @@
+{
+  "$defs": {
+    "CancelTurn": {
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "turn_id": {
+          "title": "Turn Id",
+          "type": "string"
+        },
+        "type": {
+          "const": "cancel_turn",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "turn_id"
+      ],
+      "title": "CancelTurn",
+      "type": "object"
+    },
+    "ConfirmDecision": {
+      "properties": {
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "approve",
+            "deny"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "const": "confirm_decision",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "action_id",
+        "decision"
+      ],
+      "title": "ConfirmDecision",
+      "type": "object"
+    },
+    "ConnectSystem": {
+      "properties": {
+        "app_id": {
+          "title": "App Id",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "const": "connect_system",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "app_id"
+      ],
+      "title": "ConnectSystem",
+      "type": "object"
+    },
+    "Hello": {
+      "properties": {
+        "client": {
+          "title": "Client",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "resume_from": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resume From"
+        },
+        "token": {
+          "title": "Token",
+          "type": "string"
+        },
+        "type": {
+          "const": "hello",
+          "title": "Type",
+          "type": "string"
+        },
+        "v": {
+          "const": 1,
+          "title": "V",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "v",
+        "client",
+        "token"
+      ],
+      "title": "Hello",
+      "type": "object"
+    },
+    "Ping": {
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "const": "ping",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "title": "Ping",
+      "type": "object"
+    },
+    "UserMessage": {
+      "properties": {
+        "id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 4000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "type": {
+          "const": "user_message",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "text"
+      ],
+      "title": "UserMessage",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "discriminator": {
+    "mapping": {
+      "cancel_turn": "#/$defs/CancelTurn",
+      "confirm_decision": "#/$defs/ConfirmDecision",
+      "connect_system": "#/$defs/ConnectSystem",
+      "hello": "#/$defs/Hello",
+      "ping": "#/$defs/Ping",
+      "user_message": "#/$defs/UserMessage"
+    },
+    "propertyName": "type"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Hello"
+    },
+    {
+      "$ref": "#/$defs/ConnectSystem"
+    },
+    {
+      "$ref": "#/$defs/UserMessage"
+    },
+    {
+      "$ref": "#/$defs/ConfirmDecision"
+    },
+    {
+      "$ref": "#/$defs/CancelTurn"
+    },
+    {
+      "$ref": "#/$defs/Ping"
+    }
+  ]
+}

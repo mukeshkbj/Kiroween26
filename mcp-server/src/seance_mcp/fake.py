@@ -208,6 +208,12 @@ class FakePort:
         self.timeout_keys = timeout_keys
         self.calls: list[tuple] = []
         self._connected = False
+        self.fail_next: Exception | None = None  # raised once by the next read/fill/press
+
+    def _maybe_fail(self) -> None:
+        if self.fail_next is not None:
+            exc, self.fail_next = self.fail_next, None
+            raise exc
 
     @property
     def connected(self) -> bool:
@@ -222,10 +228,12 @@ class FakePort:
         self._connected = False
 
     async def read_screen(self) -> ScreenModel:
+        self._maybe_fail()
         self.calls.append(("read",))
         return self.screens[self.current].model()
 
     async def fill_field(self, field_ref: int | tuple[int, int], value: str) -> ScreenModel:
+        self._maybe_fail()
         spec = self.screens[self.current]
         m = spec.model()
         if isinstance(field_ref, int):
@@ -247,6 +255,7 @@ class FakePort:
         return spec.model()
 
     async def press(self, key: Key) -> ScreenModel:
+        self._maybe_fail()
         self.calls.append(("press", key.value))  # the key IS sent before any timeout
         if key.value in self.timeout_keys:
             raise KeyboardTimeoutError("keyboard still locked")
@@ -331,6 +340,7 @@ class FakeApp(FakePort):
     # -- BridgePort ---------------------------------------------------------
 
     async def press(self, key: Key) -> ScreenModel:
+        self._maybe_fail()
         self.calls.append(("press", key.value))
         if key.value in self.timeout_keys:
             raise KeyboardTimeoutError("keyboard still locked")

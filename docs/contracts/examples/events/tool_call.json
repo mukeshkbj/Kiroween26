@@ -1,0 +1,17 @@
+{
+  "data": {
+    "arguments": {
+      "policy_number": "P0000003"
+    },
+    "kind": "business",
+    "may_commit": false,
+    "tool": "lookup_policy",
+    "tool_call_id": "c_01"
+  },
+  "seq": 10,
+  "session_id": "s_01",
+  "ts": "2026-11-24T10:00:00.830Z",
+  "turn_id": "t_01",
+  "type": "tool_call",
+  "v": 1
+}

@@ -1,0 +1,97 @@
+{
+  "$defs": {
+    "AppInfo": {
+      "properties": {
+        "app_id": {
+          "title": "App Id",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "has_map": {
+          "title": "Has Map",
+          "type": "boolean"
+        },
+        "kind": {
+          "enum": [
+            "fake",
+            "live"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "reachable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reachable"
+        },
+        "read_only": {
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "tools": {
+          "$ref": "#/$defs/ToolsInfo"
+        }
+      },
+      "required": [
+        "app_id",
+        "name",
+        "kind",
+        "description",
+        "reachable",
+        "has_map",
+        "tools",
+        "read_only"
+      ],
+      "title": "AppInfo",
+      "type": "object"
+    },
+    "ToolsInfo": {
+      "properties": {
+        "approved": {
+          "minimum": 0,
+          "title": "Approved",
+          "type": "integer"
+        },
+        "business": {
+          "minimum": 0,
+          "title": "Business",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "business",
+        "approved"
+      ],
+      "title": "ToolsInfo",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "apps": {
+      "items": {
+        "$ref": "#/$defs/AppInfo"
+      },
+      "title": "Apps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "apps"
+  ],
+  "title": "AppsResponse",
+  "type": "object"
+}

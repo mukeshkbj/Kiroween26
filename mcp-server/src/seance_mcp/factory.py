@@ -8,6 +8,7 @@ the launch directory.
 from __future__ import annotations
 
 from collections.abc import Callable
+from datetime import datetime
 from pathlib import Path
 
 from mcp.server import MCPServer
@@ -30,6 +31,7 @@ def build_service(
     clock: Callable[[], float] | None = None,
     root: Path = REPO_ROOT,
     registrar: Registrar | None = None,
+    audit_now: Callable[[], datetime] | None = None,
 ) -> tuple[MCPServer, SeanceService]:
     """Return ``(server, service)`` sharing one gate, audit log and port.
 
@@ -38,7 +40,7 @@ def build_service(
     handle the agent's confirmation broker uses for ``approve_oob``/``deny_oob``;
     it is never exposed as a tool.
     """
-    audit = AuditLog(resolve_path(audit_path or settings.audit_log_path, root))  # type: ignore[arg-type]
+    audit = AuditLog(resolve_path(audit_path or settings.audit_log_path, root), audit_now)  # type: ignore[arg-type]
     gate_kw = {"clock": clock} if clock is not None else {}
     gate = SafetyGate(
         allow_commit=settings.allow_commit,

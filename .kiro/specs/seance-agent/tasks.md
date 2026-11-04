@@ -5,9 +5,9 @@ Owner: **Agent D**. Folder: `agent/`, `.kiro/specs/seance-agent/`, `docs/handoff
 Ordered so the safety properties are proven with scripted models before any real LLM is attached.
 
 ## 0. Prerequisites (integrator, parallel-plan P0; blocked until done)
-- [ ] 0.1 `seance_mcp.fake` (`FakePort`, `FakeApp`) importable.
-- [ ] 0.2 `build_service(...)`, `SafetyGate.deny_oob`, `SeanceService.observe`, `AuditLog.subscribe`.
-- [ ] 0.3 Contract examples and transcripts in `docs/contracts/examples/`.
+- [x] 0.1 `seance_mcp.fake` (`FakePort`, `FakeApp`) importable.
+- [x] 0.2 `build_service(...)`, `SafetyGate.deny_oob`, `SeanceService.observe`, `AuditLog.subscribe`.
+- [x] 0.3 Contract examples and transcripts in `docs/contracts/examples/`.
 
 ## 1. Scaffold (by 9 Nov)
 - [ ] 1.1 `agent/` package: `pyproject.toml` (Python >=3.12; pin `fastapi`, `uvicorn`, `pydantic`, `anthropic`, `websockets`/test deps, `pytest`, `hypothesis`, `httpx`; `boto3` as extra). Install `../bridge`, `../mcp-server` editable.

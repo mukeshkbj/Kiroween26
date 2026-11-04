@@ -1,0 +1,22 @@
+{
+  "approved": [
+    {
+      "approved_at": "2026-11-15T12:00:00.000Z",
+      "approved_by": "example-reviewer",
+      "def_hash": "sha256:4e01b59a7e12c66bad2c46bb7f7e8aa4128891e0ed596bd7c17070d4ff8b99ad",
+      "name": "lookup_policy"
+    },
+    {
+      "approved_at": "2026-11-15T12:00:00.000Z",
+      "approved_by": "example-reviewer",
+      "def_hash": "sha256:f1887d3ce611aa4459b7133d827654bbf2f46da21255b447c59ab5069c6fad36",
+      "name": "list_policies"
+    },
+    {
+      "approved_at": "2026-11-15T12:00:00.000Z",
+      "approved_by": "example-reviewer",
+      "def_hash": "sha256:9913e6840f48e41fac45bb0a6284869fca1bba87f385ab996e259aa7fa065b7d",
+      "name": "update_policy"
+    }
+  ]
+}

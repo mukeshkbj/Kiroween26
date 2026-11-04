@@ -1,0 +1,47 @@
+{
+  "$defs": {
+    "Approval": {
+      "properties": {
+        "approved_at": {
+          "title": "Approved At",
+          "type": "string"
+        },
+        "approved_by": {
+          "title": "Approved By",
+          "type": "string"
+        },
+        "def_hash": {
+          "title": "Def Hash",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "def_hash",
+        "approved_by",
+        "approved_at"
+      ],
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "approved": {
+      "items": {
+        "$ref": "#/$defs/Approval"
+      },
+      "title": "Approved",
+      "type": "array"
+    }
+  },
+  "required": [
+    "approved"
+  ],
+  "title": "ToolApprovals",
+  "type": "object"
+}
