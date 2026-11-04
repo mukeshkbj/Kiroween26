@@ -94,8 +94,8 @@ An MCP tool can be called by the model. So `confirm_action(action_id)` being cal
 | Mode | How the human is in the loop | Fails closed when |
 |---|---|---|
 | `elicit` (default) | `confirm_action` asks the client's user via MCP elicitation, showing key, screen and snapshot. Proceeds only on an explicit "accept". | the client does not support elicitation, or the user declines/times out |
-| `client-approval` | The MCP client's own per-call approval prompt (Kiro's tool approval) is the gate. Requires `confirm_action` to NOT be auto-approved; `.kiro/settings/mcp.json` lists only `read_screen`, `list_fields`, `get_audit_log` in `autoApprove`. | not enforceable by the server, so audit records `confirmed_by: client-approval:<client>` and relies on config; flagged as the weakest mode |
-| `oob` | Confirmation comes from a separate local channel (the web UI's backend calling a local confirm endpoint). `confirm_action` over MCP only reports status. | no oob channel is attached |
+| `client-approval` | **Explicit opt-in only; never a silent fallback.** The MCP client's own per-call approval prompt (Kiro's tool approval) is the gate. Requires `confirm_action` to NOT be auto-approved; `.kiro/settings/mcp.json` lists only `read_screen`, `list_fields`, `get_audit_log` in `autoApprove`. | not enforceable by the server, so the audit records `confirmed_by: client-approval(weakest):<client>` and relies on config |
+| `oob` (**the demo path**) | Our own seance-agent plus web UI use this: the UI confirmation modal is the human gate. Confirmation comes from a separate local channel (the web UI's backend calling a local confirm endpoint). `confirm_action` over MCP only reports status. | no oob channel is attached |
 
 Elicitation in `mcp` 2.x: the `Resolve`/`Elicit` mechanism is the SDK's preferred way and carries the question over whichever transport era the connection supports; `ctx.elicit()` works for legacy connections. Task 3.3 verifies which one Kiro's client actually answers and picks the implementation accordingly; the choice is isolated in `safety.py` behind a `Confirmer` interface so the rest is unaffected.
 
