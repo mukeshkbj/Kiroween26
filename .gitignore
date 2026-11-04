@@ -26,3 +26,6 @@ bridge/_s3270_probe.py
 bridge/_probe.py
 # Audit logs are runtime data
 docs/audit/
+
+# Live-container marker: per worktree, only Agent A's (docs/contracts.md 2.1)
+.gss-live-ok

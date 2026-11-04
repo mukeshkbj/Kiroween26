@@ -32,6 +32,8 @@ class BridgePort(Protocol):
 
 
 class RealBridgePort:
+    is_live = True  # connecting is subject to the live guard (seance_mcp.live)
+
     def __init__(
         self,
         wait_timeout_ms: int = 5000,

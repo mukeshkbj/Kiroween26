@@ -24,6 +24,7 @@ from seance_bridge import (
 
 from .audit import AuditEntry, AuditLog, redact
 from .config import Settings
+from .live import LIVE_REFUSAL, live_allowed
 from .observe import FieldTarget, OpCallback, OpEvent, Subscribers
 from .port import BridgePort
 from .safety import Decision, GateError, SafetyGate
@@ -50,8 +51,10 @@ def parse_key(key: str) -> Key:
 
 
 class SeanceService:
-    def __init__(self, settings: Settings, port: BridgePort, audit: AuditLog, gate: SafetyGate):
+    def __init__(self, settings: Settings, port: BridgePort, audit: AuditLog, gate: SafetyGate, *,
+                 live_ok: Callable[[], bool] | None = None):
         self.settings = settings
+        self._live_ok = live_ok or live_allowed
         self.port = port
         self.audit = audit
         self.gate = gate
@@ -127,6 +130,9 @@ class SeanceService:
         h, p = host or self.settings.host, port or self.settings.port
         async with self._lock, self._trace("connect"):
             self._begin("connect")
+            if getattr(self.port, "is_live", False) and not self._live_ok():
+                self.audit.append("connect", "live_not_allowed", detail=f"{h}:{p}")
+                raise GateError("live_not_allowed", LIVE_REFUSAL)
             try:
                 s = await self.port.connect(h, p)
             except ScreenBridgeError as exc:
