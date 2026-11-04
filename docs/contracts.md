@@ -23,6 +23,7 @@ One folder, one owner. Nobody edits another owner's folder, not even for a typo.
 | `.kiro/specs/seance-agent/` | D | |
 | `docs/spirit-map/**` | B | generated artefacts per app (section 7) |
 | `docs/handoff/a/`, `b/`, `c/`, `d/` | the same letter | requests, notes, per-agent journal, experiments |
+| `docs/handoff/integrator/` | Integrator | weekly status, answers to contract requests |
 | `bridge/`, `mcp-server/` | **Integrator** | finished libraries; agents depend on them, change them only via request |
 | `.kiro/steering/`, `.kiro/hooks/`, `.kiro/settings/` | Integrator | |
 | `docs/contracts.md`, `docs/parallel-plan.md`, `docs/contracts/**` | Integrator | |
@@ -49,7 +50,7 @@ Rules:
 
 - **Only Agent A** may start, stop, reset, `docker exec` into, connect to port 3270 or 8038 of, or run any marked live test against `gss-legacy`.
 - Agents B, C, D and the integrator MUST NOT connect to it, including "just a read". This includes Kiro's own `green-screen-seance` MCP server pointed at `127.0.0.1:3270`: it is a live connection. Do not call its `connect` from B, C or D sessions.
-- Live tests are marked `integration`, skip when the container is not up, and additionally skip unless `GSS_LIVE_OK=1`. Only A (and the integrator for the final runs) sets `GSS_LIVE_OK=1`. `agent/` refuses to connect to a `kind: live` app without it. A shared `.env` MUST NOT set it; it is exported per shell.
+- Live tests are marked `integration`, skip when the container is not up, and additionally skip unless `GSS_LIVE_OK=1`. Only A (and the integrator for the final runs) sets `GSS_LIVE_OK=1`, or creates the gitignored marker file `.gss-live-ok` in the repo root of its own worktree (the marker is per worktree, so it cannot leak to other agents). `mcp-server` (live guard, P0.6) and `agent/` refuse to connect to a live host without one of the two (`live_not_allowed`). A shared `.env` MUST NOT set it.
 - **Live work for others is done by A on request** (section 12): "run spirit-map exploration against tk4-builtins", "run the agent end-to-end three times". A reports results and commits artefacts to *its own* paths or hands files over via `docs/handoff/a/`.
 - Final live acceptance (demo path three times in a row) is run by A on the integration branch.
 
