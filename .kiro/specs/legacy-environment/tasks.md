@@ -17,7 +17,8 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 - [ ] 3.1 `legacy/setup-kicks`: download KICKS archive from `github.com/moshix/kicks`, extract `kicks-tso-v1r5m0`.
 - [ ] 3.2 Create a 3350 DASD volume with `dasdinit`; attach to running Hercules via HTTP console (`attach 351 3350 ...`).
 - [ ] 3.3 Submit ICKDSF JCL to init the volume, then IDCAMS JCL for the user catalog (UCKICKS0) + KICKS alias.
-- [ ] 3.4 Upload the KICKS XMI via card reader (`devinit 000c ... ebcdic`) and run the unpack jobstream (V1R5M0 member).
+- [x] 3.4a Upload the KICKS XMI and RECV370 it: `devinit 10c kicks.xmi ebcdic` mounts it on the 10C reader, `legacy/src/jcl/recv370-kicks.jcl` receives it into `HERC01.KICKS.V1R5M0.INSTALL` (28 members, RC=0000, 106,474 records read). Run via `legacy/scripts/submit-jcl.ps1`.
+- [ ] 3.4b Run the unpack jobstream (`$$V1R5M0` / `V1R5M0` members of the INSTALL library) to expand the embedded XMITs into KICKS datasets.
 - [ ] 3.5 Run KFIX customization (HLQ=KICKS), create system datasets (LODINTRA, LODTEMP). Increase DYNAMNBR in IKJACCNT.
 - [ ] 3.6 Verify KICKS starts: `EXEC 'KICKS.KICKSSYS.V1R5M0.CLIST(KICKS)'` shows the banner screen.
 
