@@ -18,7 +18,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 2.2 Property tests (fast-check): reducer invariants (REQ-026). Record mutation checks (remove seq de-dup, remove supersede rule, store a hidden value -> test fails).
 - [x] 2.3 `terminal/geometry.ts` + property tests (round trip, containment, no overlap).
 - [x] 2.4 `planchette/scheduler.ts` + property tests (REQ-027).
-- [ ] 2.5 `ReplayTransport` and `WebSocketTransport` (hello, token, resume, backoff) behind the `Transport` interface; transport tests with a fake WebSocket.
+- [x] 2.5 `ReplayTransport` and `WebSocketTransport` (hello, token, resume, backoff) behind the `Transport` interface; transport tests with a fake WebSocket.
 
 ## 3. Terminal (REQ-002 to REQ-006) (by 13 Nov)
 - [ ] 3.1 `Grid`, `Row`, `FieldSpan`, `Oia`; hidden-field rendering; cursor; `ScreenAsText`.

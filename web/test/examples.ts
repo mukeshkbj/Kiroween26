@@ -1,7 +1,7 @@
 /** Loads the committed contract examples straight from docs/contracts/ (never copied). */
-export type TranscriptLine =
-  | { dir: 'server'; delay_ms: number; event: unknown }
-  | { dir: 'client'; msg: unknown };
+import { parseTranscript, type TranscriptLine } from '../src/protocol/transcript';
+
+export type { TranscriptLine };
 
 const eventFiles = import.meta.glob('../../docs/contracts/examples/events/*.json', {
   query: '?raw',
@@ -26,12 +26,7 @@ const mapFiles = import.meta.glob('../../docs/contracts/examples/spirit-map/*.js
 
 const baseName = (p: string) => (p.split('/').pop() ?? p).replace(/\.(jsonl?|JSON)$/, '');
 
-export function parseTranscript(text: string): TranscriptLine[] {
-  return text
-    .split(/\r?\n/)
-    .filter((l) => l.trim() !== '')
-    .map((l) => JSON.parse(l) as TranscriptLine);
-}
+export { parseTranscript };
 
 export function loadExamples() {
   const events: Record<string, unknown> = {};
