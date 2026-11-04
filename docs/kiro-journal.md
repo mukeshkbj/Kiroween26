@@ -21,3 +21,8 @@ How Kiro was used on Green Screen Seance: spec and steering changes, in order.
 - 2026-11-04: `.kiro/specs/seance-ui/tasks.md` changed
 - 2026-11-04: `.kiro/steering/tech.md` changed
 - 2026-11-04: `.kiro/specs/legacy-environment/tasks.md` changed
+- 2026-11-04: `.kiro/steering/structure.md` changed
+- 2026-11-04 (P0, integrator): turned the approved contracts into code before any parallel agent started: `seance_mcp.fake` (FakeApp, fake_insurance), `build_service`, `deny_oob`, step/audit observers, the tool-pack hook, the live guard, JSON Schemas plus seven recorded transcripts, `gate.ps1` and `check-ownership.ps1`. All mcp-server and bridge tests stayed green (145 + bridge) at every commit.
+  Surprise 1: `screen_id` hashes protected text, and a demo app's output fields (holder, premium) are protected text. Without masking them as volatile regions every policy would be a different screen and no per-screen key policy could ever match the result screens. Found while writing the fake app, not in review; now contracts 10.4.
+  Surprise 2: writing the stand-in "agent" that records the transcripts (it drives the real service, gate and audit log) found two protocol gaps that a review of the spec had not: a refused confirm must not move the planchette, and the gate's `field_snapshot` lists only unprotected fields so a review screen (old/new values are protected text) shows an empty snapshot. The modal must draw the screen itself; contracts 4.3 and seance-ui REQ-016 now say so.
+  Surprise 3: the first draft handed generated tools the whole service object, which includes the gate. Replaced with `RecipeService` (read, list, fill, press only) so "a generated tool can propose but never confirm" is true by construction, not by convention.
