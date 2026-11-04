@@ -219,6 +219,20 @@ class SeanceService:
             self.audit.append("confirm_action", "ok", **kw)  # type: ignore[arg-type]
             return screen_out(after)
 
+    async def deny_action(self, action_id: str, who: str) -> None:
+        """A human declined a pending action (oob channel, not an MCP tool).
+
+        Sends nothing to the 3270 session. Audited as ``rejected``; an unknown or
+        expired id is audited with its own outcome and re-raised."""
+        async with self._lock:
+            try:
+                action = self.gate.deny_oob(action_id, who)
+            except GateError as exc:
+                self.audit.append("deny_action", exc.code, action_id=action_id, confirmed_by=f"oob:{who}")
+                raise
+            self.audit.append("deny_action", "rejected", action_id=action.action_id, key=action.key,
+                              screen_id=action.screen_id, confirmed_by=f"oob:{who}")
+
     def audit_entries(self, limit: int | None = None) -> list[AuditEntry]:
         return self.audit.read(limit)
 

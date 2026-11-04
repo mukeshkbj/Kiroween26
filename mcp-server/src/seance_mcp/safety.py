@@ -175,6 +175,20 @@ class SafetyGate:
         self._pending = approved
         return approved
 
+    def deny_oob(self, action_id: str, who: str) -> PendingAction:
+        """Record a human denial from the out-of-band channel (web UI "Deny").
+
+        The pending action is dropped for good: a later ``authorize`` of the same
+        id is ``unknown_action``. An already-expired action is dropped too, but
+        reported as expired. Returns the dropped action (for auditing)."""
+        p = self._pending
+        if p is None or p.action_id != action_id:
+            raise GateError("unknown_action", "no pending action with that id (it may have run already)")
+        self._pending = None
+        if self.clock() >= p.expires_at:
+            raise GateError("action_expired", "the pending action had already expired")
+        return p
+
     # -- the only way to a commit ----------------------------------------
 
     def authorize(

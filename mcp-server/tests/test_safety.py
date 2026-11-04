@@ -157,6 +157,32 @@ def test_oob_approval_then_authorize():
     g.authorize(a.action_id, "s1", d)
 
 
+def test_deny_oob_drops_the_action_for_good():
+    g, c = gate(ttl=5)
+    a, _ = g.propose(Key.ENTER, "s1", [])
+    g.approve_oob(a.action_id, "web-ui")           # even an approved action can still be denied
+    assert g.deny_oob(a.action_id, "web-ui") == g.pending or g.pending is None
+    assert g.pending is None
+    with pytest.raises(GateError) as e:
+        g.authorize(a.action_id, "s1", YES)
+    assert e.value.code == "unknown_action"
+    with pytest.raises(GateError) as e:
+        g.deny_oob(a.action_id, "web-ui")          # twice
+    assert e.value.code == "unknown_action"
+    with pytest.raises(GateError) as e:
+        g.deny_oob("nope", "web-ui")
+    assert e.value.code == "unknown_action"
+
+
+def test_deny_oob_of_expired_action_reports_expiry_and_drops_it():
+    g, c = gate(ttl=5)
+    a, _ = g.propose(Key.ENTER, "s1", [])
+    c.t += 5
+    with pytest.raises(GateError) as e:
+        g.deny_oob(a.action_id, "web-ui")
+    assert e.value.code == "action_expired" and g.pending is None
+
+
 def test_client_approval_is_flagged_weakest():
     d = decide(ConfirmMode.CLIENT_APPROVAL, None, "kiro", None)
     assert d.approved and d.confirmed_by.startswith("client-approval(weakest):")
@@ -207,6 +233,21 @@ class CommitProtocol(RuleBasedStateMachine):
         self.created: dict[str, tuple[float, str]] = {}
         self.used: set[str] = set()
         self.dirty_since: dict[str, bool] = {}
+        self.denied: set[str] = set()
+
+    @precondition(lambda self: self.issued)
+    @rule(i=st.integers(0, 50), latest=st.sampled_from([True, True, False]))
+    def deny(self, i, latest):
+        """A human says no through the oob channel. Own bookkeeping: a denied id
+        must never be sent afterwards, whatever else happens."""
+        action_id = self.issued[-1] if latest else self.issued[i % len(self.issued)]
+        try:
+            self.gate.deny_oob(action_id, "web-ui")
+        except GateError as e:
+            event(f"deny_refused:{e.code}")
+            return
+        event("denied")
+        self.denied.add(action_id)
 
     @rule(key=st.sampled_from(list(Key)))
     def press(self, key):
@@ -247,6 +288,7 @@ class CommitProtocol(RuleBasedStateMachine):
         assert allow, "sent while read-only"
         assert self.clock.t - created < TTL, "sent after expiry"
         assert action_id not in self.used, "sent twice"
+        assert action_id not in self.denied, "sent an action a human denied"
         assert action_id == self.issued[-1], "sent a superseded action"
         assert not self.dirty_since[action_id], "sent after an ambiguous ack without resync"
         assert screen == self.screen, "sent on a different screen"
