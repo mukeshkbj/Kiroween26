@@ -92,3 +92,16 @@ Then ONE <=1h retry of the KICKS COBOL compile with raised REGION/SIZE/BUF.
 
 Milestone deliverables for B/C/D are all in place. Remaining per the user: ONE
 time-boxed (<=1h) retry of the KICKS COBOL compile with raised REGION/SIZE/BUF.
+
+## 2026-11-05 Authorized KICKS COBOL retry with raised storage — still S0C4 (closed)
+
+Ran the one allowed (<=1h) retry: inlined the KICKS single-pass compile with
+REGION=8192K on both the job and the COB2 step and PARM SIZE=4096K/BUF=2048K on
+IKFCBL00 (`src/jcl/cob-seancem-big.jcl`, job 125). KIKPPCOB RC=0000, then
+**COB2 IKFCBL00 abends S0C4** exactly as before. Raising storage did not help,
+so the S0C4 is a genuine IKFCBL00 limitation on KICKS-preprocessed source in this
+TK4- build, not a storage shortfall. KICKS COBOL path is closed; the stand-in +
+real COBOL (COBUCLG) fallback stands and the demo milestone is met. `src/kicks/`
+kept as a documented stretch (the SMENMAP BMS mapset does assemble+link).
+(Two JCL 72-column traps hit again on the way: a quoted PARM whose closing
+apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
