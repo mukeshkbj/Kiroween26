@@ -1,0 +1,27 @@
+//SEEDPOL  JOB (ACCT),'SEED POLICY FILE',CLASS=A,MSGCLASS=A,
+//         USER=@MVS_USER@,PASSWORD=@MVS_PASSWORD@
+//* Create / restore HERC01.SEANCE.POLICY with the 8 seed policies of
+//* contracts section 10 (same data as seance_mcp.fake SEED_POLICIES).
+//* Record layout: POLNO(8) HOLDER(20) STATUS(9) PREMIUM(8) UPDDATE(10)
+//* = 55 bytes of data in an 80-byte fixed record (card image, trailing
+//* blanks ignored). legacy/reset-data restores this file.
+//DELETE  EXEC PGM=IEFBR14
+//D       DD DSN=HERC01.SEANCE.POLICY,DISP=(MOD,DELETE),
+//            UNIT=SYSDA,SPACE=(TRK,1)
+//LOAD    EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSUT2   DD DSN=HERC01.SEANCE.POLICY,DISP=(NEW,CATLG,DELETE),
+//            UNIT=SYSDA,SPACE=(TRK,(2,1)),
+//            DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)
+//SYSUT1   DD *
+P0000001J. MARLOWE          ACTIVE   180.00  2026-09-14
+P0000002K. OKAFOR           ACTIVE   320.50  2026-10-02
+P0000003A. ROSE             ACTIVE   250.00  2026-10-21
+P0000004T. NAKAMURA         LAPSED   410.00  2026-06-30
+P0000005S. LINDQVIST        ACTIVE   95.75   2026-08-11
+P0000006M. DUBOIS           CANCELLED0.00    2026-05-05
+P0000007R. PATEL            ACTIVE   540.00  2026-10-29
+P0000008H. KOWALSKI         LAPSED   275.25  2026-07-19
+/*
+//
