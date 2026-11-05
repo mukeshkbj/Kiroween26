@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seance-agent"
+version = "0.1.0"
+description = "Seance chat agent: streams MCP tool use to the web UI and gates every commit through a human in the UI."
+readme = "README.md"
+requires-python = ">=3.12"
+# seance-bridge and seance-mcp are installed editable from ../bridge and ../mcp-server (see README).
+dependencies = [
+    "fastapi==0.162.0",
+    "uvicorn==0.54.0",
+    "websockets==17.4",
+    "httpx==0.28.1",
+    "pydantic==2.14.2",
+    "anyio==4.16.0",
+    "mcp==2.3.0",
+]
+
+[project.optional-dependencies]
+anthropic = [
+    "anthropic==2.5.0",
+]
+bedrock = [
+    "boto3==1.43.124",
+]
+dev = [
+    "pytest==8.4.2",
+    "hypothesis==6.170.14",
+    "jsonschema==4.26.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: needs a live TK4- 3270 session (skipped unless GSS_LIVE_OK=1)",
+    "llm: needs real LLM provider credentials (skipped by default)",
+]
+addopts = "-ra -m 'not integration and not llm'"
