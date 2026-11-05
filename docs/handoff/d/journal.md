@@ -55,3 +55,27 @@ wants the call refused, and "refuse early, fail closed" is the safer default.
 The no-leak test uses a purpose-built one-field hidden-input app because
 fake_insurance has no password field; the canary never reaches any event and
 every hidden screen field is nulled.
+
+### 2026-11-05 — confirmation broker + no-unconfirmed-commit (tasks 4.1-4.4)
+
+- `confirm.py` is the human gate. The loop calls `await_decision`, which emits
+  `confirmation_required` (content copied straight from `gate.pending`) and
+  suspends on an `anyio.Event`; only a controller `confirm_decision` resolves it,
+  via `gate.approve_oob` + `service.confirm_action`. Deny, expire, supersede,
+  read-only and unknown/duplicate ids each resolve exactly once and send nothing.
+- I split `register_pending` out of `await_decision` so the `RuleBasedStateMachine`
+  can drive registration and resolution as independent steps without a blocked
+  coroutine; the blocking path just calls `register_pending` then waits.
+
+Surprise (section 4 / safety): the state machine's invariant is deliberately
+*outside* the broker — it keeps its **own** ledger of controller approvals and
+asserts `commits <= controller_approvals`, never reading the broker's private
+state. That separation is what made the mutation checks honest: when I simulate
+removing the api-level controller gate (an observer reaches `decide`), a commit
+appears with an empty ledger and the invariant fires immediately. The two
+gate-owned rules (expiry, single-use) turned out *not* to be defeatable from the
+agent side at all — `gate.authorize` consumes the action before the key is sent
+and rejects anything past its TTL, so the broker physically cannot double-commit
+or commit-after-expiry. The agent's own load-bearing rule is the controller gate;
+the rest it correctly delegates to the integrator's gate. Recorded in
+`agent/tests/mutation_checks.md`.

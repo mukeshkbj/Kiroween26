@@ -26,10 +26,10 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 3.3 Tests: hidden sentinel never in any event (REQ-028); `confirm_action`/`connect`/`get_audit_log` never offered; invalid args never sent.
 
 ## 4. Confirmation broker (REQ-015 to REQ-019, REQ-027)
-- [ ] 4.1 `confirm.py`: pending registry, approve/deny/expire/supersede, exactly-one `confirmation_resolved`, resume future.
-- [ ] 4.2 Controller-only check, observer rejection, unknown/expired/duplicate ids.
-- [ ] 4.3 `RuleBasedStateMachine` (REQ-027) with own ledger, success-path weighting; run the mutation checks and record them in this file (remove: controller check, expiry check, single-use, observer rule -> test fails).
-- [ ] 4.4 Read-only (`SEANCE_ALLOW_COMMIT=0`) path: `blocked_read_only` shown, not silent.
+- [x] 4.1 `confirm.py`: pending registry, approve/deny/expire/supersede, exactly-one `confirmation_resolved`, resume future.
+- [x] 4.2 Controller-only check, observer rejection, unknown/expired/duplicate ids.
+- [x] 4.3 `RuleBasedStateMachine` (REQ-027) with own ledger, success-path weighting; mutation checks run and recorded in `agent/tests/mutation_checks.md` (controller/observer gate removal -> illegal commit; gate-enforced expiry and single-use verified load-bearing via `tests/_mutation_checks.py`).
+- [x] 4.4 Read-only (`SEANCE_ALLOW_COMMIT=0`) path: `blocked_read_only` shown, not silent.
 
 ## 5. Agent loop with scripted LLM (REQ-008, REQ-010, REQ-012, REQ-019, REQ-025) (by 12 Nov)
 - [ ] 5.1 `llm/base.py`, `llm/scripted.py` (`ScriptedLlm`, `GullibleLlm`).
