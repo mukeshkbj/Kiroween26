@@ -15,6 +15,26 @@ mcp-server\.venv\Scripts\python.exe -m seance_mcp
 
 POSIX: `mcp-server/.venv/bin/python -m seance_mcp`. Logs go to stderr; stdout is the protocol channel.
 
+### Which app it drives
+By default the server opens the live s3270 bridge (`TN3270_HOST`/`TN3270_PORT`). Set `SEANCE_APP` to a
+named fake app to run with no container and no live guard — the demo app without a mainframe:
+
+```powershell
+$env:SEANCE_APP = "fake-insurance"
+$env:GENERATED_TOOLS_PATH = "docs/spirit-map/fake-insurance/tools.json"   # spirit-map's business tools
+$env:KEY_POLICY_PATH      = "docs/spirit-map/fake-insurance/key-policy.json"
+mcp-server\.venv\Scripts\python.exe -m seance_mcp
+```
+
+`GENERATED_TOOLS_PATH` registers spirit-map's generated tools (`lookup_policy`, `list_policies`,
+`update_policy`); doing so requires `seance_spirit` installed in this venv
+(`mcp-server\.venv\Scripts\python.exe -m pip install -e spirit-map`). Only tools whose `def_hash`
+is listed in the `tool-approvals.json` beside the pack are registered (a human approval).
+
+Two ready-made client configs are in `mcp-server/kiro-mcp.json` (copy into `.kiro/settings/mcp.json`):
+`green-screen-seance` (live TK4-, read-only) and `gss-fake-insurance` (the fake demo app with the
+generated tools; `SEANCE_ALLOW_COMMIT=1` so the update tool's confirmation flow can be demonstrated).
+
 ## Tools and resources
 
 | Tool | What it does |

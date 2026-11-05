@@ -48,6 +48,23 @@ def build_service(
         policy=KeyPolicy.load(resolve_path(settings.key_policy_path, root)),
         **gate_kw,  # type: ignore[arg-type]
     )
-    real = port or RealBridgePort(settings.wait_timeout_ms, settings.volatile_regions)
-    service = SeanceService(settings, real, audit, gate)
+    chosen = port or _port_for(settings)
+    service = SeanceService(settings, chosen, audit, gate)
     return build_server(service, registrar), service
+
+
+def _port_for(settings: Settings) -> BridgePort:
+    """The real s3270 bridge by default; a named fake app when ``SEANCE_APP`` is set.
+
+    A fake app needs no container and is never subject to the live guard, so a
+    ``SEANCE_APP`` server (e.g. ``fake-insurance``) is the way to drive the demo
+    screens from Kiro or the agent without TK4-.
+    """
+    if settings.app:
+        from .fake import FAKE_APPS
+
+        make = FAKE_APPS.get(settings.app)
+        if make is None:
+            raise ValueError(f"SEANCE_APP={settings.app!r} is not a known fake app; one of {sorted(FAKE_APPS)}")
+        return make()
+    return RealBridgePort(settings.wait_timeout_ms, settings.volatile_regions)

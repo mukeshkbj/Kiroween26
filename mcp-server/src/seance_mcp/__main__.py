@@ -19,9 +19,11 @@ def main() -> None:
     log = logging.getLogger("seance_mcp")
     settings = Settings.from_env()
     server, service = build_service(settings)
+    target = f"fake:{settings.app}" if settings.app else f"{settings.host}:{settings.port}"
     log.info(
-        "starting: host=%s:%s allow_commit=%s confirm_mode=%s audit=%s",
-        settings.host, settings.port, settings.allow_commit, settings.confirm_mode.value, service.audit.path,
+        "starting: target=%s allow_commit=%s confirm_mode=%s audit=%s tools=%s",
+        target, settings.allow_commit, settings.confirm_mode.value, service.audit.path,
+        settings.generated_tools_path or "(generic only)",
     )
     server.run("stdio")
 
