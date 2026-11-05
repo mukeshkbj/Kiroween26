@@ -92,8 +92,10 @@ Source of truth is the Python models in `mcp-server` (`seance_mcp.screens`, `sea
   "screen_id": "9f2c...64 hex",
   "cursor": [5, 14],
   "rows": ["... 24 strings, each 80 chars, control chars replaced by spaces ..."],
-  "fields": [ FieldOut ]
+  "fields": [ FieldOut ],
+  "volatile": [[0, 64, 16], [1, 64, 16]]
 }
+`volatile` is the list of positions masked out of `screen_id` (clocks, paint-time dates, the demo app's output fields), as `(row, col, length)` runs, 0-origin; each run stays on one row. It is advisory, never a field value. Spirit-map treats these spans as part of node identity (section 10.4); a consumer that does not care ignores it.
 ```
 ### 3.2 `FieldOut`
 ```json
@@ -459,6 +461,7 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
 Change log:
+- 2026-11-05 (additive, B request `screenout-volatile`): `ScreenOut` gains `volatile` ((row, col, length) runs). Regenerated schemas/examples. Consumers ignore unknown fields, so this is a v1 addition.
 - 2026-11-04 (P0.7, additive): schemas and examples generated into `docs/contracts/` (`seance_mcp.contracts`); section 3 timestamp note; `denied_by_user` error code; section 4.3 screen/focus/confirmation rules; `Fill.skip_if_absent`; `extract_list.row_fields` pattern.
 - 2026-11-04 (P0.5, clarification): section 6.1 states the exact `register` signature and the `RecipeService` facade; approval enforcement lives in mcp-server.
 - 2026-11-04 (P0.1, additive): section 10.4 added (output fields are volatile regions); captures may carry per-screen `volatile` spans.

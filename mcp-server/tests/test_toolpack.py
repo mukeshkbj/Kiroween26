@@ -175,15 +175,62 @@ def test_nothing_configured_means_no_hook_and_no_audit(tmp_path):
 
 
 def test_configured_pack_without_spirit_package_fails_loudly(tmp_path):
+    import importlib.util
+
+    if importlib.util.find_spec("seance_spirit") is not None:
+        pytest.skip("seance_spirit is installed in this env; the no-package path is covered where it is absent")
     a = tool()
     pack, appr = write_pack(tmp_path, [a], approve=[a])
     with pytest.raises(ToolPackError, match="seance_spirit"):
         rig(tmp_path, pack, appr)
 
 
+def test_configured_pack_with_spirit_package_registers_through_the_real_register(tmp_path):
+    """When seance_spirit IS installed (as in the agent/integration envs), the default
+    registrar loads it and registers the approved tools."""
+    import importlib.util
+
+    if importlib.util.find_spec("seance_spirit") is None:
+        pytest.skip("seance_spirit not installed in this env")
+    from pathlib import Path
+
+    from seance_mcp.paths import REPO_ROOT
+
+    pack = REPO_ROOT / "docs/spirit-map/fake-insurance/tools.json"
+    pol = REPO_ROOT / "docs/spirit-map/fake-insurance/key-policy.json"
+    if not pack.exists():
+        pytest.skip("fake-insurance pack not present in this checkout")
+    s = Settings(allow_commit=True, confirm_mode=ConfirmMode.OOB, audit_log_path=tmp_path / "a.jsonl",
+                 generated_tools_path=pack, key_policy_path=pol)
+    server, service = build_service(s, fake_insurance())
+
+    async def go():
+        async with __import__("mcp").Client(server) as c:
+            return sorted(t.name for t in (await c.list_tools()).tools
+                          if t.name in ("lookup_policy", "list_policies", "update_policy"))
+
+    assert anyio.run(go) == ["list_policies", "lookup_policy", "update_policy"]
+
+
 def test_configured_but_missing_pack_fails_loudly(tmp_path):
     with pytest.raises(ToolPackError):
         rig(tmp_path, tmp_path / "nope.json", None)
+
+
+def test_screenout_exposes_volatile_runs_from_the_fake_app():
+    from seance_mcp.fake import DEMO_VOLATILE_REGIONS, fake_insurance
+    from seance_mcp.screens import screen_out, volatile_runs
+
+    assert volatile_runs(()) == []
+    assert volatile_runs((0, 1, 2, 5, 6)) == [(0, 0, 3), (0, 5, 2)]
+    assert volatile_runs((79, 80)) == [(0, 79, 1), (1, 0, 1)]  # a run never crosses a row boundary
+    out = screen_out(fake_insurance().screens["enquiry"].model())
+    assert out.volatile  # the enquiry output fields are masked
+    assert all(0 <= r < 24 and 0 <= c < 80 and n >= 1 for r, c, n in out.volatile)
+    # every run is a subset of the app's declared regions
+    declared = {(r, c + i) for r, c, n in DEMO_VOLATILE_REGIONS for i in range(n)}
+    covered = {(r, c + i) for r, c, n in out.volatile for i in range(n)}
+    assert covered <= declared
 
 
 def test_env_parsing():
@@ -192,6 +239,27 @@ def test_env_parsing():
     assert not Settings.from_env({}).allow_unreviewed_tools
     with pytest.raises(ValueError):
         Settings.from_env({"SEANCE_ALLOW_UNREVIEWED_TOOLS": "yes"})
+
+
+def test_seance_app_selects_a_fake_port_not_the_live_bridge(tmp_path):
+    from seance_mcp.fake import FakeApp
+
+    s = Settings.from_env({"SEANCE_APP": "fake-insurance", "AUDIT_LOG_PATH": str(tmp_path / "a.jsonl")})
+    assert s.app == "fake-insurance"
+    _, service = build_service(s)
+    assert isinstance(service.port, FakeApp)
+    assert getattr(service.port, "is_live", False) is False  # never subject to the live guard
+
+    async def go():
+        return (await service.connect()).screen_id
+
+    assert anyio.run(go)  # connects with no container, no live marker
+
+
+def test_unknown_seance_app_is_a_clear_error(tmp_path):
+    s = Settings(app="nope", audit_log_path=tmp_path / "a.jsonl")
+    with pytest.raises(ValueError, match="not a known fake app"):
+        build_service(s)
 
 
 @settings(max_examples=60, deadline=None)

@@ -1,0 +1,15 @@
+{
+  "app_id": "tk4-builtins",
+  "probes": [],
+  "declared_read_only": {},
+  "deny": {
+    "keys": [],
+    "nodes": [],
+    "screen_keys": {},
+    "field_label_patterns": ["PASS|PWD|PIN|SECRET|TOKEN|USERID|LOGON"]
+  },
+  "budgets": {"max_screens": 20, "max_steps": 80, "max_depth": 5},
+  "harvest": false,
+  "start_recipe": [],
+  "volatile": [[0, 64, 16], [1, 64, 16]]
+}

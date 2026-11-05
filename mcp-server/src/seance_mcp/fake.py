@@ -602,8 +602,11 @@ def _policies(app: FakeApp) -> dict[str, dict[str, str]]:
 
 FakeApp.policies = property(_policies)  # type: ignore[attr-defined]
 
+# Named fake apps a SEANCE_APP server can select (no container, never live-guarded).
+FAKE_APPS: dict[str, "Callable[[], FakeApp]"] = {"fake-insurance": fake_insurance}
+
 __all__ = [
-    "CaptureError", "DEMO_VOLATILE_REGIONS", "F", "FakeApp", "FakePort", "H", "HN", "P", "PARSER", "Region",
-    "Rule", "SEED_POLICIES", "ScreenSpec", "U", "UN", "build_screen", "fake_insurance", "logon_screen",
+    "CaptureError", "DEMO_VOLATILE_REGIONS", "F", "FAKE_APPS", "FakeApp", "FakePort", "H", "HN", "P", "PARSER",
+    "Region", "Rule", "SEED_POLICIES", "ScreenSpec", "U", "UN", "build_screen", "fake_insurance", "logon_screen",
     "menu_screen", "rc", "region_positions",
 ]

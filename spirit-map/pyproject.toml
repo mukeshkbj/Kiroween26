@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seance-spirit"
+version = "0.1.0"
+description = "spirit-map: explore a 3270 app read-only, label it, and generate typed MCP tools. (Green Screen Seance)"
+readme = "README.md"
+requires-python = ">=3.12"
+# seance-bridge and seance-mcp are installed editable from ../bridge and ../mcp-server (see README).
+dependencies = [
+    "pydantic==2.14.2",
+    "anyio==4.16.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.4.2",
+    "hypothesis==6.170.14",
+    "jsonschema==4.26.0",
+]
+# LLM providers are optional; labelling works without them (heuristic mode).
+# Versions are pinned when first installed and recorded in README (task 5.2).
+anthropic = []
+bedrock = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: needs a live 3270 host and GSS_LIVE_OK=1 (skipped by default)",
+    "llm: needs a real LLM provider and credentials (skipped by default)",
+]
+addopts = "-ra -m 'not integration and not llm'"

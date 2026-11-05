@@ -1,0 +1,8 @@
+{
+  "names": {
+    "n_ba02cc6364+n_419888f22d+n_419888f22d": "lookup_policy",
+    "n_ba02cc6364+n_96fa848aaa+n_483e5fe116": "update_policy",
+    "n_ba02cc6364+n_c5d11dedae": "list_policies"
+  },
+  "schema": "gss.toollock/1"
+}
