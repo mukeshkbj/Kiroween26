@@ -30,6 +30,14 @@ export const strings = {
     off: 'Off',
   },
 
+  planchette: {
+    reading: 'reading the screen',
+    filling: 'filling a field',
+    readingField: (name: string) => `reading ${name}`,
+    fillingField: (name: string) => `filling ${name}`,
+    pressing: (key: string) => `pressing ${key}`,
+  },
+
   sat: {
     region: 'Screen as text',
     title: 'Title',
