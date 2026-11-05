@@ -10,13 +10,13 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 0.3 Contract examples and transcripts in `docs/contracts/examples/`.
 
 ## 1. Scaffold (by 9 Nov)
-- [ ] 1.1 `agent/` package: `pyproject.toml` (Python >=3.12; pin `fastapi`, `uvicorn`, `pydantic`, `anthropic`, `websockets`/test deps, `pytest`, `hypothesis`, `httpx`; `boto3` as extra). Install `../bridge`, `../mcp-server` editable.
-- [ ] 1.2 `.env.example` with every variable in design.md (placeholders only); `.env` stays gitignored.
-- [ ] 1.3 `config.py` with validation (unknown provider is an error, not a fallback; missing key -> `llm.available=false`, no crash).
-- [ ] 1.4 Markers `integration`, `llm` skipped by default.
+- [x] 1.1 `agent/` package: `pyproject.toml` (Python >=3.12; pin `fastapi`, `uvicorn`, `pydantic`, `anthropic`, `websockets`/test deps, `pytest`, `hypothesis`, `httpx`; `boto3` as extra). Install `../bridge`, `../mcp-server` editable.
+- [x] 1.2 `.env.example` with every variable in design.md (placeholders only); `.env` stays gitignored.
+- [x] 1.3 `config.py` with validation (unknown provider is an error, not a fallback; missing key -> `llm.available=false`, no crash).
+- [x] 1.4 Markers `integration`, `llm` skipped by default.
 
 ## 2. Events and session (REQ-001, REQ-003, REQ-004, REQ-026, REQ-030)
-- [ ] 2.1 `events.py`: pydantic models for every server event and client message from contracts section 4; JSON round trip; conformance test against `docs/contracts/examples/events/*.json`.
+- [x] 2.1 `events.py`: pydantic models for every server event and client message from contracts section 4; JSON round trip; conformance test against `docs/contracts/examples/events/*.json`.
 - [ ] 2.2 `session.py`: seq, ring buffer, resume, observers vs controller, bounded queue, optional event log.
 - [ ] 2.3 Property test: stream shape invariants (seq gap-free, replay suffix equality) over generated event sequences.
 
