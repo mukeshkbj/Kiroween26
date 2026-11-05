@@ -41,13 +41,13 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [ ] 5.5 Optional `llm`-marked test against a real provider; capture one real labelled run for the journal (screenshot + a surprise).
 
 ## 6. Generator and runtime (REQ-019 to REQ-031) (by 15 Nov)
-- [ ] 6.1 **Spike:** dynamic tool registration with `mcp` 2.x `MCPServer` (inputSchema from JSON Schema, kwargs handler). Record result in design.md; pick adapter or the single-tool fallback.
-- [ ] 6.2 `generator.py` + `keypolicy.py`: candidates and evidence; tool derivation (lookup, list, update); schemas; names + `tools.lock.json`; refuse hidden/credential params.
-- [ ] 6.3 `describe.py`: `app-description.md` with Mermaid flow.
-- [ ] 6.4 `runtime.py`: `run_tool`, `register`; abort codes; trace; step budget.
-- [ ] 6.5 `review.py` + CLI: `review --tools`, `review --policy` (records `approved_by`, `approved_at`; only writer of `key-policy.json`).
-- [ ] 6.6 Tests: REQ-037 snapshots, REQ-039 golden policy for `fake-insurance`, runtime against `FakeApp` (lookup, list, update ends `pending` and the fake saw no commit key), `screen_mismatch` and `unknown_start` paths, approval hash invalidation on edit.
-- [ ] 6.7 Handoff request to the integrator: mcp-server registers packs (P0 hook) and loads `key-policy.json`. This unblocks **mcp-server 6.3** (hand-written policy replaced by the approved one for `fake-insurance`).
+- [x] 6.1 **Spike:** dynamic tool registration with `mcp` 2.x `MCPServer` (inputSchema from JSON Schema, kwargs handler). Record result in design.md; pick adapter or the single-tool fallback.
+- [x] 6.2 `generator.py` + `keypolicy.py`: candidates and evidence; tool derivation (lookup, list, update); schemas; names + `tools.lock.json`; refuse hidden/credential params.
+- [x] 6.3 `describe.py`: `app-description.md` with Mermaid flow.
+- [x] 6.4 `runtime.py`: `run_tool`, `register`; abort codes; trace; step budget.
+- [x] 6.5 `review.py` + CLI: `review --tools`, `review --policy` (records `approved_by`, `approved_at`; only writer of `key-policy.json`).
+- [x] 6.6 Tests: REQ-037 snapshots, REQ-039 golden policy for `fake-insurance`, runtime against `FakeApp` (lookup, list, update ends `pending` and the fake saw no commit key), `screen_mismatch` and `unknown_start` paths, approval hash invalidation on edit.
+- [x] 6.7 Handoff request to the integrator: mcp-server registers packs (P0 hook) and loads `key-policy.json`. This unblocks **mcp-server 6.3** (hand-written policy replaced by the approved one for `fake-insurance`).
 
 ## 7. Live TK4- built-ins (REQ-040) (by 17 Nov)
 - [ ] 7.1 Handoff request to **Agent A** for `legacy/captures/tk4-*.json` (recorded real screens, format in contracts section 2). FakeBridge replays them so B can test against real layouts without touching the container.
@@ -56,6 +56,6 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [ ] 7.4 Stretch: attach-mode run after a human logon (RFE/ISPF), map committed if clean.
 
 ## 8. Docs and journal
-- [ ] 8.1 `spirit-map/README.md`: pipeline, the human-in-the-loop widening cycle, how to review.
+- [x] 8.1 `spirit-map/README.md`: pipeline, the human-in-the-loop widening cycle, how to review.
 - [ ] 8.2 Journal entries to `docs/handoff/b/journal.md` (integrator merges into `docs/kiro-journal.md`): one surprise per stage.
 - [ ] 8.3 After KICKS lands (legacy-environment 4.6): rerun the pipeline on `seance-insurance`, review, approve, commit artefacts. Not a blocker for the 17 Nov milestone.

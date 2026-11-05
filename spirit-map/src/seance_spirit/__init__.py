@@ -5,3 +5,7 @@ the keys a recipe may press come from deterministic code plus a human-signed fil
 """
 
 __version__ = "0.1.0"
+
+from .runtime import register, run_tool
+
+__all__ = ["register", "run_tool", "__version__"]

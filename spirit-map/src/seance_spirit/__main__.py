@@ -11,6 +11,7 @@ Artefacts live in ``docs/spirit-map/<app_id>/``.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -92,6 +93,60 @@ def cmd_label(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_generate(args: argparse.Namespace) -> int:
+    from .generator import Generator, Overrides
+    from .keypolicy import proposed_policy
+    from .store import read_labels, read_map, write_json
+
+    d, seed_p, map_p, policy_p = _paths(args)
+    m = read_map(map_p)
+    labels = read_labels(d / "labels.json")
+    seed = load_seed(seed_p)
+    ov_path = d / "overrides.json"
+    overrides = Overrides.load(json.loads(ov_path.read_text(encoding="utf-8")) if ov_path.exists() else None)
+    gen = Generator(m, labels, seed, overrides, approved=load_approved_policy(policy_p))
+    pack = gen.generate()
+    write_json(d / "tools.json", pack)
+    _write_lock(d / "tools.lock.json", pack)
+    policy, evidence = proposed_policy(m, seed)
+    write_json(d / "key-policy.proposed.json", policy)
+    write_json(d / "key-policy.evidence.json", evidence)
+    from .describe import describe
+    (d / "app-description.md").write_text(describe(m, labels, pack), encoding="utf-8")
+    print(f"generated {len(pack['tools'])} tools -> {d / 'tools.json'}")
+    if gen.report.refused:
+        print("refused:", "; ".join(gen.report.refused))
+    if gen.report.draft:
+        print("draft (needs review):", ", ".join(gen.report.draft))
+    return 0
+
+
+def _write_lock(path: Path, pack: dict) -> None:
+    from .store import write_json
+
+    existing = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"names": {}}
+    names = existing.get("names", {})
+    for t in pack["tools"]:
+        key = "+".join(t["provenance"]["nodes"])
+        names.setdefault(key, t["name"])
+    write_json(path, {"schema": "gss.toollock/1", "names": names})
+
+
+def cmd_review(args: argparse.Namespace) -> int:
+    from .review import approve_tools, promote_policy, summarise
+
+    d, _, _, policy_p = _paths(args)
+    if args.tools:
+        names = approve_tools(d / "tools.json", d / "tool-approvals.json", args.by)
+        print(f"approved {len(names)} tools by {args.by}: {', '.join(names)}")
+    if args.policy:
+        promote_policy(d / "key-policy.proposed.json", policy_p, args.by)
+        print(f"promoted key policy to {policy_p.name} by {args.by}")
+    if not (args.tools or args.policy):
+        print(summarise(d / "tools.json", d / "tool-approvals.json"))
+    return 0
+
+
 def cmd_replay(args: argparse.Namespace) -> int:
     d, seed_p, map_p, policy_p = _paths(args)
     audit = REPO_ROOT / "docs" / "audit" / f"replay-{args.app}.audit.jsonl"
@@ -108,7 +163,9 @@ def cmd_replay(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="seance_spirit", description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("explore", cmd_explore), ("label", cmd_label), ("replay", cmd_replay)):
+    cmds = (("explore", cmd_explore), ("label", cmd_label), ("generate", cmd_generate),
+            ("review", cmd_review), ("replay", cmd_replay))
+    for name, fn in cmds:
         s = sub.add_parser(name)
         s.add_argument("--app", required=True, help="app id, e.g. fake-insurance")
         s.add_argument("--dir", help="artefact directory (default docs/spirit-map/<app>)")
@@ -118,6 +175,10 @@ def main(argv: list[str] | None = None) -> int:
             s.add_argument("--attach", action="store_true", help="start from the screen a human left the session on")
         if name == "explore":
             s.add_argument("--stamp", action="store_true", help="record the start time in the map")
+        if name == "review":
+            s.add_argument("--tools", action="store_true", help="approve the tools in tools.json")
+            s.add_argument("--policy", action="store_true", help="promote key-policy.proposed.json to key-policy.json")
+            s.add_argument("--by", default="reviewer", help="who is approving (recorded)")
         s.set_defaults(fn=fn)
     args = p.parse_args(argv)
     try:
