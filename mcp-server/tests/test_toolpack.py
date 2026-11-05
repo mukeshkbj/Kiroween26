@@ -217,6 +217,22 @@ def test_configured_but_missing_pack_fails_loudly(tmp_path):
         rig(tmp_path, tmp_path / "nope.json", None)
 
 
+def test_screenout_exposes_volatile_runs_from_the_fake_app():
+    from seance_mcp.fake import DEMO_VOLATILE_REGIONS, fake_insurance
+    from seance_mcp.screens import screen_out, volatile_runs
+
+    assert volatile_runs(()) == []
+    assert volatile_runs((0, 1, 2, 5, 6)) == [(0, 0, 3), (0, 5, 2)]
+    assert volatile_runs((79, 80)) == [(0, 79, 1), (1, 0, 1)]  # a run never crosses a row boundary
+    out = screen_out(fake_insurance().screens["enquiry"].model())
+    assert out.volatile  # the enquiry output fields are masked
+    assert all(0 <= r < 24 and 0 <= c < 80 and n >= 1 for r, c, n in out.volatile)
+    # every run is a subset of the app's declared regions
+    declared = {(r, c + i) for r, c, n in DEMO_VOLATILE_REGIONS for i in range(n)}
+    covered = {(r, c + i) for r, c, n in out.volatile for i in range(n)}
+    assert covered <= declared
+
+
 def test_env_parsing():
     s = Settings.from_env({"GENERATED_TOOLS_PATH": "docs/x/tools.json", "SEANCE_ALLOW_UNREVIEWED_TOOLS": "1"})
     assert str(s.generated_tools_path).endswith("tools.json") and s.allow_unreviewed_tools
