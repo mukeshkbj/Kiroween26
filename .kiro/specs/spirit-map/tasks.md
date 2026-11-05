@@ -50,12 +50,12 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 6.7 Handoff request to the integrator: mcp-server registers packs (P0 hook) and loads `key-policy.json`. This unblocks **mcp-server 6.3** (hand-written policy replaced by the approved one for `fake-insurance`).
 
 ## 7. Live TK4- built-ins (REQ-040) (by 17 Nov)
-- [ ] 7.1 Handoff request to **Agent A** for `legacy/captures/tk4-*.json` (recorded real screens, format in contracts section 2). FakeBridge replays them so B can test against real layouts without touching the container.
-- [ ] 7.2 `tk4-builtins` seed (welcome screen, bogus-logon error; clock volatile regions). Explore against captures.
+- [x] 7.1 Handoff request to **Agent A** for `legacy/captures/tk4-*.json` (recorded real screens, format in contracts section 2). FakeBridge replays them so B can test against real layouts without touching the container.
+- [x] 7.2 `tk4-builtins` seed (welcome screen, bogus-logon error; clock volatile regions). Explore against captures.
 - [ ] 7.3 Request A (or the integrator) to run the marked live exploration; commit the resulting map under `docs/spirit-map/tk4-builtins/`.
 - [ ] 7.4 Stretch: attach-mode run after a human logon (RFE/ISPF), map committed if clean.
 
 ## 8. Docs and journal
 - [x] 8.1 `spirit-map/README.md`: pipeline, the human-in-the-loop widening cycle, how to review.
-- [ ] 8.2 Journal entries to `docs/handoff/b/journal.md` (integrator merges into `docs/kiro-journal.md`): one surprise per stage.
+- [x] 8.2 Journal entries to `docs/handoff/b/journal.md` (integrator merges into `docs/kiro-journal.md`): one surprise per stage.
 - [ ] 8.3 After KICKS lands (legacy-environment 4.6): rerun the pipeline on `seance-insurance`, review, approve, commit artefacts. Not a blocker for the 17 Nov milestone.
