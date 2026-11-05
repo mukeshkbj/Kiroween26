@@ -216,7 +216,17 @@ LLM calls in tests use `ScriptedLlm`; a real-provider test is marked `llm` and s
 |---|---|
 | ENTER can never be proved read-only by observation | It can't, so we don't claim it. Heuristic candidates + mandatory human sign-off. Said plainly in the README and the demo. |
 | TK4- unauthenticated screens are few (welcome, bogus-logon error) | They make a small but real graph and exercise the live path. A richer TK4- map (RFE/ISPF) needs a human logon (attach mode) and is a stretch goal. The insurance app is the main show. |
-| Dynamic tool registration API in `mcp` 2.x unverified | Spike in task 6.1 before committing to the adapter; fallback is one generic `call_generated_tool(name, args)` tool with the schema list exposed as a resource (worse for LLMs, same safety). |
+| Dynamic tool registration API in `mcp` 2.x unverified | **Resolved (task 6.1 spike, 2026-11-04).** Per-tool adapter works; no fallback needed. See below. |
+
+## Task 6.1 spike result: dynamic registration in `mcp` 2.3.0
+
+`MCPServer` has `add_tool(fn, name, title, description)` and `remove_tool(name)`. `add_tool` derives the advertised JSON Schema from the callable's signature, which is not our strict schema. The working recipe, verified in the spike:
+
+1. Build a handler with a **generated signature** from the tool's `input_schema` (required params first, then `name: "str | None" = None` for optional ones). Set `handler.__signature__` and `handler.__annotations__`. The body binds the arguments and calls `runtime.run_tool`.
+2. `t = Tool.from_function(handler, name=..., title=..., description=..., structured_output=False)`, then **override** `t.parameters = tool["input_schema"]` (our strict schema), and insert it: `server._tool_manager._tools[name] = t`. `list_tools()` then advertises our schema verbatim (`additionalProperties:false`, `maxLength`, `pattern`, `enum`).
+3. **What the SDK enforces at call time:** required params and top-level types only (from the derived metadata, not from `t.parameters`). It does **not** enforce `maxLength`, `pattern`, `enum` or `additionalProperties`. So `runtime.run_tool` validates arguments against the strict schema itself (jsonschema) and returns `invalid_arguments` before touching the session. Both checks are tested.
+
+Decision: per-tool adapter, `structured_output=False` (we return the tool-result envelope as content). `register` returns the list of names it added. No generic single-tool fallback is needed. The one private attribute used is `server._tool_manager._tools`; isolated in `runtime.register` and covered by a test that fails loudly if the SDK changes it.
 | Screen layouts that change per record (list screens with variable rows) | Nodes are keyed by `screen_id` (protected text + layout). List screens are handled as one node with an `extract_list` step; variance in row count is not a new node. |
 | Two parallel agents change the format | Formats live in `docs/contracts.md`; changes go through the integrator. |
 | Replay on a real system is not deterministic (data changes) | Replay checks `screen_id` only, never data. |
