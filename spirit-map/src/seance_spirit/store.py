@@ -74,3 +74,13 @@ def write_map(path: Path, m: SpiritMap, sentinels: Iterable[str] = ()) -> None:
 def read_map(path: Path) -> SpiritMap:
     raw = json.loads(Path(path).read_text(encoding="utf-8"))
     return SpiritMap.model_validate(raw)
+
+
+def write_labels(path: Path, labels: Any, sentinels: Iterable[str] = ()) -> None:
+    write_json(path, labels.model_dump(by_alias=True, mode="json"), sentinels)
+
+
+def read_labels(path: Path) -> Any:
+    from .labels import Labels
+
+    return Labels.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))

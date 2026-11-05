@@ -74,6 +74,24 @@ def cmd_explore(args: argparse.Namespace) -> int:
     return 0 if rep.status in ("completed", "budget") else 2
 
 
+def cmd_label(args: argparse.Namespace) -> int:
+    from .labeller import Labeller
+    from .llm import build_llm
+    from .store import read_map, write_labels
+
+    d, _, map_p, _ = _paths(args)
+    cache = d / "labels.cache.json"
+    client = build_llm(cache_path=cache)
+    labeller = Labeller(client)
+    labels = labeller.label(read_map(map_p))
+    write_labels(d / "labels.json", labels)
+    if hasattr(client, "_cache"):
+        client._cache.save()
+    print(f"labelled {len(labels.nodes)} screens via {labels.source}; "
+          f"{len(labels.dropped)} model labels dropped -> {d / 'labels.json'}")
+    return 0
+
+
 def cmd_replay(args: argparse.Namespace) -> int:
     d, seed_p, map_p, policy_p = _paths(args)
     audit = REPO_ROOT / "docs" / "audit" / f"replay-{args.app}.audit.jsonl"
@@ -90,13 +108,14 @@ def cmd_replay(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="seance_spirit", description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name, fn in (("explore", cmd_explore), ("replay", cmd_replay)):
+    for name, fn in (("explore", cmd_explore), ("label", cmd_label), ("replay", cmd_replay)):
         s = sub.add_parser(name)
         s.add_argument("--app", required=True, help="app id, e.g. fake-insurance")
         s.add_argument("--dir", help="artefact directory (default docs/spirit-map/<app>)")
-        s.add_argument("--fake", help="use a fake app from seance_mcp.fake")
-        s.add_argument("--capture", help="use a recorded capture file")
-        s.add_argument("--attach", action="store_true", help="start from the screen a human left the session on")
+        if name in ("explore", "replay"):
+            s.add_argument("--fake", help="use a fake app from seance_mcp.fake")
+            s.add_argument("--capture", help="use a recorded capture file")
+            s.add_argument("--attach", action="store_true", help="start from the screen a human left the session on")
         if name == "explore":
             s.add_argument("--stamp", action="store_true", help="record the start time in the map")
         s.set_defaults(fn=fn)

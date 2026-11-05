@@ -34,10 +34,10 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 4.5 Milestone: `explore` + `replay` green on `fake-insurance`; summary to `docs/handoff/b/`.
 
 ## 5. Labelling (REQ-014 to REQ-018) (by 13 Nov)
-- [ ] 5.1 `labels.py` schema + sanitising; `labeller.py` heuristic mode.
-- [ ] 5.2 `llm.py`: `LlmClient` protocol, `ScriptedLlm`, anthropic and bedrock adapters (env-driven, no keys logged), prompt-hash cache.
-- [ ] 5.3 Prompt builder: screen text delimited as data; response validated; failures fall back and are recorded.
-- [ ] 5.4 Tests: REQ-036 (label independence), REQ-038 (injection fixture), REQ-035 on prompts (sentinel never in a prompt), cache round-trip.
+- [x] 5.1 `labels.py` schema + sanitising; `labeller.py` heuristic mode.
+- [x] 5.2 `llm.py`: `LlmClient` protocol, `ScriptedLlm`, anthropic and bedrock adapters (env-driven, no keys logged), prompt-hash cache.
+- [x] 5.3 Prompt builder: screen text delimited as data; response validated; failures fall back and are recorded.
+- [x] 5.4 Tests: REQ-036 (label independence), REQ-038 (injection fixture), REQ-035 on prompts (sentinel never in a prompt), cache round-trip.
 - [ ] 5.5 Optional `llm`-marked test against a real provider; capture one real labelled run for the journal (screenshot + a surprise).
 
 ## 6. Generator and runtime (REQ-019 to REQ-031) (by 15 Nov)

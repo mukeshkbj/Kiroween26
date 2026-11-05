@@ -1,0 +1,439 @@
+{
+  "app_id": "fake-insurance",
+  "dropped": [],
+  "edges": {
+    "e_0137d1321e": {
+      "confidence": 0.4,
+      "meaning": "PA3 to SEANCE INSURANCE - POLICY ENQUIRY"
+    },
+    "e_02b9e8e664": {
+      "confidence": 0.4,
+      "meaning": "PF3 to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_10e1d02821": {
+      "confidence": 0.4,
+      "meaning": "PF3 to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_16dba7bf62": {
+      "confidence": 0.4,
+      "meaning": "PF7 to SEANCE INSURANCE - POLICY LIST"
+    },
+    "e_1c07f4498d": {
+      "confidence": 0.4,
+      "meaning": "PA2 to SEANCE INSURANCE - CONFIRM UPDATE"
+    },
+    "e_1df2583bdd": {
+      "confidence": 0.4,
+      "meaning": "PA1 to SEANCE INSURANCE - POLICY ENQUIRY"
+    },
+    "e_25d5fa5645": {
+      "confidence": 0.4,
+      "meaning": "PA3 to SEANCE INSURANCE - CONFIRM UPDATE"
+    },
+    "e_2626603c5e": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - POLICY ENQUIRY"
+    },
+    "e_33775d489c": {
+      "confidence": 0.4,
+      "meaning": "PA2 to SEANCE INSURANCE - POLICY ENQUIRY"
+    },
+    "e_4111809cbb": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - CONFIRM UPDATE"
+    },
+    "e_4f761822b8": {
+      "confidence": 0.4,
+      "meaning": "CLEAR to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_5ab9f96220": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - POLICY LIST"
+    },
+    "e_5ed7e16656": {
+      "confidence": 0.4,
+      "meaning": "PF8 to SEANCE INSURANCE - POLICY LIST"
+    },
+    "e_6238d69b28": {
+      "confidence": 0.4,
+      "meaning": "PF13 to SEANCE INSURANCE - CONFIRM UPDATE"
+    },
+    "e_7ccc3ad448": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - POLICY LIST"
+    },
+    "e_87ce05732b": {
+      "confidence": 0.4,
+      "meaning": "PA1 to SEANCE INSURANCE - POLICY UPDATE"
+    },
+    "e_8a9b539680": {
+      "confidence": 0.4,
+      "meaning": "CLEAR to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_91c79b9a85": {
+      "confidence": 0.4,
+      "meaning": "CLEAR to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_a6eba031b8": {
+      "confidence": 0.4,
+      "meaning": "CLEAR to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_ab834f16ef": {
+      "confidence": 0.4,
+      "meaning": "PA3 to SEANCE INSURANCE - POLICY UPDATE"
+    },
+    "e_ae5a4d0216": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - POLICY UPDATE"
+    },
+    "e_c9281b046e": {
+      "confidence": 0.4,
+      "meaning": "ENTER to SEANCE INSURANCE - POLICY ENQUIRY"
+    },
+    "e_d07e76ebd1": {
+      "confidence": 0.4,
+      "meaning": "PA1 to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_d470475aec": {
+      "confidence": 0.4,
+      "meaning": "PF3 to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_dd73a04b98": {
+      "confidence": 0.4,
+      "meaning": "PA2 to SEANCE INSURANCE - POLICY UPDATE"
+    },
+    "e_e1f72c58ee": {
+      "confidence": 0.4,
+      "meaning": "CLEAR to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_e2c79ec104": {
+      "confidence": 0.4,
+      "meaning": "PA1 to SEANCE INSURANCE - CONFIRM UPDATE"
+    },
+    "e_e410119d46": {
+      "confidence": 0.4,
+      "meaning": "PA1 to SEANCE INSURANCE - POLICY LIST"
+    },
+    "e_e4ca73352c": {
+      "confidence": 0.4,
+      "meaning": "PF3 to SEANCE INSURANCE - MAIN MENU"
+    },
+    "e_e83a93d221": {
+      "confidence": 0.4,
+      "meaning": "PF3 to SEANCE INSURANCE - MAIN MENU"
+    }
+  },
+  "fields": {
+    "n_419888f22d:holder": {
+      "business_name": "Holder",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_419888f22d:polno": {
+      "business_name": "Polno",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "identifier"
+    },
+    "n_419888f22d:premium": {
+      "business_name": "Premium",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_419888f22d:r22c1": {
+      "business_name": "r22c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_419888f22d:status": {
+      "business_name": "Status",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_419888f22d:updated": {
+      "business_name": "Updated",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:holder": {
+      "business_name": "Holder",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:polno": {
+      "business_name": "Polno",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:premium": {
+      "business_name": "Premium",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:premium_2": {
+      "business_name": "Premium",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:r22c1": {
+      "business_name": "r22c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:status": {
+      "business_name": "Status",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_483e5fe116:status_2": {
+      "business_name": "Status",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_96fa848aaa:holder": {
+      "business_name": "Holder",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_96fa848aaa:polno": {
+      "business_name": "Polno",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "identifier"
+    },
+    "n_96fa848aaa:premium": {
+      "business_name": "Premium",
+      "confidence": 0.5,
+      "data_type": "number",
+      "role": "input"
+    },
+    "n_96fa848aaa:r22c1": {
+      "business_name": "r22c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_96fa848aaa:status": {
+      "business_name": "Status (A/L/C)",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "status"
+    },
+    "n_ba02cc6364:option": {
+      "business_name": "Option",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "selector"
+    },
+    "n_ba02cc6364:r22c1": {
+      "business_name": "r22c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r10c1": {
+      "business_name": "r10c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r10c11": {
+      "business_name": "r10c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r10c33": {
+      "business_name": "r10c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r11c1": {
+      "business_name": "r11c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r11c11": {
+      "business_name": "r11c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r11c33": {
+      "business_name": "r11c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r12c1": {
+      "business_name": "r12c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r12c11": {
+      "business_name": "r12c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r12c33": {
+      "business_name": "r12c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r13c1": {
+      "business_name": "r13c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r13c11": {
+      "business_name": "r13c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r13c33": {
+      "business_name": "r13c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r22c1": {
+      "business_name": "r22c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r6c1": {
+      "business_name": "r6c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r6c11": {
+      "business_name": "r6c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r6c33": {
+      "business_name": "r6c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r7c1": {
+      "business_name": "r7c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r7c11": {
+      "business_name": "r7c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r7c33": {
+      "business_name": "r7c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r8c1": {
+      "business_name": "r8c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r8c11": {
+      "business_name": "r8c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r8c33": {
+      "business_name": "r8c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r9c1": {
+      "business_name": "r9c1",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r9c11": {
+      "business_name": "r9c11",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:r9c33": {
+      "business_name": "r9c33",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "display"
+    },
+    "n_c5d11dedae:select": {
+      "business_name": "Select",
+      "confidence": 0.5,
+      "data_type": "string",
+      "role": "selector"
+    }
+  },
+  "map_hash": "sha256:005e6532e305b36930a17fc35def29e81d403b0195de20a3a92b77abc0ece431",
+  "nodes": {
+    "n_419888f22d": {
+      "confidence": 0.5,
+      "kind": "enquiry",
+      "name": "Policy Enquiry",
+      "purpose": ""
+    },
+    "n_483e5fe116": {
+      "confidence": 0.5,
+      "kind": "confirm",
+      "name": "Confirm Update",
+      "purpose": ""
+    },
+    "n_96fa848aaa": {
+      "confidence": 0.5,
+      "kind": "form",
+      "name": "Policy Update",
+      "purpose": ""
+    },
+    "n_ba02cc6364": {
+      "confidence": 0.5,
+      "kind": "menu",
+      "name": "Main Menu",
+      "purpose": ""
+    },
+    "n_c5d11dedae": {
+      "confidence": 0.5,
+      "kind": "list",
+      "name": "Policy List",
+      "purpose": ""
+    }
+  },
+  "schema": "gss.labels/1",
+  "source": "heuristic"
+}
