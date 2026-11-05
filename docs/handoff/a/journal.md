@@ -48,3 +48,19 @@ install interactively through our own MCP server, task 3.5-followup).
 Artefacts kept: `legacy/src/kicks/map/SMENMAP.bms`, `legacy/src/kicks/cob/SEANCEM.cob`,
 assemble/compile JCL, and the s3270 driver. The SMENMAP mapset is installed in
 KIKRPL on the live system.
+- 2026-11-05: `.kiro/specs/legacy-environment/tasks.md` changed
+
+## 2026-11-05 Go/no-go decided: NO-GO on KICKS COBOL, take the fallback
+
+The user approved the fallback. Plan from here (task 3.5-fallback + 4.x reshaped):
+1. COBOL business logic as a real TK4- program (COBUCLG route, proven): policy
+   lookup / list / update over an on-mainframe policy file. Driven as a batch
+   "service" the stand-in calls, returning records to the Python stand-in.
+2. `legacy/standin/`: a clearly labelled Python TN3270 server that paints the five
+   insurance screens (SMEN/SENQ/SLST/SUPD/SCNF) exactly per contract section 10
+   (field names, keys, 24x80 layout, VOLATILE_REGIONS), and runs the business
+   logic through the COBOL program on TK4-.
+3. Captures of the five real stand-in screens + the TK4- built-ins for B.
+4. reset-data + healthcheck.
+5. README: honest about real (TK4- live, KICKS banner, COBOL logic) vs stand-in.
+Then ONE <=1h retry of the KICKS COBOL compile with raised REGION/SIZE/BUF.
