@@ -21,9 +21,9 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 2.3 Property test: stream shape invariants (seq gap-free, replay suffix equality) over generated event sequences.
 
 ## 3. Tool broker and mapper (REQ-005 to REQ-007, REQ-013, REQ-014)
-- [ ] 3.1 `tools.py`: in-memory MCP client over the in-process server; allowlist; JSON Schema validation; error mapping to stable codes.
-- [ ] 3.2 `mapper.py`: observer -> `screen` before/after, `field_focus` (read/fill/key), `audit_entry`; redaction.
-- [ ] 3.3 Tests: hidden sentinel never in any event (REQ-028); `confirm_action`/`connect`/`get_audit_log` never offered; invalid args never sent.
+- [x] 3.1 `tools.py`: in-memory MCP client over the in-process server; allowlist; JSON Schema validation; error mapping to stable codes.
+- [x] 3.2 `mapper.py`: observer -> `screen` before/after, `field_focus` (read/fill/key), `audit_entry`; redaction.
+- [x] 3.3 Tests: hidden sentinel never in any event (REQ-028); `confirm_action`/`connect`/`get_audit_log` never offered; invalid args never sent.
 
 ## 4. Confirmation broker (REQ-015 to REQ-019, REQ-027)
 - [ ] 4.1 `confirm.py`: pending registry, approve/deny/expire/supersede, exactly-one `confirmation_resolved`, resume future.
