@@ -24,7 +24,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 3.1 `Grid`, `Row`, `FieldSpan`, `Oia`; hidden-field rendering; cursor; `ScreenAsText`.
 - [x] 3.2 CRT tokens and overlay with `Full/Low/Off`; contrast arithmetic test over the token pairs at each level.
 - [x] 3.3 `Planchette` with gestures, queue, reduced-motion path.
-- [ ] 3.4 Typing reveal.
+- [x] 3.4 Typing reveal.
 - [ ] 3.5 Screenshots for the journal: dormant, populated screen, planchette mid-glide.
 
 ## 4. Chat and connect (REQ-007 to REQ-012) (by 15 Nov)
