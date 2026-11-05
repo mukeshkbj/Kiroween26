@@ -82,6 +82,9 @@ def main() -> None:
         if step.startswith("str:"):
             s.cmd('String("' + step[4:].replace('"', '\\"') + '")')
             continue
+        if step == "tab":
+            s.cmd("Tab")
+            continue
         if step.startswith(("pf:", "pa:")):
             s.cmd(f"{step[:2].upper()}({step[3:]})")
         else:
