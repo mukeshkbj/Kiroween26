@@ -1,0 +1,12 @@
+{
+  "approved_at": "2026-11-05T15:12:22.000Z",
+  "approved_by": "agent-b-demo",
+  "schema": "gss.keypolicy.approval/1",
+  "screens": [
+    "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+    "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
+    "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a",
+    "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+    "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952"
+  ]
+}
