@@ -32,7 +32,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 4.2 `StepCard` with redacted arguments, business/generic badge, untrusted legacy data style.
 - [x] 4.3 `ConnectScreen` + `SystemCard`; REST client for `/api/apps`.
 - [x] 4.4 Empty and error states from REQ-012, each with its next action; `Announcer`.
-- [ ] 4.5 Run the whole flow in mock mode with the transcripts: lookup, session lost, injection screen.
+- [x] 4.5 Run the whole flow in mock mode with the transcripts: lookup, session lost, injection screen.
 
 ## 5. Confirmation, audit, spirit-map (REQ-013 to REQ-017) (by 19 Nov)
 - [ ] 5.1 `ConfirmModal` + `useFocusTrap`; REQ-029 tests (Deny first, Esc denies, 600 ms, untrusted click, one decision, expired).

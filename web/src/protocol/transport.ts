@@ -18,7 +18,11 @@ export interface TransportHandlers {
   onStatus(status: ConnectionStatus, detail?: string): void;
 }
 
+export type Unsubscribe = () => void;
+
 export interface Transport {
+  /** Subscribe to events and status; returns an unsubscribe. */
+  subscribe(h: TransportHandlers): Unsubscribe;
   /** Begin connecting / playing. Idempotent. */
   start(): void;
   /** Returns true if the message was handed to the wire (or script). Never queues, never retries. */
@@ -28,8 +32,6 @@ export interface Transport {
   close(): void;
   readonly kind: 'live' | 'replay';
 }
-
-export type Unsubscribe = () => void;
 
 export class Emitter {
   private handlers: TransportHandlers[] = [];

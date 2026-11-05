@@ -188,6 +188,7 @@ export type Action =
   | { type: 'confirmation_dismiss' }
   | { type: 'audit_loaded'; response: AuditResponse }
   | { type: 'map_loaded'; map: SpiritMapView | null }
+  | { type: 'send_failed'; id: string }
   | { type: 'ui'; patch: Partial<UiState> };
 
 // ---- helpers ---------------------------------------------------------------
@@ -280,6 +281,15 @@ export function reduce(state: AppState, action: Action): AppState {
     case 'user_sent':
       if (state.messages.some((m) => m.id === action.id)) return state;
       return { ...state, messages: [...state.messages, { kind: 'user', id: action.id, text: action.text, status: 'sent' }] };
+
+    case 'send_failed': {
+      // The transport could not send the message. It is NOT retried; mark it so the UI can say so.
+      const i = state.messages.findIndex((m) => m.kind === 'user' && m.id === action.id);
+      if (i < 0) return state;
+      const messages = state.messages.slice();
+      messages[i] = { ...(messages[i] as Extract<Message, { kind: 'user' }>), status: 'failed' };
+      return { ...state, messages };
+    }
 
     case 'connection':
       return state.connection === action.status ? state : { ...state, connection: action.status };
