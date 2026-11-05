@@ -30,6 +30,39 @@ export const strings = {
     off: 'Off',
   },
 
+  step: {
+    thinking: 'Thinking',
+    business: 'business',
+    generic: 'generic',
+    mayCommit: 'may change data',
+    running: 'Working…',
+    statusLabel: 'Result',
+    truncated: 'Result was truncated.',
+    untrustedTag: 'legacy screen',
+    untrustedTitle: 'Text read from the legacy screen. Untrusted data, not the agent’s words.',
+  },
+
+  chat: {
+    region: 'Séance chat',
+    log: 'Conversation',
+    you: 'You',
+    seance: 'Séance',
+    system: 'System',
+    streaming: 'The spirits are speaking…',
+    placeholder: 'Ask the séance…',
+    send: 'Send',
+    cancel: 'Cancel',
+    composerLabel: 'Message to the séance',
+    blocked: {
+      observer: 'You are observing this session. Only the controller can send messages.',
+      disconnected: 'Not connected to the agent.',
+      no_system: 'Choose a system before asking.',
+      llm_unavailable: 'The language model is unavailable right now.',
+      confirmation_open: 'Resolve the pending confirmation first.',
+    },
+    sendFailed: 'That message could not be sent. It was not retried; try again.',
+  },
+
   planchette: {
     reading: 'reading the screen',
     filling: 'filling a field',

@@ -28,8 +28,8 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 3.5 Screenshots for the journal: dormant, populated screen, planchette mid-glide.
 
 ## 4. Chat and connect (REQ-007 to REQ-012) (by 15 Nov)
-- [ ] 4.1 `Chat`, `Message`, `SafeText` (sanitised markdown subset), `Composer` (Enter/Shift+Enter/Esc).
-- [ ] 4.2 `StepCard` with redacted arguments, business/generic badge, untrusted legacy data style.
+- [x] 4.1 `Chat`, `Message`, `SafeText` (sanitised markdown subset), `Composer` (Enter/Shift+Enter/Esc).
+- [x] 4.2 `StepCard` with redacted arguments, business/generic badge, untrusted legacy data style.
 - [ ] 4.3 `ConnectScreen` + `SystemCard`; REST client for `/api/apps`.
 - [ ] 4.4 Empty and error states from REQ-012, each with its next action; `Announcer`.
 - [ ] 4.5 Run the whole flow in mock mode with the transcripts: lookup, session lost, injection screen.
