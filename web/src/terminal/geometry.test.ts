@@ -16,6 +16,7 @@ import {
   rectCenter,
   rectContains,
   rectsOverlap,
+  rowRuns,
 } from './geometry';
 
 const rowArb = fc.integer({ min: 0, max: ROWS - 1 });
@@ -131,6 +132,45 @@ describe('field rectangles', () => {
     expect(attributeCell({ row: 0, col: 0 })).toBeNull();
     expect(attributeCell({ row: 3, col: 0 })).toEqual({ x: 79, y: 2, w: 1, h: 1 });
     expect(attributeCell({ row: 3, col: 14 })).toEqual({ x: 13, y: 3, w: 1, h: 1 });
+  });
+});
+
+describe('rowRuns', () => {
+  it('covers exactly 80 columns with runs that tile the row in order', () => {
+    const fields = [
+      { index: 0, row: 0, col: 1, length: 10 },
+      { index: 1, row: 0, col: 20, length: 5 },
+    ];
+    const runs = rowRuns(0, fields);
+    expect(runs.reduce((n, r) => n + r.length, 0)).toBe(80);
+    expect(runs[0]?.col).toBe(0);
+    for (let i = 1; i < runs.length; i++) {
+      expect(runs[i]?.col).toBe((runs[i - 1]?.col ?? 0) + (runs[i - 1]?.length ?? 0));
+    }
+    // the two fields appear as runs
+    expect(runs.some((r) => r.field === 0 && r.col === 1 && r.length === 10)).toBe(true);
+    expect(runs.some((r) => r.field === 1 && r.col === 20 && r.length === 5)).toBe(true);
+  });
+
+  it('later fields win when two claim the same cell (datastream order)', () => {
+    const fields = [
+      { index: 0, row: 0, col: 1, length: 20 },
+      { index: 1, row: 0, col: 5, length: 3 },
+    ];
+    const runs = rowRuns(0, fields);
+    const at6 = runs.find((r) => r.col <= 6 && 6 < r.col + r.length);
+    expect(at6?.field).toBe(1);
+  });
+
+  it('ignores fields that do not touch the row', () => {
+    const runs = rowRuns(3, [{ index: 0, row: 0, col: 1, length: 5 }]);
+    expect(runs).toEqual([{ col: 0, length: 80, field: null }]);
+  });
+
+  it('follows a wrapped field onto the next row', () => {
+    const runs = rowRuns(1, [{ index: 0, row: 0, col: 78, length: 10 }]);
+    // cols 0..7 on row 1 belong to the wrapped field
+    expect(runs[0]).toEqual({ col: 0, length: 8, field: 0 });
   });
 });
 

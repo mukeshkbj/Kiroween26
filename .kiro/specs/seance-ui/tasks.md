@@ -21,8 +21,8 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 2.5 `ReplayTransport` and `WebSocketTransport` (hello, token, resume, backoff) behind the `Transport` interface; transport tests with a fake WebSocket.
 
 ## 3. Terminal (REQ-002 to REQ-006) (by 13 Nov)
-- [ ] 3.1 `Grid`, `Row`, `FieldSpan`, `Oia`; hidden-field rendering; cursor; `ScreenAsText`.
-- [ ] 3.2 CRT tokens and overlay with `Full/Low/Off`; contrast arithmetic test over the token pairs at each level.
+- [x] 3.1 `Grid`, `Row`, `FieldSpan`, `Oia`; hidden-field rendering; cursor; `ScreenAsText`.
+- [x] 3.2 CRT tokens and overlay with `Full/Low/Off`; contrast arithmetic test over the token pairs at each level.
 - [ ] 3.3 `Planchette` with gestures, queue, reduced-motion path.
 - [ ] 3.4 Typing reveal.
 - [ ] 3.5 Screenshots for the journal: dormant, populated screen, planchette mid-glide.

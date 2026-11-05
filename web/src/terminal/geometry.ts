@@ -77,6 +77,47 @@ export function attributeCell(f: { row: number; col: number }): Rect | null {
   return cellRect(Math.floor(i / COLS), i % COLS);
 }
 
+/**
+ * Split one row into runs, each either a field span (with the field index) or protected background text.
+ * A 3270 field owns the cells from its first data column up to (not including) the next field's attribute byte;
+ * here we approximate per-row ownership from the fields that touch the row, which is all the renderer needs to
+ * mark inputs, intensity and numeric cells. Overlapping claims resolve to the field with the higher index
+ * (later fields in the datastream win), matching how a real terminal paints.
+ */
+export interface Run {
+  /** 0-origin first column of this run. */
+  col: number;
+  /** cell count. */
+  length: number;
+  /** index into the field array, or null for plain protected text. */
+  field: number | null;
+}
+
+export function rowRuns(
+  rowIndex: number,
+  fields: { index: number; row: number; col: number; length: number }[],
+): Run[] {
+  const owner = new Array<number | null>(COLS).fill(null);
+  for (const f of fields) {
+    for (const r of fieldRects({ row: f.row, col: f.col, length: f.length })) {
+      if (r.y !== rowIndex) continue;
+      for (let x = r.x; x < r.x + r.w; x++) {
+        const prev = owner[x];
+        if (prev == null || f.index > prev) owner[x] = f.index;
+      }
+    }
+  }
+  const runs: Run[] = [];
+  let start = 0;
+  for (let c = 1; c <= COLS; c++) {
+    if (c === COLS || (owner[c] ?? null) !== (owner[start] ?? null)) {
+      runs.push({ col: start, length: c - start, field: owner[start] ?? null });
+      start = c;
+    }
+  }
+  return runs;
+}
+
 export type TargetShape = 'field' | 'screen' | 'key';
 
 export interface FocusTarget {
