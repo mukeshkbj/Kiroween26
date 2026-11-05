@@ -17,8 +17,8 @@ Ordered so the safety properties are proven with scripted models before any real
 
 ## 2. Events and session (REQ-001, REQ-003, REQ-004, REQ-026, REQ-030)
 - [x] 2.1 `events.py`: pydantic models for every server event and client message from contracts section 4; JSON round trip; conformance test against `docs/contracts/examples/events/*.json`.
-- [ ] 2.2 `session.py`: seq, ring buffer, resume, observers vs controller, bounded queue, optional event log.
-- [ ] 2.3 Property test: stream shape invariants (seq gap-free, replay suffix equality) over generated event sequences.
+- [x] 2.2 `session.py`: seq, ring buffer, resume, observers vs controller, bounded queue, optional event log.
+- [x] 2.3 Property test: stream shape invariants (seq gap-free, replay suffix equality) over generated event sequences.
 
 ## 3. Tool broker and mapper (REQ-005 to REQ-007, REQ-013, REQ-014)
 - [ ] 3.1 `tools.py`: in-memory MCP client over the in-process server; allowlist; JSON Schema validation; error mapping to stable codes.
