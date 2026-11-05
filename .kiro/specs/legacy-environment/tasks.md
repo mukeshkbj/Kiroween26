@@ -29,17 +29,20 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 - [ ] 3.5-fallback **(only on no-go)** The five insurance screens (contract: `docs/contracts.md` section 10) are served by a **clearly labelled Python TN3270 stand-in** in docker (`legacy/standin/`), whose business logic (lookup, list, update) calls a **COBOL program running on TK4-** (compiled via the proven COBUCLG route, results returned to the stand-in). The demo also shows the **real TK4- built-in screens live**. README must state which parts are real mainframe and which is the stand-in. Same screens, field names and key behaviour as the contract, so spirit-map, the agent and the UI work unchanged.
 - [x] 3.6 Verify KICKS starts (2026-11-04: banner "KSGM ... KICKS for TSO V1R5M0" shown over 3270 after TSO logon; see journal): `EXEC 'KICKS.KICKSSYS.V1R5M0.CLIST(KICKS)'` shows the banner screen.
 
-## 4. Séance Insurance app — KICKS transactions (A)
-- [ ] 4.1 COBOL copybook: policy record layout (POLNO, HOLDER, STATUS, PREMIUM, UPDDATE).
-- [ ] 4.2 COBOL programs with EXEC CICS (KICKS) commands: SEANCEM (menu), SEANCEQ (enquiry), SEANCLS (list), SEANCEU (update), SEANCEC (confirm).
-- [ ] 4.3 BMS mapsets: SMENMAP, SENQMAP, SLSTMAP, SUPDMAP, SCNFMAP (5 maps with protected + unprotected fields).
-- [ ] 4.4 Install JCL: compile COBOL programs, assemble BMS mapsets, define + load seed policy file (8 records).
-- [ ] 4.5 KICKS control table updates: assemble PPT (programs + mapsets), PCT (transaction IDs), FCT (policy file).
-- [ ] 4.6 Verify all 5 screens reachable from a 3270 client / the bridge after running setup-kicks.
+## 4. Séance Insurance app (A) — fallback: Python stand-in + real COBOL on TK4-
+KICKS COBOL compile abends S0C4 (3.5-gate NO-GO). The app is delivered as the
+3.5-fallback: real COBOL business logic on TK4- behind a labelled Python TN3270
+stand-in. KICKS BMS/COBOL attempt kept under `legacy/src/kicks/` as a stretch.
+- [x] 4.1 Policy record layout (POLNO, HOLDER, STATUS, PREMIUM, UPDDATE) — `src/cobol/SEANCSVC.cob` FD / seed file `src/jcl/seed-policies.jcl`.
+- [x] 4.2 Business logic as REAL COBOL on TK4- (`SEANCSVC`, COBUCLG route): lookup / list / update, proven RC=0 and correct output. (KICKS `EXEC`-command version `src/kicks/cob/SEANCEM.cob` kept but blocked by the S0C4.)
+- [x] 4.3 Five screens with protected + unprotected fields — `legacy/standin/seance_standin/screens.py` to contract 10 geometry; KICKS BMS `src/kicks/map/SMENMAP.bms` assembles+links (stretch).
+- [x] 4.4 Install JCL: `src/jcl/build-seancsvc.jcl` (compile+link) and `src/jcl/seed-policies.jcl` (8 seed records).
+- [ ] 4.5 KICKS control tables (PPT/PCT/FCT) — not needed for the stand-in; part of the KICKS stretch only.
+- [x] 4.6 All 5 screens reachable through the bridge/s3270 and the full flow verified end-to-end (lookup/list/update+commit persist); see `legacy/scripts/demo_path.py`.
 
 ## 5. Built-in screens — spirit-map second target (B)
-- [ ] 5.1 Document the TK4- built-in full-screen tools available for spirit-map exploration (RFE, TSO logon, utility screens).
-- [ ] 5.2 Verify the bridge can read the TSO logon screen (structured fields present) — this is the screen-bridge integration test (task 6.2).
+- [x] 5.1 TK4- built-ins captured for B: `legacy/captures/tk4-builtins/capture.json` (welcome + `IKJ56420I` rejection for test id XYZZY). Handoff in `docs/handoff/a/response-b-captures.md`.
+- [x] 5.2 Bridge reads the TK4- screens with structured fields (welcome, logon rejection) — captured live through the real bridge/parser. (Known: the fake's `from_capture` rejects the welcome's top-left field; request filed to the integrator.)
 
 ## 6. COBOL line-mode fallback (C)
 - [ ] 6.1 COBOL program: line-mode policy enquiry (ACCEPT/DISPLAY, no BMS, no KICKS).
@@ -47,9 +50,9 @@ Tasks are ordered so the go/no-go de-risks as early as possible: COBOL compile f
 - [ ] 6.3 Document as the fallback path in `legacy/README.md`.
 
 ## 7. Health check + reset
-- [ ] 7.1 `legacy/healthcheck.sh`: poll 3270 until a readable screen + keyboard unlocked; timeout ~6 min; clear error.
-- [ ] 7.2 `legacy/reset-data.sh`: re-run the seed-load JCL via the console to restore known data.
-- [ ] 7.3 Run the demo path (menu → enquiry → list → update → confirm) three times after reset.
+- [x] 7.1 Health check: `legacy/healthcheck.py` (+ `.ps1`/`.sh` wrappers) — connects via the bridge, waits for a readable menu with keyboard unlocked, proves a live COBOL lookup; clear OK/FAIL, exit 0/1.
+- [x] 7.2 Reset: `legacy/reset-data.ps1` (+ `.sh`) re-runs `seed-policies.jcl` to restore the 8 policies.
+- [x] 7.3 Demo path (menu → enquiry → list → update → confirm) run three times in a row after reset — `legacy/scripts/demo_path.py`, ALL RUNS OK.
 
 ## 8. Docs
-- [ ] 8.1 `legacy/README.md`: how to run, KICKS setup instructions, cold-start time, the 5-screen walkthrough, demo credentials (from `.env`), fallback instructions.
+- [x] 8.1 `legacy/README.md`: run steps, real-vs-stand-in honesty, KICKS status + S0C4 note, cold-start time, 5-screen walkthrough, credentials (from `.env`), reset/health check, captures, fallback.

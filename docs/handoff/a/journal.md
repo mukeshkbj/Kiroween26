@@ -64,3 +64,31 @@ The user approved the fallback. Plan from here (task 3.5-fallback + 4.x reshaped
 4. reset-data + healthcheck.
 5. README: honest about real (TK4- live, KICKS banner, COBOL logic) vs stand-in.
 Then ONE <=1h retry of the KICKS COBOL compile with raised REGION/SIZE/BUF.
+
+## 2026-11-05 Fallback demo app DONE (Tue 10 Nov milestone safe)
+
+- Real COBOL `SEANCSVC` compiles+links on TK4- via COBUCLG (COB RC=0004, LKED
+  RC=0000) into `HERC01.SEANCE.LOAD`. Proven: lookup returns
+  `OK|R|P0000003|A. ROSE|ACTIVE|250.00|2026-10-21`; list returns all 8; update
+  rewrites the master and persists. This confirms the S0C4 was specific to the
+  KICKS preprocessor path (plain COBOL is fine).
+  - Surprise: the KICKS program name `SEANCESVC` was 9 chars -> `IEF642I
+    EXCESSIVE PARAMETER LENGTH` (member names max 8). Renamed to `SEANCSVC`.
+  - Surprise: a JCL card exactly 72 cols ending in `,` puts the comma in the
+    continuation column -> `IEF618I`. Keep continued operands short.
+- `legacy/standin/` Python TN3270 server paints the 5 screens to contract 10
+  geometry and calls `SEANCSVC` per request via the card reader. 15 unit tests
+  pass; proven end-to-end over real s3270 (menu/enquiry/list/update+commit).
+  - Surprise: the bridge sends `PF3`, but s3270 wants `PF(3)` — PF/PA presses
+    fail live. Filed `request-integrator-bridge-pf-keys.md`; capture/demo tools
+    issue `PF(n)` directly meanwhile.
+- Captures: `seance-insurance` (5 screens, loads via from_capture) and
+  `tk4-builtins` (real welcome + `IKJ56420I` for XYZZY). Known: from_capture
+  rejects the welcome's top-left field — filed to the integrator; B informed.
+- `volatile-regions.txt` equals the fake's DEMO_VOLATILE_REGIONS (36 spans).
+- reset-data, healthcheck (exit 0), and demo_path 3x in a row (ALL RUNS OK).
+- README is explicit about real (TK4-, KICKS banner, COBOL logic) vs stand-in
+  (the 3270 presentation of the 5 screens only).
+
+Milestone deliverables for B/C/D are all in place. Remaining per the user: ONE
+time-boxed (<=1h) retry of the KICKS COBOL compile with raised REGION/SIZE/BUF.
