@@ -118,7 +118,7 @@ class GullibleLlm(ScriptedLlm):
 
 # The amount after "to"/"=": "premium of policy P0000003 to 300" -> 300, never the policy digits.
 _PREMIUM_RE = re.compile(r"premium\b.*?(?:\bto\b|=|\bat\b)\s*(\d{1,7})(?:\.\d+)?\b", re.IGNORECASE)
-_STATUS_RE = re.compile(r"status\D{0,15}\b([ALC])\b", re.IGNORECASE)
+_STATUS_RE = re.compile(r"status\b.*?(?:\bto\b|=)\s*([ALC])\b", re.IGNORECASE)
 _STATUS_WORDS = {"active": "A", "lapsed": "L", "cancelled": "C", "canceled": "C"}
 
 

@@ -207,10 +207,17 @@ from seance_agent.llm.base import ToolDef  # noqa: E402
 _ALL = [ToolDef(n, "", {}) for n in ("lookup_policy", "list_policies", "update_policy")]
 
 
-def test_demo_reads_the_new_premium_not_the_policy_digits() -> None:
-    out = demo_responder([{"role": "user", "text": "Set the premium of policy P0000003 to 300"}], _ALL)
+@pytest.mark.parametrize("text,args", [
+    ("Set the premium of policy P0000003 to 300", {"policy_number": "P0000003", "premium": "300"}),
+    ("Change policy P0000002 premium to 450.00", {"policy_number": "P0000002", "premium": "450"}),
+    ("Set the status of policy P0000004 to L", {"policy_number": "P0000004", "status": "L"}),
+    ("Set the status of policy P0000004 to lapsed", {"policy_number": "P0000004", "status": "L"}),
+])
+def test_demo_reads_the_new_value_not_the_policy_digits(text, args) -> None:
+    """The sentences in agent/README.md's run guide."""
+    out = demo_responder([{"role": "user", "text": text}], _ALL)
     use = next(i for i in out if isinstance(i, ToolUse))
-    assert use.input == {"policy_number": "P0000003", "premium": "300"}
+    assert use.input == args
 
 
 async def test_update_after_a_lookup_recovers_from_unknown_start_and_still_needs_a_human() -> None:
