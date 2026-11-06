@@ -54,9 +54,12 @@ describe('ConnectScreen (REQ-010)', () => {
     render(<ConnectScreen load={{ status: 'ready', apps }} onConnect={() => {}} onRetry={() => {}} />);
     expect(screen.getByText('Seance Insurance (simulated)')).toBeInTheDocument();
     expect(screen.getByText(/3 of 3 tools approved/)).toBeInTheDocument();
-    // the unreachable live app's connect button is disabled
-    const kicks = screen.getByText('Seance Insurance (KICKS)').closest('.system-card') as HTMLElement;
-    expect(kicks.querySelector('button')).toBeDisabled();
+    // the unreachable live app's connect button is disabled. Names come from the contract example, not copied here
+    // (the integrator renamed this app on 2026-11-06 and a hard-coded name broke this test).
+    const unreachable = apps.find((a) => a.kind === 'live' && a.reachable === false);
+    expect(unreachable).toBeDefined();
+    const card = screen.getByText(unreachable!.name).closest('.system-card') as HTMLElement;
+    expect(card.querySelector('button')).toBeDisabled();
   });
 
   it('sends connect_system when a reachable system is chosen', async () => {
