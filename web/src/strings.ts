@@ -30,6 +30,26 @@ export const strings = {
     off: 'Off',
   },
 
+  audit: {
+    region: 'Audit log',
+    toggle: 'Audit log',
+    close: 'Close audit log',
+    filterLabel: 'Show outcomes',
+    filters: { all: 'All', ok: 'OK', pending: 'Pending', blocked: 'Blocked', rejected: 'Rejected' },
+    export: 'Export JSON',
+    empty: 'No audit entries yet.',
+    emptyFiltered: 'No entries match this filter.',
+    chain: {
+      label: 'Chain',
+      ok: 'verified by the server',
+      broken: (seq: number | null) => (seq === null ? 'broken' : `broken at entry ${seq}`),
+      unknown: 'unknown until refreshed',
+    },
+    refresh: 'Refresh',
+    cols: { time: 'Time', seq: 'Seq', tool: 'Tool', screen: 'Screen', field: 'Field', value: 'Value', key: 'Key', outcome: 'Outcome', by: 'Confirmed by' },
+    count: (shown: number, total: number) => (shown === total ? `${total} entries` : `${shown} of ${total} entries`),
+  },
+
   confirm: {
     title: 'Confirm a change to the legacy system',
     miniLabel: 'Miniature of the screen the key will be pressed on',
