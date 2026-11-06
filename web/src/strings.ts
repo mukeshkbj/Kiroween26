@@ -30,6 +30,32 @@ export const strings = {
     off: 'Off',
   },
 
+  map: {
+    region: 'Spirit-map',
+    graphLabel: 'Spirit-map graph. Screens are nodes and keys are edges. A table with the same information follows.',
+    tableLabel: 'Spirit-map as a table',
+    tableToggleShow: 'Show table',
+    tableToggleHide: 'Hide table',
+    youAreHere: 'you are here',
+    needsReview: 'needs review',
+    needsConfirmation: 'needs confirmation',
+    notExplored: 'not explored',
+    readOnlyKey: 'read-only key',
+    uncharted: 'The current screen is not in this map (uncharted).',
+    noMap: 'No spirit-map has been generated for this system yet.',
+    loadingMap: 'Loading the spirit-map…',
+    cols: { screen: 'Screen', kind: 'Kind', confidence: 'Confidence', keys: 'Keys out', tools: 'Tools' },
+    nodeLabel: (name: string, kind: string, here: boolean, review: boolean) =>
+      `${name}, ${kind} screen${here ? ', you are here' : ''}${review ? ', needs review' : ''}`,
+    selected: 'Selected screen',
+    preview: 'Screen preview',
+    fields: 'Fields',
+    toolsThrough: 'Tools that pass through this screen',
+    none: 'none',
+    pathTrail: 'Path taken in this tool call',
+    visits: (n: number) => `${n} visit${n === 1 ? '' : 's'}`,
+  },
+
   audit: {
     region: 'Audit log',
     toggle: 'Audit log',

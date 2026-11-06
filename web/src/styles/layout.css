@@ -229,3 +229,40 @@
   overflow: auto;
 }
 .mini-screen mark { background: var(--phosphor); color: var(--bg); }
+
+/* Audit drawer. */
+.audit-drawer {
+  background: var(--bg-raised);
+  color: var(--phosphor);
+  border-left: 2px solid var(--phosphor-dim);
+  padding: 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  min-width: 22rem;
+}
+.audit-head { display: flex; justify-content: space-between; align-items: center; }
+.audit-tools { display: flex; gap: 1rem; align-items: center; margin: 0.5rem 0; }
+.audit-table { border-collapse: collapse; width: 100%; }
+.audit-table th, .audit-table td { text-align: left; padding: 0.15rem 0.5rem; border-bottom: 1px solid var(--phosphor-dim); white-space: nowrap; }
+.audit-chain-broken { color: var(--danger); }
+.audit-chain-unknown { color: var(--warn); }
+.audit-outcome-blocked_read_only, .audit-outcome-rejected, .audit-outcome-stale_screen { color: var(--warn); }
+
+/* Spirit-map. */
+.spirit-map { color: var(--phosphor-dim); font-family: var(--mono); background: var(--bg); }
+.spirit-map .map-node rect { fill: var(--bg-raised); stroke: var(--phosphor-dim); }
+.spirit-map .map-node:focus-visible rect { stroke: var(--focus); stroke-width: 3; }
+.spirit-map .node-here rect { stroke: var(--phosphor-bright); }
+.spirit-map .node-selected rect { fill: var(--field-fill); }
+.spirit-map .node-name { fill: var(--phosphor); font-size: 13px; font-weight: 600; }
+.spirit-map .node-sub { fill: var(--phosphor-dim); font-size: 11px; }
+.spirit-map .node-tag { fill: var(--phosphor-bright); font-size: 11px; font-weight: 700; }
+.spirit-map .node-tag-review { fill: var(--warn); }
+.spirit-map .map-edge path, .spirit-map .map-frontier path { stroke: currentColor; stroke-width: 1.5; }
+.spirit-map .edge-trail path { stroke: var(--phosphor-bright); stroke-width: 3.5; }
+.spirit-map .edge-label { fill: var(--phosphor-dim); font-size: 10px; }
+.map-table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.85rem; }
+.map-table th, .map-table td { text-align: left; vertical-align: top; padding: 0.2rem 0.5rem; border-bottom: 1px solid var(--phosphor-dim); }
+.map-uncharted { color: var(--warn); border: 1px solid var(--warn); padding: 0.4rem; }
+.node-preview-screen { font-size: 0.6rem; line-height: 0.85rem; background: var(--bg); border: 1px solid var(--phosphor-dim); overflow: auto; }
+.map-keys { margin: 0; padding-left: 1.2rem; }

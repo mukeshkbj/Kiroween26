@@ -112,6 +112,8 @@ export interface AppState {
   screen: ScreenState | null;
   /** Latest screen seen for each screen_id (bounded); the confirmation modal draws from here. */
   screensById: Record<string, ScreenState>;
+  /** Screens seen during the current tool call, in order, consecutive duplicates collapsed (map path trail). */
+  trail: { toolCallId: string | null; screenIds: string[] };
   messages: Message[];
   turns: Record<string, TurnState>;
   turnOrder: string[];
@@ -159,6 +161,7 @@ export function initialState(ui: Partial<UiState> = {}): AppState {
     session: freshSession(),
     screen: null,
     screensById: {},
+    trail: { toolCallId: null, screenIds: [] },
     messages: [],
     turns: {},
     turnOrder: [],
@@ -501,8 +504,19 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
       };
     }
 
-    case 'screen':
-      return rememberScreen(s, scrubScreen(ev.data.screen));
+    case 'screen': {
+      const screen = scrubScreen(ev.data.screen);
+      const callId = ev.data.tool_call_id;
+      const t = s.trail;
+      // A new tool call (or a snapshot) starts a new trail; within a call, consecutive repeats collapse.
+      const trail =
+        t.toolCallId !== callId || callId === null
+          ? { toolCallId: callId, screenIds: [screen.screenId] }
+          : t.screenIds[t.screenIds.length - 1] === screen.screenId
+            ? t
+            : { toolCallId: callId, screenIds: [...t.screenIds, screen.screenId].slice(-50) };
+      return { ...rememberScreen(s, screen), trail };
+    }
 
     case 'field_focus': {
       const queue = [...s.focusQueue, { ...ev.data, seq: ev.seq }];

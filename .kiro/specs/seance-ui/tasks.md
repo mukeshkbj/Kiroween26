@@ -38,8 +38,8 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 5.1 `ConfirmModal` + `useFocusTrap`; REQ-029 tests (Deny first, Esc denies, 600 ms, untrusted click, one decision, expired).
 - [x] 5.2 Modal transcripts: approve, deny, expire, read-only, superseded.
 - [x] 5.3 `AuditDrawer` with filter, export, chain badge ("unknown" after live appends).
-- [ ] 5.4 `layout.ts` (dagre, deterministic) + `SpiritMap` SVG + `MapTable` + `NodePreview`; current-node tracking and path trail.
-- [ ] 5.5 Unknown-screen ("uncharted") state tested with a screen id absent from the map.
+- [x] 5.4 `layout.ts` (dagre, deterministic) + `SpiritMap` SVG + `MapTable` + `NodePreview`; current-node tracking and path trail.
+- [x] 5.5 Unknown-screen ("uncharted") state tested with a screen id absent from the map.
 
 ## 6. Accessibility and motion (REQ-018 to REQ-022, REQ-028, REQ-031) (by 22 Nov)
 - [ ] 6.1 Landmarks, skip links, shortcuts, splitter keyboard support, tab order test.

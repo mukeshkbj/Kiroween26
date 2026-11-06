@@ -13,6 +13,18 @@ export function isUncharted(s: AppState): boolean {
   return s.map !== null && s.screen !== null && currentNodeId(s) === null;
 }
 
+/** Map node ids visited during the current tool call, in order, for the path trail. Unknown screens are skipped. */
+export function trailNodeIds(s: AppState): string[] {
+  if (!s.map) return [];
+  const byScreen = new Map(s.map.nodes.map((n) => [n.screen_id, n.id]));
+  const out: string[] = [];
+  for (const sid of s.trail.screenIds) {
+    const id = byScreen.get(sid);
+    if (id && out[out.length - 1] !== id) out.push(id);
+  }
+  return out;
+}
+
 export function activeTurnId(s: AppState): string | null {
   for (let i = s.turnOrder.length - 1; i >= 0; i--) {
     const id = s.turnOrder[i] as string;
