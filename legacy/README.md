@@ -122,6 +122,45 @@ submitted with `scripts/submit-jcl.ps1` (Hercules card reader on device 000C).
 are `gss.capture/1` files for Agent B, produced live through the real bridge.
 See `docs/handoff/a/response-b-captures.md`.
 
+## Line-mode COBOL under TSO (fallback without any 3270 screens)
+
+`SEANCSVC` is a plain line-mode program (ACCEPT/DISPLAY; no BMS, no KICKS), so
+the business logic also works from TSO with no screens at all. A TSO user at
+READY (or batch TSO, as in `src/jcl/tso-seancsvc.jcl`) does:
+
+```
+ ALLOC FI(POLIN)  DA('HERC01.SEANCE.POLICY') SHR
+ ALLOC FI(POLOUT) DUMMY
+ ALLOC FI(SYSOUT) SYSOUT(A)
+ ALLOC FI(SYSIN)  DA('HERC01.SEANCE.TSOREQ(LOOKUP)') SHR      <- card: L P0000003
+ CALL 'HERC01.SEANCE.LOAD(SEANCSVC)'
+```
+and gets `OK|R|P0000003|A. ROSE|ACTIVE|250.00|2026-10-21`. The request cards
+(`L <polno>`, `A`, `U <polno> <A|L|C> <premium>`) are created by
+`src/jcl/tso-reqs.jcl`. Verified 2026-11-06: IKJEFT01 RC=0000, lookup + list of
+all 8 policies. This is the fallback if neither the stand-in nor KICKS screens
+can be used.
+
+## KICKS (stretch) - how it was installed
+
+KICKS 1.5.0 (`.tools/kicks-tso-v1r5m0.xmi`, from github.com/moshix/kicks; KICKS'
+license forbids putting its objects in a public repo, so only our own JCL is
+committed) was installed into the existing catalog under `HERC01.KICKS.*` and
+`HERC01.KICKSSYS.*`. No dedicated DASD volume or user catalog turned out to be
+needed. Order: `recv370-kicks.jcl` (with `devinit 10c <xmi> ebcdic`),
+`kicks-unpack.jcl`, `kicks-unpack-cb2.jcl`, `kicks-kfix.jcl`,
+`kicks-lodintra.jcl`, `kicks-lodtemp.jcl`. Start it from TSO READY with
+`PROFILE PREFIX(HERC01)` then `EXEC 'HERC01.KICKSSYS.V1R5M0.CLIST(KICKS)'`.
+BMS maps assemble (`asm-smenmap.jcl`); KICKS COBOL does not compile in this
+build (S0C4, see above).
+
+## JCL column rule (guarded)
+
+JCL statements may only use columns 1-71: column 72 is the continuation column
+and 73-80 the sequence field. Overflow is silently mangled (we hit IEF618I,
+IEF629I and a dead JOB card this way). `scripts/submit-jcl.ps1` now refuses a
+job with any statement past column 71.
+
 ## Fallback path if the mainframe is unavailable
 
 If TK4- cannot be started, `mcp-server`'s `seance_mcp.fake.fake_insurance()`

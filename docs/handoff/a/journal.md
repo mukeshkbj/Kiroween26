@@ -160,3 +160,20 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   mainframe after the pre-run reset, so nothing committed.
 - So the full chain works on the live, COBOL-backed app, unchanged from the fake:
   spirit-map discovery, then B's approved policy and tools.
+
+## 2026-11-06 Tasks 6.1-6.3 (line-mode COBOL under TSO) and the JCL column guard
+
+- 6.2: `SEANCSVC` runs under TSO via `ALLOC` + `CALL`
+  (`src/jcl/tso-seancsvc.jcl`, IKJEFT01 RC=0000), returning the lookup and all
+  8 policies. 6.1 is SEANCSVC itself; 6.3 is documented in the README.
+- Surprise: the first TSO run printed 16 lines and never started. Its JOB card
+  was 74 columns. This was the **third** time the column-72 rule bit, so
+  `submit-jcl.ps1` now refuses any JCL statement past column 71. A scan of all
+  JCL found two more offenders. One of them, `pp-seancem.jcl`, is the "PPSEAN
+  never ran" mystery from the KICKS diagnosis on 2026-11-05: it was this JOB-card
+  trap, not the preprocessor. Both are fixed.
+- Tasks 3.2/3.3 (dedicated KICKS DASD volume + user catalog) are marked
+  superseded. They were not needed, because KICKS is in the existing catalog.
+- Open in legacy-environment, both KICKS stretch: 3.5-followup (KFIX via our own
+  MCP) and 4.5 (KICKS tables). Neither is useful while KICKS COBOL S0C4s; 4.5 is
+  only needed by a working KICKS transaction.
