@@ -1,0 +1,27 @@
+{
+  "apps": [
+    {
+      "app_id": "fake-insurance",
+      "name": "Seance Insurance (simulated)",
+      "kind": "fake",
+      "fake": "fake_insurance",
+      "description": "Five simulated screens. No mainframe."
+    },
+    {
+      "app_id": "tk4-builtins",
+      "name": "TK4- built-in screens",
+      "kind": "live",
+      "host_env": "TN3270_HOST",
+      "port_env": "TN3270_PORT",
+      "description": "Real MVS 3.8j screens that need no logon."
+    },
+    {
+      "app_id": "seance-insurance",
+      "name": "Seance Insurance (KICKS)",
+      "kind": "live",
+      "host_env": "TN3270_HOST",
+      "port_env": "TN3270_PORT",
+      "description": "The demo business app on the legacy system."
+    }
+  ]
+}
