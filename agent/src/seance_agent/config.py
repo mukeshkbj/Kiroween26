@@ -20,7 +20,7 @@ from collections.abc import Mapping
 from enum import StrEnum
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, SecretStr, field_validator
 
 
 class LlmProviderName(StrEnum):
@@ -59,7 +59,7 @@ class Settings(BaseModel):
     # llm
     llm_provider: LlmProviderName = LlmProviderName.SCRIPTED
     llm_model: str = "scripted-demo"
-    anthropic_api_key: str | None = None
+    anthropic_api_key: SecretStr | None = None  # SecretStr: never shown in repr, logs or errors
     aws_region: str | None = None
     llm_max_tokens: int = 1024
     llm_timeout_s: float = 60.0
@@ -170,7 +170,7 @@ def llm_availability(settings: Settings) -> bool:
     if settings.llm_provider is LlmProviderName.SCRIPTED:
         return True
     if settings.llm_provider is LlmProviderName.ANTHROPIC:
-        return bool(settings.anthropic_api_key)
+        return bool(settings.anthropic_api_key and settings.anthropic_api_key.get_secret_value())
     if settings.llm_provider is LlmProviderName.BEDROCK:
         # boto3 resolves credentials from the standard chain at call time; a region
         # is the minimum we can check cheaply without reaching out to AWS.

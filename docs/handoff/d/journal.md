@@ -110,3 +110,29 @@ invented `approve_pending`, PF3 and a zero premium. The first two were refused b
 the allowlist, the update stopped at the modal and expired, no commit key reached
 the fake (`app.dirty` false), and `confirm_action` is absent from the audit log.
 The tool-error budget then stopped the turn, which is the budget doing its job.
+
+### 2026-11-06 — API, hub and websocket (tasks 6.1-6.5)
+
+- `hub.py` holds everything behind the socket (session, runtime, loop, confirm
+  broker, message handling); `api.py` is a thin transport. That split is what let
+  the controller-only rule be tested without a socket and again through one.
+- The tool server runs in its own long-lived task (`ToolBroker.start` has to be
+  entered and exited by the same task), stopped by an event on reconnect/shutdown.
+- Live apps are refused with `live_not_allowed` **before a port is built**; the
+  service's own guard is the second layer. `reachable` is reported `null` because
+  probing a live host is itself a live connection.
+
+Surprise (section 6 / protocol): `session_state.controller` is a per-recipient
+fact but the event has one `seq` in a gap-free stream. Sending each client its own
+copy would break the gap-free rule for everyone else. Resolution: broadcast one
+event and rewrite `controller` per recipient on fan-out and replay. Same reasoning
+makes `ack`, `pong` and session-level `error` broadcast. Written up for C in
+`for-c-run-the-agent.md`. Also worth a contracts note: a controller that drops
+keeps its slot for 60 s keyed by its token, otherwise an observer tab could take
+over during an ordinary reconnect.
+
+Smaller catches: my first API test hung because the helper waited for a
+`session_state` an earlier assertion had already consumed (test bug, not server);
+the secrets test I first wrote ended in `or True`, so it proved nothing. The API
+key is now a `SecretStr` and the test asserts it is absent from repr, dump and
+JSON.

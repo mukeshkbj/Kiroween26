@@ -21,8 +21,9 @@ resume.
 from __future__ import annotations
 
 import json
+import time
 from collections import deque
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -54,6 +55,7 @@ class Connection:
 
     conn_id: str
     controller: bool
+    token: str | None
     _queue: anyio.streams.memory.MemoryObjectSendStream[dict[str, Any]]
     _receive: anyio.streams.memory.MemoryObjectReceiveStream[dict[str, Any]]
     overrun: bool = False
@@ -92,7 +94,12 @@ class Session:
         ring_size: int = 1000,
         queue_maxsize: int = DEFAULT_QUEUE_MAXSIZE,
         event_log: Path | None = None,
+        clock: Callable[[], float] = time.monotonic,
+        controller_grace_s: float = 60.0,
     ):
+        self._clock = clock
+        self._grace = controller_grace_s
+        self._reserved: tuple[str, float] | None = None  # (token, deadline)
         self.session_id = session_id
         self._seq = 0
         self._ring: deque[dict[str, Any]] = deque(maxlen=ring_size)
@@ -128,15 +135,27 @@ class Session:
         cid = self._controller_id
         return cid is not None and cid in self._conns and not self._conns[cid].closed
 
-    def add_connection(self, conn_id: str) -> Connection:
+    def _slot_free_for(self, token: str | None) -> bool:
+        """No live controller, and no unexpired reservation held for another token."""
+        if self.has_controller():
+            return False
+        r = self._reserved
+        if r is None or self._clock() >= r[1]:
+            return True
+        return token is not None and token == r[0]
+
+    def add_connection(self, conn_id: str, token: str | None = None) -> Connection:
         """Register a connection. The first one (while no live controller exists)
-        becomes the controller (contracts 4.1); the rest are observers."""
+        becomes the controller (contracts 4.1); the rest are observers. A controller
+        that dropped keeps its slot for ``controller_grace_s`` for the same token
+        (REQ-003), so an observer cannot take over during a brief reconnect."""
         send, receive = anyio.create_memory_object_stream(max_buffer_size=self._queue_maxsize)
-        is_controller = not self.has_controller()
-        conn = Connection(conn_id=conn_id, controller=is_controller, _queue=send, _receive=receive)
+        is_controller = self._slot_free_for(token)
+        conn = Connection(conn_id=conn_id, controller=is_controller, token=token, _queue=send, _receive=receive)
         self._conns[conn_id] = conn
         if is_controller:
             self._controller_id = conn_id
+            self._reserved = None
         return conn
 
     def remove_connection(self, conn_id: str) -> None:
@@ -145,6 +164,8 @@ class Session:
             conn.close()
         if self._controller_id == conn_id:
             self._controller_id = None
+            if conn is not None and conn.token is not None:
+                self._reserved = (conn.token, self._clock() + self._grace)
 
     def is_controller(self, conn_id: str) -> bool:
         return self._controller_id == conn_id
@@ -164,10 +185,17 @@ class Session:
         self._fan_out(payload)
         return payload
 
+    @staticmethod
+    def _view(conn: Connection, payload: dict[str, Any]) -> dict[str, Any]:
+        """``session_state.controller`` describes the *receiving* connection."""
+        if payload["type"] != "session_state" or payload["data"].get("controller") == conn.controller:
+            return payload
+        return {**payload, "data": {**payload["data"], "controller": conn.controller}}
+
     def _fan_out(self, payload: dict[str, Any]) -> None:
         for conn_id, conn in list(self._conns.items()):
             try:
-                conn.try_send(payload)
+                conn.try_send(self._view(conn, payload))
             except Overrun:
                 # Drop the slow client; the agent keeps streaming to everyone else.
                 self.remove_connection(conn_id)
@@ -196,7 +224,7 @@ class Session:
         """Push a batch (e.g. a replay) to one connection only."""
         for e in events:
             try:
-                conn.try_send(e)
+                conn.try_send(self._view(conn, e))
             except Overrun:
                 self.remove_connection(conn.conn_id)
                 return

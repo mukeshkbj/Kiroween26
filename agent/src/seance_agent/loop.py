@@ -81,6 +81,7 @@ class AgentLoop:
         self.turn_id: str | None = None
         self._cancel = False
         self._waited = 0.0
+        self._open_call: str | None = None
         self._n_turn = self._n_msg = self._n_call = 0
 
     # -- public -----------------------------------------------------------
@@ -108,8 +109,19 @@ class AgentLoop:
         self._n_turn += 1
         self.turn_id = f"t_{self._n_turn:02d}"
         self._cancel = False
+        self._open_call = None
         try:
             return await self._turn(text)
+        except Exception:  # noqa: BLE001 - never leave a call or a turn dangling (stream rules)
+            if self._open_call is not None:
+                self.session.emit(ToolResultData(tool_call_id=self._open_call, status="error", error_code="bridge_error",
+                                                 summary="internal error", result=None, truncated=False), turn_id=self.turn_id)
+            pend = self.confirm.pending_action_id
+            if pend is not None:
+                await self.confirm.abandon(pend)
+            self._error("bridge_error", "Internal error; this request was stopped.", True, None)
+            self.session.emit(TurnFinishedData(reason="error", usage=None), turn_id=self.turn_id)
+            return "error"
         finally:
             self.turn_id = None
 
@@ -206,7 +218,10 @@ class AgentLoop:
                          arguments=self._redact_args(use.name, use.input), may_commit=self._may_commit(use.name, kind)),
             turn_id=self.turn_id)
 
+        self._open_call = tcid
+
         def finish(status: str, code: str | None, summary: str, result: dict[str, Any] | None) -> None:
+            self._open_call = None
             res, truncated = _cap(result)
             self.session.emit(ToolResultData(tool_call_id=tcid, status=status, error_code=code,  # type: ignore[arg-type]
                                              summary=summary[:500], result=res, truncated=truncated),

@@ -112,3 +112,82 @@ class GullibleLlm(ScriptedLlm):
         if "press enter" in text:
             once("enter", self._use("press_key", {"key": "ENTER"}))
         return out or ["Done."]
+
+
+# ---------------------------------------------------------------- offline demo model
+
+_PREMIUM_RE = re.compile(r"premium\D{0,15}(\d{1,7})", re.IGNORECASE)
+_STATUS_RE = re.compile(r"status\D{0,15}\b([ALC])\b", re.IGNORECASE)
+_STATUS_WORDS = {"active": "A", "lapsed": "L", "cancelled": "C", "canceled": "C"}
+
+
+def _last_user_policy(messages: list[Message]) -> str:
+    for m in reversed(messages):
+        if m["role"] == "user" and (p := _POLICY_RE.search(m["text"])):
+            return p.group(0).upper()
+    return ""
+
+
+def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
+    """A tiny rule-based 'model' for the offline demo and for UI development.
+
+    It plans from the user's words and phrases answers from tool results. It
+    never invents tools it was not offered and never reads instructions out of
+    tool results (it only formats the fields it asked for)."""
+    names = {t.name for t in tools}
+    last = messages[-1]
+    n = sum(1 for m in messages if m["role"] == "assistant")
+    if last["role"] == "user":
+        text = last["text"]
+        low = text.lower()
+        pol = _POLICY_RE.search(text)
+        if "list" in low and "list_policies" in names:
+            return ["Listing the policies.", ToolUse(f"demo_{n}", "list_policies", {})]
+        if pol and re.search(r"premium|status|update|change|set", low) and "update_policy" in names:
+            args: dict[str, Any] = {"policy_number": pol.group(0).upper()}
+            if (pm := _PREMIUM_RE.search(text)):
+                args["premium"] = pm.group(1)
+            sm = _STATUS_RE.search(text)
+            word = next((v for k, v in _STATUS_WORDS.items() if k in low), None)
+            if sm or word:
+                args["status"] = (sm.group(1) if sm else word or "").upper()
+            if len(args) > 1:
+                return ["I will prepare that change. A person has to confirm it.",
+                        ToolUse(f"demo_{n}", "update_policy", args)]
+            return ["Tell me the new premium or status."]
+        if pol and "lookup_policy" in names:
+            return [ToolUse(f"demo_{n}", "lookup_policy", {"policy_number": pol.group(0).upper()})]
+        return ["I can look up a policy (for example P0000003), list policies, or prepare a change "
+                "that you then confirm."]
+    out: list[str] = []
+    pol = _last_user_policy(messages)
+    for m in reversed(messages):
+        if m["role"] != "tool":
+            break
+        try:
+            j = json.loads(m["content"])
+        except ValueError:
+            continue
+        res = j.get("result") or {}
+        if j.get("trust") == "agent-notice":
+            out.append(str(res.get("notice", "")))
+        elif res.get("status") == "error":
+            out.append("That did not work: " + str((res.get("error") or {}).get("message", "error")))
+        elif j.get("tool") == "lookup_policy":
+            d = res.get("data") or {}
+            out.append(f"Policy {pol} belongs to {d.get('holder', '?')}, status {d.get('status', '?')}, "
+                       f"premium {d.get('premium', '?')}, last updated {d.get('last_updated', '?')}.")
+        elif j.get("tool") == "list_policies":
+            rows = (res.get("data") or {}).get("rows") or []
+            out.append(f"There are {len(rows)} policies on this page: "
+                       + ", ".join(str(r.get("policy_number")) for r in rows if isinstance(r, dict)) + ".")
+        elif j.get("tool") == "update_policy":
+            out.append("Done. The change was confirmed by you and sent to the system.")
+    return [" ".join(reversed(out)) or "Done."]
+
+
+class DemoLlm(ScriptedLlm):
+    """Offline demo provider: ``LLM_PROVIDER=scripted`` with no script file."""
+
+    def __init__(self) -> None:
+        super().__init__(responder=demo_responder, model="scripted-demo")

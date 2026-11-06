@@ -38,11 +38,11 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 5.4 Injection tests (REQ-029a) with `GullibleLlm`; record in the journal that the defence holds with an obedient model.
 
 ## 6. API (REQ-001, REQ-002, REQ-022 to REQ-024) (by 16 Nov)
-- [ ] 6.1 `api.py`: routes, CORS, origin check, `/api/session` token, websocket handshake (`hello`), observer/controller.
-- [ ] 6.2 `apps.py` + `apps.json`: fake and live registry; `GSS_LIVE_OK` guard; spirit-map view loader (`SpiritMapView`) with fixtures from the contract until B delivers.
-- [ ] 6.3 `__main__.py`: `python -m seance_agent`; logs to stderr; startup line prints provider/model only.
-- [ ] 6.4 WS tests: origin refused, token required, second connection observer, resume after drop, session lost.
-- [ ] 6.5 Milestone: Agent C can run the UI against `python -m seance_agent` with the scripted provider and `fake-insurance` (handoff note in `docs/handoff/d/`).
+- [x] 6.1 `api.py`: routes, CORS, origin check, `/api/session` token, websocket handshake (`hello`), observer/controller.
+- [x] 6.2 `apps.py` + `apps.json`: fake and live registry; `GSS_LIVE_OK` guard; spirit-map view loader (`SpiritMapView`) with fixtures from the contract until B delivers.
+- [x] 6.3 `__main__.py`: `python -m seance_agent`; logs to stderr; startup line prints provider/model only.
+- [x] 6.4 WS tests: origin refused, token required, second connection observer, resume after drop, session lost.
+- [x] 6.5 Milestone: Agent C can run the UI against `python -m seance_agent` with the scripted provider and `fake-insurance` (handoff note in `docs/handoff/d/`).
 
 ## 7. Real providers (REQ-009, REQ-011, REQ-029b) (by 20 Nov)
 - [ ] 7.1 `anthropic_provider.py` with recorded-payload tests; no key in logs (test greps log output).
