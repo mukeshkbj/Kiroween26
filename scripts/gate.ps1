@@ -22,12 +22,19 @@ param(
   [int]$Seed = 20261124
 )
 
+# `-File gate.ps1 -Only a,b` arrives as ONE string "a,b" (only `-Command` builds an array), so split it.
+$Only = @($Only | ForEach-Object { $_ -split ',' } | Where-Object { $_ })
 $ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 $results = [ordered]@{}
 
 function Want($name) { return ($Only.Count -eq 0) -or ($Only -contains $name) }
+if ($Only.Count -gt 0) {
+  $known = @('ownership', 'contracts', 'bridge', 'mcp-server', 'spirit-map', 'agent', 'legacy', 'web')
+  $bad = @($Only | Where-Object { $known -notcontains $_ })
+  if ($bad.Count -gt 0) { Write-Host "FAIL: unknown -Only name(s): $($bad -join ', '). Known: $($known -join ', ')"; exit 2 }
+}
 function Note($name, $status, $detail) { $script:results[$name] = @{ status = $status; detail = $detail } }
 
 function Venv-Python($dir) {
