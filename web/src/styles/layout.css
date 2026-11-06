@@ -170,3 +170,62 @@
 .step-arg-redacted { color: var(--warn); font-style: italic; }
 .msg-failed { color: var(--danger); font-size: 0.85em; }
 .composer-reason { color: var(--warn); font-size: 0.85em; }
+
+/* Confirmation modal. */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+}
+.modal {
+  background: var(--bg-raised);
+  color: var(--phosphor);
+  border: 2px solid var(--phosphor-bright);
+  border-radius: 6px;
+  max-width: min(60rem, 96vw);
+  max-height: 94vh;
+  overflow: auto;
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+}
+.modal:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
+.keycap {
+  display: inline-block;
+  padding: 0 0.6ch;
+  border: 2px solid var(--phosphor-bright);
+  border-bottom-width: 4px;
+  border-radius: 4px;
+  font-weight: 700;
+  color: var(--phosphor-bright);
+}
+.confirm-readonly { color: var(--warn); border: 1px solid var(--warn); padding: 0.4rem; }
+.confirm-agent { margin-top: 1rem; border-top: 1px dashed var(--phosphor-dim); padding-top: 0.5rem; }
+.confirm-agent-text { margin: 0.25rem 0; padding-left: 1ch; border-left: 3px solid var(--warn); color: var(--phosphor-dim); }
+.confirm-agent-note { font-size: 0.8em; color: var(--warn); }
+.modal-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+.btn-deny, .btn-approve, .btn-dismiss {
+  font: inherit;
+  padding: 0.5rem 1.2rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+.btn-deny { color: var(--phosphor-bright); font-weight: 700; }
+.btn-approve { color: var(--phosphor-dim); }
+.btn-approve:disabled { opacity: 0.6; cursor: not-allowed; border-style: dashed; }
+.btn-deny:focus-visible, .btn-approve:focus-visible, .btn-dismiss:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.mini-screen {
+  font-size: 0.55rem;
+  line-height: 0.8rem;
+  white-space: pre;
+  background: var(--bg);
+  border: 1px solid var(--phosphor-dim);
+  padding: 0.25rem;
+  overflow: auto;
+}
+.mini-screen mark { background: var(--phosphor); color: var(--bg); }
