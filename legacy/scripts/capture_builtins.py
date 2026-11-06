@@ -32,7 +32,7 @@ OUT = ROOT / "legacy" / "captures" / APP_ID / "capture.json"
 # The TK4- welcome screen stamps a live Date (0-origin row 0) and Time; mask the
 # whole top-right corner where "Date hh.mm.yy / Time hh:mm:ss" can appear so the
 # screen_id is stable. Found by observing two reads of the real screen.
-WELCOME_VOLATILE = ((0, 64, 16), (1, 64, 16))  # = seance_mcp.config.TK4_CLOCK_REGIONS
+from seance_mcp.config import TK4_CLOCK_REGIONS as WELCOME_VOLATILE  # noqa: E402  clock + terminal id
 
 
 from seance_bridge import COLS  # noqa: E402
@@ -63,9 +63,15 @@ def main() -> None:
     bridge.connect()
     # TK4- shows the Hercules device banner first and replaces it with the VTAM
     # welcome ("Terminal CUU0C0 ... Date") a moment later. Wait for the welcome.
-    for _ in range(40):
+    # After a fresh IPL with no terminal attached, VTAM painted the welcome into
+    # the void and does not repaint on connect: the banner stays until a key.
+    # CLEAR is read-only (it is the capture's own self-transition), so press it
+    # once if the welcome has not appeared after 10 s.
+    for i in range(40):
         if bridge.read_screen().rows[0].lstrip().startswith("Terminal"):
             break
+        if i == 10:
+            bridge.press(Key.CLEAR)
         time.sleep(1)
     else:
         raise SystemExit("VTAM welcome screen never appeared")

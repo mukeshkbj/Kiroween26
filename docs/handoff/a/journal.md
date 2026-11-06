@@ -241,3 +241,22 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   locally via `.git/info/exclude`).
 - New: `legacy/scripts/stop-mvs.ps1`, a clean shutdown for before `down`,
   backups and reboots.
+
+## 2026-11-06 Merged main (bridge fixes); tools cleaned up; a new TK4- quirk
+
+- The integrator fixed all three bridge requests (PF/PA allowlist, bounded
+  `_exec` + `ambiguous_ack`, no AID into a locked keyboard) and now masks the
+  terminal id `(0,11,6)` by default. My workarounds are gone:
+  - `live_explore.py` keeps only the watchdog and the host/port wiring.
+  - `capture_seance.py` and `demo_path.py` use `bridge.press` (they had sent
+    `PF(n)` straight to s3270, bypassing the new safety checks).
+  - Verified on the merged bridge: demo path 3x OK, parity OK.
+- New quirk after the named-volume `down`/`up`: on a **fresh IPL with no
+  terminal attached**, VTAM paints the welcome into the void and does not
+  repaint on connect. The Hercules banner stays until a key is pressed. CLEAR
+  brings the welcome. (Earlier runs never saw this because a session from
+  before the IPL existed.) The capture presses CLEAR once if needed.
+  **Relevant for B's explorer and D's e2e on tk4-builtins:** a connect right
+  after an IPL lands on the Hercules banner, which is a different screen_id.
+  The tk4-builtins capture is re-recorded with the terminal id masked;
+  `from_capture` OK.

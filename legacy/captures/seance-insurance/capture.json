@@ -1,7 +1,7 @@
 {
   "schema": "gss.capture/1",
   "app_id": "seance-insurance",
-  "captured_at": "2026-11-06T04:51:47Z",
+  "captured_at": "2026-11-06T15:13:08Z",
   "note": "Seance Insurance stand-in (legacy/standin). Presentation is a Python TN3270 stand-in; business logic is the real COBOL SEANCSVC on TK4-. See legacy/README.md.",
   "screens": [
     {
