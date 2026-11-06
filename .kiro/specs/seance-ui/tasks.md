@@ -42,7 +42,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 5.5 Unknown-screen ("uncharted") state tested with a screen id absent from the map.
 
 ## 6. Accessibility and motion (REQ-018 to REQ-022, REQ-028, REQ-031) (by 22 Nov)
-- [ ] 6.1 Landmarks, skip links, shortcuts, splitter keyboard support, tab order test.
+- [x] 6.1 Landmarks, skip links, shortcuts, splitter keyboard support, tab order test.
 - [ ] 6.2 `vitest-axe` over every view and state; keyboard-only flow test.
 - [ ] 6.3 `useReducedMotion` (OS + in-app); verify every animation honours it (a test that fails if an animation runs with reduce on).
 - [ ] 6.4 `prefers-contrast: more`, `forced-colors`, 200%/400% zoom checks.

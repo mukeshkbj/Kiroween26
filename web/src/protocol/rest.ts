@@ -1,5 +1,6 @@
 import { parseApps, parseAudit, parseSpiritMap } from './guards';
 import type { AppInfo, AuditResponse, HealthResponse, SpiritMapView } from './types';
+import type { RestApi } from './mock';
 
 /**
  * REST client for the agent (contracts section 5). Same-origin rules apply; responses are validated through the
@@ -37,7 +38,7 @@ async function getJson(url: string, f: typeof fetch): Promise<unknown> {
   return res.json();
 }
 
-export class RestClient {
+export class RestClient implements RestApi {
   constructor(
     private readonly baseUrl: string,
     private readonly f: typeof fetch = fetch,
