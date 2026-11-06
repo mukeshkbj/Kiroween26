@@ -1,0 +1,8 @@
+   1 04:17:24 read_screen not_connected   key=-      field=-   screen=-
+   2 04:17:39 connect     ok              key=-      field=-   screen=a713a47305
+   3 04:17:40 press_key   ok              key=Clear  field=-   screen=a713a47305
+   4 04:17:40 press_key   session_lost    key=PA1    field=-   screen=a713a47305
+   5 04:17:46 connect     ok              key=-      field=-   screen=a713a47305
+   6 04:17:47 press_key   ok              key=Clear  field=-   screen=a713a47305
+   7 04:17:47 press_key   session_lost    key=PA1    field=-   screen=a713a47305
+# 7 entries; outcomes={'not_connected': 1, 'ok': 4, 'session_lost': 2}; keys={'Clear': 2, 'PA1': 2}; hash chain linked: True

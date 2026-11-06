@@ -198,3 +198,46 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   gss-dasd:/to alpine cp -a /from/. /to/`), recreate, then run the health
   check. It is reversible while the old anonymous volume is kept. Expected
   downtime ~5 min including IPL.
+
+## 2026-11-06 Named-volume migration (user-approved) - nothing lost
+
+- Fingerprint before: 45 HERC01 catalog entries (demo app, KICKS, VSAM) and the
+  8 policies from the COBOL.
+- `legacy/scripts/migrate-volumes.ps1`: clean TK4- shutdown (exit 0) -> tarball
+  backups with sha1 manifests in `legacy/backup/20261106/` (git-excluded; dasd
+  206 MB) -> copy into named volumes `gss-*`, each verified file for file
+  (dasd 28/28) -> old container kept as `gss-legacy-pre-migration` (rollback)
+  -> new container from compose.
+- After: catalog 45/45 identical, policies 8/8 identical, `setup-app.ps1` 7/7
+  OK, health OK, demo path 3x OK. A real `stop-mvs` + `docker compose down` +
+  `up` repeated all of it: catalog identical, health OK, demo 3x OK.
+- Surprises:
+  1. Windows PowerShell 5 + `ErrorActionPreference=Stop` turns docker's stderr
+     progress ("legacy Built") into a terminating error, so the migration
+     script stopped after its last safe step. Fixed in the script.
+  2. **Compose almost deleted the rollback.** It tracks containers by project
+     label (`legacy`, from the folder name), not by container name, so the
+     renamed old container was still "its" container, and `up` tried to
+     *recreate* (= remove) it. That was only stopped by a second bug: the base
+     image declares `tk4-/log` with a relative path, which compose rejects when
+     it carries volumes over. Fixed by pinning `name: gss` in the compose file;
+     now compose never touches the old container.
+  3. After an IPL, Hercules truncates the printer file when JES2 starts the
+     printer. The first job's printout can be lost if its size was snapshotted
+     earlier.
+  4. The IDE terminal injects shell-integration escapes (`ESC ] 633;...`) into
+     `>`-redirected output, which corrupted the first line of a fingerprint
+     file. `catalog-names.ps1` now has `-OutFile`.
+  5. My own tooling: several command blocks returned early while their
+     processes kept running. A background `stop-mvs` + `down` therefore really
+     executed while I thought it hadn't. No harm done (it was the planned test),
+     but I now run one step per call and read result files.
+- Found and corrected: `*.audit.jsonl` and `*.log` are gitignored, so my B
+  handoffs referenced files that were never committed. Now
+  `legacy/scripts/audit_summary.py` writes a value-free `*.audit-summary.txt`
+  (hash chain checked) and the responses are corrected. The seance-insurance
+  audit also shows ENTER was pressed 0 times on the confirm screen.
+- Request to the integrator: add `legacy/backup/` to `.gitignore` (I excluded it
+  locally via `.git/info/exclude`).
+- New: `legacy/scripts/stop-mvs.ps1`, a clean shutdown for before `down`,
+  backups and reboots.

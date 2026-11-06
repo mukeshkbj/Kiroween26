@@ -26,8 +26,8 @@ Files are in `docs/handoff/a/live-runs/tk4-builtins/` (not in your
 
 | file | what |
 |---|---|
-| `spirit-map.unpatched-bridge.json` + `explore.unpatched-bridge.audit.jsonl` | Run with the bridge as shipped. 1 node (welcome), CLEAR self-edge, then **halted `session_lost` on PA1**. The cause is that the bridge sends `PA1`, which s3270 rejects as an unknown action, so nothing is sent (`request-integrator-bridge-pf-keys.md`). |
-| `spirit-map.partial.json` + `explore.partial.audit.jsonl` | Run through `legacy/scripts/live_explore.py`, which only rewrites PF/PA to `PF(n)`/`PA(n)` and adds a bounded unlock check and a watchdog. **7 nodes, 12 edges, 17 frontier**. Status was still `running` when the watchdog stopped it. |
+| `spirit-map.unpatched-bridge.json` + `explore.unpatched-bridge.audit-summary.txt` | Run with the bridge as shipped. 1 node (welcome), CLEAR self-edge, then **halted `session_lost` on PA1**. The cause is that the bridge sends `PA1`, which s3270 rejects as an unknown action, so nothing is sent (`request-integrator-bridge-pf-keys.md`). |
+| `spirit-map.partial.json` + `explore.partial.audit-summary.txt` | Run through `legacy/scripts/live_explore.py`, which only rewrites PF/PA to `PF(n)`/`PA(n)` and adds a bounded unlock check and a watchdog. **7 nodes, 12 edges, 17 frontier**. Status was still `running` when the watchdog stopped it. |
 | `stack.txt` | Watchdog stack: the run blocks in `Session._exec` on the next AID after a CLEAR (`request-integrator-bridge-aid-blocks.md`). |
 
 What the partial map contains:
@@ -63,3 +63,5 @@ What the partial map contains:
 python -m seance_spirit explore --app tk4-builtins --stamp   # (A, live)
 ```
 Ask in `docs/handoff/b/request-a-...md` and I will run it and commit the map.
+
+(Correction 2026-11-06: the raw `*.audit.jsonl` files are gitignored runtime data; the committed evidence is the value-free `*.audit-summary.txt`, hash chain checked.)
