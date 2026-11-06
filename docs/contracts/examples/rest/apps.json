@@ -28,10 +28,10 @@
     },
     {
       "app_id": "seance-insurance",
-      "description": "The demo business app on the legacy system.",
+      "description": "Real COBOL on TK4-; the five screens are served by a labelled Python TN3270 stand-in.",
       "has_map": false,
       "kind": "live",
-      "name": "Seance Insurance (KICKS)",
+      "name": "Seance Insurance (COBOL on TK4-)",
       "reachable": false,
       "read_only": false,
       "tools": {

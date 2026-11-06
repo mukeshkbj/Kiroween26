@@ -11,7 +11,7 @@ from typing import Protocol
 
 import anyio
 
-from seance_bridge import Bridge, Key, ScreenModel
+from seance_bridge import AmbiguousAckError, Bridge, Key, ScreenModel
 
 from .config import TK4_CLOCK_REGIONS
 
@@ -68,13 +68,23 @@ class RealBridgePort:
             b, self._bridge = self._bridge, None
             await anyio.to_thread.run_sync(b.disconnect)
 
+    async def _run(self, fn):
+        """Run a blocking bridge call. On AmbiguousAckError the bridge session is already dead
+        (s3270 killed, nothing resent), so forget it: later calls say "not connected" and the
+        caller has to connect again instead of talking to a corpse."""
+        try:
+            return await anyio.to_thread.run_sync(fn)
+        except AmbiguousAckError:
+            self._bridge = None
+            raise
+
     async def read_screen(self) -> ScreenModel:
-        return await anyio.to_thread.run_sync(self._b().read_screen)
+        return await self._run(self._b().read_screen)
 
     async def fill_field(self, field_ref: int | tuple[int, int], value: str) -> ScreenModel:
         b = self._b()
-        return await anyio.to_thread.run_sync(lambda: b.fill_field(field_ref, value))
+        return await self._run(lambda: b.fill_field(field_ref, value))
 
     async def press(self, key: Key) -> ScreenModel:
         b = self._b()
-        return (await anyio.to_thread.run_sync(lambda: b.press(key))).screen
+        return (await self._run(lambda: b.press(key))).screen

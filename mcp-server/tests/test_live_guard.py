@@ -1,7 +1,10 @@
 """Live-container guard (P0.6, docs/contracts.md section 2.1)."""
+import tempfile
+from pathlib import Path
+
 import anyio
 import pytest
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from seance_mcp.fake import FakePort
@@ -9,6 +12,9 @@ from seance_mcp.live import MARKER, live_allowed
 from seance_mcp.safety import GateError
 
 from harness import make_rig
+
+
+_EMPTY_ROOT = Path(tempfile.mkdtemp())  # a directory with no marker file
 
 
 class LivePort(FakePort):
@@ -71,7 +77,8 @@ def test_refusal_goes_through_the_mcp_tool_with_a_stable_code():
     assert "[live_not_allowed]" in Session(rig).err("connect")
 
 
+@settings(deadline=None, max_examples=200)
 @given(st.dictionaries(st.text(max_size=8), st.text(max_size=8), max_size=4))
 def test_property_only_the_exact_env_value_allows(tmp_path_factory, env):
-    root = tmp_path_factory.mktemp("r")
+    root = _EMPTY_ROOT   # one directory with no marker; creating one per example is slow and pointless
     assert live_allowed(env, root) == (env.get("GSS_LIVE_OK") == "1")

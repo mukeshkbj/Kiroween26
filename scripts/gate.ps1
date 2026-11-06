@@ -22,12 +22,19 @@ param(
   [int]$Seed = 20261124
 )
 
+# `-File gate.ps1 -Only a,b` arrives as ONE string "a,b" (only `-Command` builds an array), so split it.
+$Only = @($Only | ForEach-Object { $_ -split ',' } | Where-Object { $_ })
 $ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 $results = [ordered]@{}
 
 function Want($name) { return ($Only.Count -eq 0) -or ($Only -contains $name) }
+if ($Only.Count -gt 0) {
+  $known = @('ownership', 'contracts', 'bridge', 'mcp-server', 'spirit-map', 'agent', 'legacy', 'web')
+  $bad = @($Only | Where-Object { $known -notcontains $_ })
+  if ($bad.Count -gt 0) { Write-Host "FAIL: unknown -Only name(s): $($bad -join ', '). Known: $($known -join ', ')"; exit 2 }
+}
 function Note($name, $status, $detail) { $script:results[$name] = @{ status = $status; detail = $detail } }
 
 function Venv-Python($dir) {
@@ -76,6 +83,19 @@ foreach ($comp in 'bridge', 'mcp-server', 'spirit-map', 'agent') {
   if ($Mypy) {
     $m = Run $py @('-m', 'mypy', 'src') $dir
     Note "$comp mypy" ($(if ($m -eq 0) { 'pass' } else { 'FAIL' })) "exit $m"
+  }
+}
+
+if (Want 'legacy') {
+  $py = Venv-Python 'mcp-server'
+  $tests = Join-Path $root 'legacy/standin/tests'
+  if (-not (Test-Path $tests)) { Note 'legacy' 'skip' 'no stand-in tests in this checkout' }
+  elseif ($null -eq $py) { Note 'legacy' 'skip' 'mcp-server/.venv missing' }
+  else {
+    $env:PYTHONPATH = Join-Path $root 'legacy/standin'
+    $l = Run $py @('-m', 'pytest', '-q', $tests) $root
+    Remove-Item Env:PYTHONPATH
+    Note 'legacy' ($(if ($l -eq 0) { 'pass' } else { 'FAIL' })) 'TN3270 stand-in unit tests (no container needed)'
   }
 }
 
