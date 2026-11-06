@@ -197,3 +197,43 @@ async def test_keyboard_timeout_is_never_resent() -> None:
         assert "may or may not" in tool_msg["content"]
     finally:
         await cm.__aexit__(None, None, None)
+
+
+# ---------------------------------------------------------------- found running C's client live (8.2)
+
+from seance_agent.llm.scripted import DemoLlm, demo_responder  # noqa: E402
+from seance_agent.llm.base import ToolDef  # noqa: E402
+
+_ALL = [ToolDef(n, "", {}) for n in ("lookup_policy", "list_policies", "update_policy")]
+
+
+def test_demo_reads_the_new_premium_not_the_policy_digits() -> None:
+    out = demo_responder([{"role": "user", "text": "Set the premium of policy P0000003 to 300"}], _ALL)
+    use = next(i for i in out if isinstance(i, ToolUse))
+    assert use.input == {"policy_number": "P0000003", "premium": "300"}
+
+
+async def test_update_after_a_lookup_recovers_from_unknown_start_and_still_needs_a_human() -> None:
+    cm, h = await _connected()
+    try:
+        loop = make_loop(h, DemoLlm())
+        assert await loop.run_turn("Look up policy P0000003") == "completed"
+        assert h.app.current == "enquiry"  # B's update_policy refuses to start here (unknown_start)
+        await run_with_decision(h, loop, "Set the premium of policy P0000003 to 300", "approve")
+        assert_stream_ok(h)
+        codes = [e["data"]["error_code"] for e in events(h, "tool_result")]
+        assert "unknown_start" in codes
+        assert [e["data"]["outcome"] for e in events(h, "confirmation_resolved")] == ["approved"]
+        assert h.app.policies["P0000003"]["premium"] == "300.00" and len(h.app.mutations) == 1
+    finally:
+        await cm.__aexit__(None, None, None)
+
+
+async def test_business_error_summary_carries_the_real_message() -> None:
+    cm, h = await _connected()
+    try:
+        await h.broker.call("lookup_policy", {"policy_number": "P0000003"})
+        out = await h.broker.call("update_policy", {"policy_number": "P0000003", "premium": "300"})
+        assert out.error_code == "unknown_start" and "expected to start" in out.summary
+    finally:
+        await cm.__aexit__(None, None, None)

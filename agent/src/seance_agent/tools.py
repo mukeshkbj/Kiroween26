@@ -263,6 +263,11 @@ class ToolBroker:
 
     @staticmethod
     def _summary(name: str, status: str, structured: dict[str, Any] | None) -> str:
+        if status == "error" and structured:
+            err = structured.get("error")
+            if isinstance(err, dict) and err.get("message"):
+                return f"{name} failed: {str(err['message'])[:300]}"
+            return f"{name} failed"
         if status == "pending":
             return f"{name} needs a human to confirm a commit-capable key"
         return f"{name} ok"

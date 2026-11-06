@@ -103,6 +103,7 @@ class Session:
         self._reserved: tuple[str, float] | None = None  # (token, deadline)
         self.session_id = session_id
         self._seq = 0
+        self._ids: dict[str, int] = {}
         self._ring: deque[dict[str, Any]] = deque(maxlen=ring_size)
         self._conns: dict[str, Connection] = {}
         self._queue_maxsize = queue_maxsize
@@ -110,6 +111,16 @@ class Session:
         self._controller_id: str | None = None
         if event_log is not None:
             event_log.parent.mkdir(parents=True, exist_ok=True)
+
+    # -- ids ----------------------------------------------------------------
+
+    def next_id(self, prefix: str) -> str:
+        """``t_01``, ``m_01``, ``c_01``... unique per session, not per connected system.
+        Clients key their state on these ids, so a reconnect (``connect_system`` again)
+        must never reuse one (found running C's reducer live)."""
+        n = self._ids.get(prefix, 0) + 1
+        self._ids[prefix] = n
+        return f"{prefix}_{n:02d}"
 
     # -- sequence / ring ---------------------------------------------------
 
@@ -138,15 +149,20 @@ class Session:
 
     def _slot_free_for(self, token: str | None, resuming: bool) -> bool:
         """No live controller, and no unexpired reservation held for someone else.
-        The reservation is reclaimed by the same token, or by any connection that is
-        *resuming* (it names a ``resume_from``): the web client fetches a fresh token
-        on every reconnect, so the token alone cannot identify the returning tab."""
+
+        A dropped controller keeps the slot for ``controller_grace_s`` so another open tab
+        cannot take it during a brief reconnect. The reservation yields to the same token,
+        to any connection that is *resuming* (the web client fetches a fresh token on every
+        reconnect), or to anyone when no other connection is open (a page reload must not
+        leave the only user as an observer for a minute)."""
         if self.has_controller():
             return False
         r = self._reserved
         if r is None or self._clock() >= r[1]:
             return True
-        return resuming or (token is not None and token == r[0])
+        if resuming or (token is not None and token == r[0]):
+            return True
+        return not any(not c.closed for c in self._conns.values())
 
     def add_connection(self, conn_id: str, token: str | None = None, resuming: bool = False) -> Connection:
         """Register a connection. The first one (while no live controller exists)

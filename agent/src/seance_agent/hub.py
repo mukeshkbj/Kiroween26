@@ -133,22 +133,32 @@ class SeanceHub:
     # -- handshake (contracts 4.1, 4.4) -------------------------------------
 
     def attach(self, conn_id: str, token: str, resume_from: int | None) -> Connection:
-        """Complete a ``hello``: state, then a replay or a snapshot. Events are emitted
-        before the connection joins so it receives each exactly once, in order."""
+        """Complete a ``hello``: state, then a replay or a snapshot.
+
+        * ``resume_from`` inside the ring: replay ``seq > resume_from`` (contracts 4.4).
+        * no ``resume_from`` and the ring still starts at seq 1: replay the whole session,
+          so the client gets a baseline from seq 1 and the full log.
+        * otherwise: ``session_state{resync:true}`` and a ``screen{snapshot}``. A client
+          with no history must get a baseline; a mid-session event with no resync is a gap
+          (found running C's reducer live).
+
+        The fresh ``session_state`` is emitted *before* the connection joins and delivered
+        as the tail of the replay, so the connection sees each event exactly once, in order."""
         s = self.session
-        if resume_from is not None and resume_from <= s.last_seq and s.can_replay(resume_from):
+        resuming = resume_from is not None
+        start = resume_from if resuming else 0
+        if start is not None and start <= s.last_seq and s.can_replay(start) and (resuming or s.ring_min_seq in (None, 1)):
             self.emit_state()
-            conn = s.add_connection(conn_id, token, resuming=True)
-            s.deliver_to(conn, s.replay(resume_from))
+            conn = s.add_connection(conn_id, token, resuming=resuming)
+            s.deliver_to(conn, s.replay(start))
             return conn
         first = s.last_seq + 1
-        self.emit_state(resync=resume_from is not None)
+        self.emit_state(resync=True)
         if self.live is not None and self.live.mapper.last_screen is not None:
             s.emit(ScreenData(phase="snapshot", tool_call_id=None, screen=self.live.mapper.last_screen), turn_id=None)
-        conn = s.add_connection(conn_id, token, resuming=resume_from is not None)
+        conn = s.add_connection(conn_id, token, resuming=resuming)
         s.deliver_to(conn, s.replay(first - 1))
         return conn
-
     def detach(self, conn_id: str) -> None:
         self.session.remove_connection(conn_id)
 

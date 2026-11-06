@@ -82,7 +82,6 @@ class AgentLoop:
         self._cancel = False
         self._waited = 0.0
         self._open_call: str | None = None
-        self._n_turn = self._n_msg = self._n_call = 0
 
     # -- public -----------------------------------------------------------
 
@@ -106,8 +105,7 @@ class AgentLoop:
             self._error("llm_unavailable", "No language model is configured, so I cannot answer. "
                         "Check LLM_PROVIDER and its credentials.", True, ref)
             return "unavailable"
-        self._n_turn += 1
-        self.turn_id = f"t_{self._n_turn:02d}"
+        self.turn_id = self.session.next_id("t")
         self._cancel = False
         self._open_call = None
         try:
@@ -343,12 +341,10 @@ class AgentLoop:
     # -- helpers ----------------------------------------------------------
 
     def _mid(self) -> str:
-        self._n_msg += 1
-        return f"m_{self._n_msg:02d}"
+        return self.session.next_id("m")
 
     def _cid(self) -> str:
-        self._n_call += 1
-        return f"c_{self._n_call:02d}"
+        return self.session.next_id("c")
 
     def _may_commit(self, name: str, kind: str) -> bool | None:
         if name in GENERIC_NO_COMMIT:
