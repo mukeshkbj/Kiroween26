@@ -40,13 +40,13 @@ def test_explore_passes_the_target_to_connect(monkeypatch, tmp_path) -> None:
     monkeypatch.setattr("seance_spirit.__main__._port", lambda args: app)
     monkeypatch.setenv("TN3270_HOST", "should-be-ignored")
     monkeypatch.setenv("TN3270_PORT", "1")
-    assert main(["explore", "--app", "fake-insurance", "--dir", str(d)]) == 0
+    assert main(["explore", "--app", "fake-insurance", "--dir", str(d), "--audit", str(tmp_path / "a.jsonl")]) == 0
     assert ("connect", "localhost", 3270) in app.calls
     app2 = fake_insurance()
     monkeypatch.setattr("seance_spirit.__main__._port", lambda args: app2)
-    assert main(["explore", "--app", "fake-insurance", "--dir", str(d), "--host", "h", "--port", "7"]) == 0
+    assert main(["explore", "--app", "fake-insurance", "--dir", str(d), "--audit", str(tmp_path / "b.jsonl"), "--host", "h", "--port", "7"]) == 0
     assert ("connect", "h", 7) in app2.calls
     app3 = fake_insurance()
     monkeypatch.setattr("seance_spirit.__main__._port", lambda args: app3)
-    assert main(["explore", "--app", "fake-insurance", "--dir", str(d), "--from-env"]) == 0
+    assert main(["explore", "--app", "fake-insurance", "--dir", str(d), "--audit", str(tmp_path / "c.jsonl"), "--from-env"]) == 0
     assert ("connect", "should-be-ignored", 1) in app3.calls
