@@ -179,6 +179,27 @@
           "default": "untrusted-screen-data",
           "title": "Trust",
           "type": "string"
+        },
+        "volatile": {
+          "default": [],
+          "items": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array"
+          },
+          "title": "Volatile",
+          "type": "array"
         }
       },
       "required": [

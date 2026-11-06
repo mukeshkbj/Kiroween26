@@ -419,11 +419,13 @@ def _spec_from_screen_out(name: str, so: dict[str, Any], volatile: list[list[int
     if len(rows) != 24 or any(len(r) != COLS for r in rows):
         raise CaptureError(f"{name}: rows must be 24 x {COLS}")
     text = "".join(rows)
-    starts: list[tuple[int, FieldAttrs]] = [(0, P)] if not so["fields"] or so["fields"][0]["row"] * COLS + so["fields"][0]["col"] > 1 else []
+    # Rebuild exactly the recorded fields, nothing synthetic: a field's attribute byte sits one
+    # cell before its first data cell, and the 3270 buffer wraps, so a field reported at
+    # (0, 0) (the zero-length field the parser emits for an attribute in the very last cell)
+    # has its attribute at offset 1919.
+    starts: list[tuple[int, FieldAttrs]] = []
     for f in so["fields"]:
-        pos = f["row"] * COLS + f["col"] - 1
-        if pos < 0:
-            raise CaptureError(f"{name}: field starts at the first cell")
+        pos = (f["row"] * COLS + f["col"] - 1) % BUFFER_SIZE
         starts.append((pos, FieldAttrs(protected=f["protected"], numeric=f["numeric"],
                                        hidden=f["hidden"], intensified=f["intensified"])))
     vol = region_positions(tuple(v) for v in volatile)  # type: ignore[misc]
@@ -602,8 +604,11 @@ def _policies(app: FakeApp) -> dict[str, dict[str, str]]:
 
 FakeApp.policies = property(_policies)  # type: ignore[attr-defined]
 
+# Named fake apps a SEANCE_APP server can select (no container, never live-guarded).
+FAKE_APPS: dict[str, "Callable[[], FakeApp]"] = {"fake-insurance": fake_insurance}
+
 __all__ = [
-    "CaptureError", "DEMO_VOLATILE_REGIONS", "F", "FakeApp", "FakePort", "H", "HN", "P", "PARSER", "Region",
-    "Rule", "SEED_POLICIES", "ScreenSpec", "U", "UN", "build_screen", "fake_insurance", "logon_screen",
+    "CaptureError", "DEMO_VOLATILE_REGIONS", "F", "FAKE_APPS", "FakeApp", "FakePort", "H", "HN", "P", "PARSER",
+    "Region", "Rule", "SEED_POLICIES", "ScreenSpec", "U", "UN", "build_screen", "fake_insurance", "logon_screen",
     "menu_screen", "rc", "region_positions",
 ]

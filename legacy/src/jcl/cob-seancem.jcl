@@ -1,0 +1,16 @@
+//CBSEANM JOB (ACCT),'COMPILE SEANCEM',CLASS=A,MSGCLASS=A,REGION=4096K,
+//         USER=@MVS_USER@,PASSWORD=@MVS_PASSWORD@
+//* Compile+link the SEANCEM menu program into HERC01.KICKS.V1R5M0.KIKRPL
+//* using the single-pass KICKS command-level COBOL proc KIKCOBCL (KICKS
+//* preprocessor KIKPPCOB + OS/VS COBOL IKFCBL00 + linkedit). The two-pass
+//* K2KCOBCL proc abends S0C4 in its DMAP-only COB1 step in this TK4- build;
+//* single-pass KIKCOBCL is used instead (our programs do not need LENGTH OF).
+//JOBPROC DD DSN=HERC01.KICKSSYS.V1R5M0.PROCLIB,DISP=SHR
+//SEANCEM EXEC KIKCOBCL
+//COPY.SYSUT1  DD DISP=SHR,DSN=HERC01.KICKS.V1R5M0.COB(SEANCEM)
+//LKED.SYSIN   DD *
+ INCLUDE SKIKLOAD(KIKCOBGL)
+ ENTRY SEANCEM
+ NAME SEANCEM(R)
+/*
+//

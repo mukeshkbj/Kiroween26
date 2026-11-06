@@ -1,0 +1,54 @@
+* SMENMAP - Seance Insurance main menu (screen SMEN, contract 10.1).
+*
+* Column model (docs/contracts.md 10 + seance_mcp.fake, all 0-origin):
+*   data at 0-origin (row R, col C) has its 3270 attribute byte at
+*   (R, C-1). BMS POS=(row,col) is 1-origin and names the ATTRIBUTE
+*   cell, so BMS POS=(R+1, C) places data at 0-origin (R, C).
+* Contract fields: title (0,1); option input (7,15) len1;
+*   msg (22,1) len70; legend (23,1).
+         PRINT NOGEN
+SMENMAP  DFHMSD TYPE=&SYSPARM,                                         X
+               LANG=COBOL,                                             X
+               MODE=INOUT,                                             X
+               TERM=3270-2,                                            X
+               CTRL=FREEKB,                                            X
+               STORAGE=AUTO,                                           X
+               TIOAPFX=YES
+SMENM    DFHMDI SIZE=(24,80),                                          X
+               LINE=1,                                                 X
+               COLUMN=1
+         DFHMDF POS=(1,1),                                             X
+               LENGTH=28,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='SEANCE INSURANCE - MAIN MENU'
+         DFHMDF POS=(4,3),                                             X
+               LENGTH=17,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='1  POLICY ENQUIRY'
+         DFHMDF POS=(5,3),                                             X
+               LENGTH=14,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='2  POLICY LIST'
+         DFHMDF POS=(6,3),                                             X
+               LENGTH=16,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='3  POLICY UPDATE'
+         DFHMDF POS=(8,3),                                             X
+               LENGTH=11,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='OPTION ===>'
+OPTION   DFHMDF POS=(8,15),                                            X
+               LENGTH=1,                                               X
+               ATTRB=(NORM,UNPROT,IC)
+         DFHMDF POS=(8,17),                                            X
+               LENGTH=1,                                               X
+               ATTRB=(ASKIP,PROT)
+MSG      DFHMDF POS=(23,1),                                            X
+               LENGTH=70,                                              X
+               ATTRB=(BRT,PROT)
+         DFHMDF POS=(24,1),                                            X
+               LENGTH=24,                                              X
+               ATTRB=(NORM,PROT),                                      X
+               INITIAL='ENTER=SELECT  CLEAR=EXIT'
+         DFHMSD TYPE=FINAL
+         END

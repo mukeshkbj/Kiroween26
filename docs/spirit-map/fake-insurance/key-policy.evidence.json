@@ -1,0 +1,133 @@
+{
+  "app_id": "fake-insurance",
+  "schema": "gss.keypolicy.evidence/1",
+  "screens": {
+    "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080": [
+      {
+        "evidence": [
+          "ENTER on n_419888f22d always lands on a prior/same node (n_419888f2); 1 obs",
+          "ENTER on n_419888f22d was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "ENTER",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      },
+      {
+        "evidence": [
+          "PF3 on n_419888f22d always lands on a prior/same node (n_ba02cc63); 1 obs",
+          "PF3 on n_419888f22d was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF3",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      }
+    ],
+    "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313": [
+      {
+        "evidence": [
+          "PF3 on n_483e5fe116 always lands on a prior/same node (n_ba02cc63); 1 obs",
+          "PF3 on n_483e5fe116 was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF3",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      }
+    ],
+    "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a": [
+      {
+        "evidence": [
+          "ENTER on n_96fa848aaa was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "ENTER",
+        "rules": [
+          "declared_behaved"
+        ]
+      },
+      {
+        "evidence": [
+          "PF3 on n_96fa848aaa always lands on a prior/same node (n_ba02cc63); 1 obs",
+          "PF3 on n_96fa848aaa was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF3",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      }
+    ],
+    "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271": [
+      {
+        "evidence": [
+          "ENTER on n_ba02cc6364 was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "ENTER",
+        "rules": [
+          "declared_behaved"
+        ]
+      },
+      {
+        "evidence": [
+          "PF3 on n_ba02cc6364 always lands on a prior/same node (n_ba02cc63); 1 obs",
+          "PF3 on n_ba02cc6364 was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF3",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      }
+    ],
+    "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952": [
+      {
+        "evidence": [
+          "PF3 on n_c5d11dedae always lands on a prior/same node (n_ba02cc63); 1 obs",
+          "PF3 on n_c5d11dedae was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF3",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      },
+      {
+        "evidence": [
+          "PF7 on n_c5d11dedae always lands on a prior/same node (n_c5d11ded); 1 obs",
+          "PF7 on n_c5d11dedae was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF7",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      },
+      {
+        "evidence": [
+          "ENTER on n_c5d11dedae always lands on a prior/same node (n_c5d11ded); 1 obs",
+          "ENTER on n_c5d11dedae was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "ENTER",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      },
+      {
+        "evidence": [
+          "PF8 on n_c5d11dedae always lands on a prior/same node (n_c5d11ded); 1 obs",
+          "PF8 on n_c5d11dedae was seed-declared read-only and every landing is recorded"
+        ],
+        "key": "PF8",
+        "rules": [
+          "declared_behaved",
+          "navigation"
+        ]
+      }
+    ]
+  }
+}
