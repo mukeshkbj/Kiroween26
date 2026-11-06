@@ -68,8 +68,65 @@ src/seance_agent/
 ```
 cd agent
 py -3.12 -m venv .venv
-.venv\Scripts\python.exe -m pip install -e ..\bridge -e ..\mcp-server[dev] -e .[dev]
+.venv\Scripts\python.exe -m pip install -e ..\bridge -e ..\mcp-server[dev] -e ..\spirit-map -e .[dev]
 ```
+
+`spirit-map` provides the runtime for the approved `fake-insurance` tool pack
+(`docs/spirit-map/fake-insurance/`). Without it, `connect_system` fails loudly.
+
+## Start agent + web locally
+
+Two terminals, both from the repo root. Nothing here touches the live mainframe:
+`fake-insurance` is the in-process FakeBridge app.
+
+**1. Agent** (port 8000):
+
+```
+cd agent
+$env:SEANCE_ALLOW_COMMIT = "1"     # optional: let approved changes run (default 0 = read-only, still shows the modal)
+.venv\Scripts\python.exe -m seance_agent
+```
+
+The startup line names the provider and model only, e.g.
+`starting on 127.0.0.1:8000 llm=scripted model=scripted-demo available=True commit=allowed`.
+
+**2. Web** (port 5173, Agent C's app in `web/`):
+
+```
+cd web
+npm ci                              # exact pinned versions from the lockfile
+npm run dev                         # http://localhost:5173
+```
+
+`web/.env.example` already points at the agent (`VITE_AGENT_URL=http://127.0.0.1:8000`,
+`VITE_MODE=live`). Use `VITE_MODE=mock` to replay recorded sessions without the agent.
+
+**3. Use it.** Open http://localhost:5173 (that exact origin, or http://127.0.0.1:5173; anything
+else is refused with close code 4403). Connect **Seance Insurance (simulated)**, then try:
+
+| Say | What happens |
+|---|---|
+| `Look up policy P0000003` | read tool; the planchette follows each recipe step |
+| `List the policies` | read tool |
+| `Set the premium of policy P0000003 to 300` | stops at the confirmation modal; Approve sends ENTER once, Deny sends nothing |
+| `Set the status of policy P0000004 to L` | same, for status |
+
+The offline demo model only understands sentences like these. For free text, set
+`LLM_PROVIDER=anthropic` with `ANTHROPIC_API_KEY`, or `bedrock` with `AWS_REGION` and AWS
+credentials, plus `LLM_MODEL`, in the agent's terminal.
+
+**Notes**
+
+- The first tab to say `hello` controls the session. Other tabs are observers (they see everything
+  and cannot approve). A reload, or a reconnect that resumes, keeps control.
+- Restarting the agent starts a new session: the UI discards its old state.
+- The audit log is at `docs/audit/audit.jsonl` (gitignored), also shown in the UI and at `GET /api/audit`.
+- The fake app's data lives in memory and resets when the agent restarts.
+- Port in use (`Errno 10048`): another agent is still running; stop it first.
+
+**Checked 2026-11-06:** C's real transport, guards and reducer (`origin/agent/c-seance-ui`, `d197091`)
+against this agent, in Node, five runs in a row on one agent (`scripts/c_live_check/`, see the header of
+`live-agent.test.ts`). Not yet clicked through in a browser; that is the 8.2 sign-off with Agent C.
 
 ## Run
 
