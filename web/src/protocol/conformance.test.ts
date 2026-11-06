@@ -111,6 +111,20 @@ describe('guards fail closed', () => {
     }
   });
 
+  it('accepts screens with or without the advisory volatile runs, and rejects malformed ones', () => {
+    const rows = Array.from({ length: 24 }, () => ' '.repeat(80));
+    const screen = (extra: Record<string, unknown>) => ({
+      ...base, type: 'screen',
+      data: { phase: 'snapshot', tool_call_id: null, screen: { trust: 'untrusted-screen-data', screen_id: 'x', cursor: [0, 0], rows, fields: [], ...extra } },
+    });
+    expect(parseServerEvent(screen({})).ok).toBe(true);
+    const ok = parseServerEvent(screen({ volatile: [[3, 10, 8], [4, 10, 6]] }));
+    expect(ok.ok).toBe(true);
+    if (ok.ok && ok.event.type === 'screen') expect(ok.event.data.screen.volatile).toEqual([[3, 10, 8], [4, 10, 6]]);
+    expect(parseServerEvent(screen({ volatile: [[3, 10]] })).ok).toBe(false);
+    expect(parseServerEvent(screen({ volatile: 'x' })).ok).toBe(false);
+  });
+
   it('rejects client messages that are too long or unknown', () => {
     expect(isClientMessage({ id: 'a', type: 'user_message', text: 'x'.repeat(4001) })).toBe(false);
     expect(isClientMessage({ id: 'a', type: 'send_keys', keys: 'x' })).toBe(false);

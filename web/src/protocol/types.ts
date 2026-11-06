@@ -24,6 +24,11 @@ export interface ScreenOut {
   cursor: [number, number];
   rows: string[];
   fields: FieldOut[];
+  /**
+   * Advisory (added 2026-11-05): (row, col, length) runs the server masks out of screen_id. Never a value.
+   * The UI does not use it; it is mirrored so the type matches the contract.
+   */
+  volatile?: [number, number, number][];
 }
 
 export interface FieldSnap {

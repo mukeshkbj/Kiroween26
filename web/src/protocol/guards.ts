@@ -58,6 +58,8 @@ const isScreenShape = shape({
   cursor: isCursor,
   rows: (v) => Array.isArray(v) && v.length === GRID_ROWS && v.every(isStr),
   fields: isArr(isFieldOut),
+  // optional and advisory: absent on older servers, validated when present
+  volatile: (v) => v === undefined || isArr((r) => Array.isArray(r) && r.length === 3 && r.every(isInt))(v),
 });
 
 /**
@@ -84,6 +86,7 @@ export function toScreenOut(v: unknown): ScreenOut | null {
     cursor: [(v.cursor as number[])[0] as number, (v.cursor as number[])[1] as number],
     rows: [...(v.rows as string[])],
     fields,
+    ...(Array.isArray(v.volatile) ? { volatile: (v.volatile as [number, number, number][]).map((r) => [r[0], r[1], r[2]] as [number, number, number]) } : {}),
   };
 }
 
