@@ -36,7 +36,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 
 ## 5. Confirmation, audit, spirit-map (REQ-013 to REQ-017) (by 19 Nov)
 - [x] 5.1 `ConfirmModal` + `useFocusTrap`; REQ-029 tests (Deny first, Esc denies, 600 ms, untrusted click, one decision, expired).
-- [ ] 5.2 Modal transcripts: approve, deny, expire, read-only, superseded.
+- [x] 5.2 Modal transcripts: approve, deny, expire, read-only, superseded.
 - [ ] 5.3 `AuditDrawer` with filter, export, chain badge ("unknown" after live appends).
 - [ ] 5.4 `layout.ts` (dagre, deterministic) + `SpiritMap` SVG + `MapTable` + `NodePreview`; current-node tracking and path trail.
 - [ ] 5.5 Unknown-screen ("uncharted") state tested with a screen id absent from the map.
