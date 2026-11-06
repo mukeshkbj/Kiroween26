@@ -21,10 +21,12 @@ class ConfirmMode(StrEnum):
 
 Region = tuple[int, int, int]  # (row, col, length), 0-origin
 
+# Also masked: the terminal id in row 0 ("CUU0C0" / "CUU0C1", cols 11-16), which differs per
+# connection (found by Agent A, 2026-11-06), so the same screen has one screen_id.
 # TK4- VTAM welcome screen: the Date and Time stamps (top right) are fixed at
 # paint time, so two reads agree but every repaint differs. Masked by default so
 # screen_id (and the safety gate's stale-screen check) stays stable.
-TK4_CLOCK_REGIONS: tuple[Region, ...] = ((0, 64, 16), (1, 64, 16))
+TK4_CLOCK_REGIONS: tuple[Region, ...] = ((0, 11, 6), (0, 64, 16), (1, 64, 16))
 
 
 def parse_regions(raw: str) -> tuple[Region, ...]:
