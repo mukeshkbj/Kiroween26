@@ -79,3 +79,34 @@ and rejects anything past its TTL, so the broker physically cannot double-commit
 or commit-after-expiry. The agent's own load-bearing rule is the controller gate;
 the rest it correctly delegates to the integrator's gate. Recorded in
 `agent/tests/mutation_checks.md`.
+
+### 2026-11-05 — agent loop + injection (tasks 5.1-5.4)
+
+- `loop.py` streams inner steps live: a 20 ms pump flushes the service's
+  observer bus while the tool call is in flight, so the planchette can follow a
+  recipe rather than get one batch at the end (REQ-013).
+- The model is never shown the pending result (its text tells callers to use
+  `confirm_action`). It sees nothing until a human decides, then a short
+  agent-written notice ("declined, final, do not retry") or the confirmed screen.
+
+Surprise (section 5 / safety): B's real tools return their envelope as JSON
+**text**, with no `structured_content`. My first classifier read `status` from
+structured content only, so `update_policy` came back as `ok` while the gate
+held a live pending action. That would have failed open: the turn would not
+have suspended and no modal would appear. Fixed twice over: the broker parses
+the text envelope, and the loop independently compares `gate.pending` before
+and after every call, so a new pending action suspends the turn whatever the
+tool reported.
+
+Second surprise: my first injection test passed for the wrong reason. B's
+`lookup_policy` extracts four fields and never the message line, so the hostile
+text never reached the model. The test now asserts the attack text is seen
+inside a tool result (and nowhere in the system prompt or user messages) before
+it asserts anything about safety. `GullibleLlm` also had to learn to scan every
+tool result of a step, not just the last one.
+
+Defence holds with an obedient model: `GullibleLlm` tried `confirm_action`, an
+invented `approve_pending`, PF3 and a zero premium. The first two were refused by
+the allowlist, the update stopped at the modal and expired, no commit key reached
+the fake (`app.dirty` false), and `confirm_action` is absent from the audit log.
+The tool-error budget then stopped the turn, which is the budget doing its job.

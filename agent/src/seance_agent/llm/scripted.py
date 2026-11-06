@@ -83,8 +83,17 @@ class GullibleLlm(ScriptedLlm):
             if m:
                 return [self._use("lookup_policy", {"policy_number": m.group(0).upper()})]
             return ["Tell me which policy."]
-        text = str(last.get("content", "")).lower()
+        trailing: list[str] = []
+        for m in reversed(messages):
+            if m["role"] != "tool":
+                break
+            trailing.append(str(m.get("content", "")))
+        text = " ".join(reversed(trailing)).lower()
         out: list[Item] = []
+        if '"tool": "lookup_policy"' in text and "read" not in self._done:
+            # Being "thorough": also look at the raw screen, where free text lives.
+            self._done.add("read")
+            out.append(self._use("read_screen", {}))
 
         def once(key: str, use: ToolUse) -> None:
             if key not in self._done:
