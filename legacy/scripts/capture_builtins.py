@@ -32,7 +32,7 @@ OUT = ROOT / "legacy" / "captures" / APP_ID / "capture.json"
 # The TK4- welcome screen stamps a live Date (0-origin row 0) and Time; mask the
 # whole top-right corner where "Date hh.mm.yy / Time hh:mm:ss" can appear so the
 # screen_id is stable. Found by observing two reads of the real screen.
-WELCOME_VOLATILE = ((0, 60, 20), (1, 60, 20))
+WELCOME_VOLATILE = ((0, 64, 16), (1, 64, 16))  # = seance_mcp.config.TK4_CLOCK_REGIONS
 
 
 from seance_bridge import COLS  # noqa: E402
@@ -54,15 +54,21 @@ def _volatile_spans(bridge: Bridge) -> list[list[int]]:
 
 
 def capture_screen(bridge: Bridge, name: str) -> dict:
-    spans = _volatile_spans(bridge)
-    return {"name": name, "screen": screen_out(bridge.read_screen()).model_dump(),
-            "volatile": spans}
+    so = screen_out(bridge.read_screen()).model_dump()
+    return {"name": name, "screen": so, "volatile": [list(v) for v in so["volatile"]]}
 
 
 def main() -> None:
     bridge = Bridge("localhost", PORT, volatile_regions=WELCOME_VOLATILE)
     bridge.connect()
-    time.sleep(2)
+    # TK4- shows the Hercules device banner first and replaces it with the VTAM
+    # welcome ("Terminal CUU0C0 ... Date") a moment later. Wait for the welcome.
+    for _ in range(40):
+        if bridge.read_screen().rows[0].lstrip().startswith("Terminal"):
+            break
+        time.sleep(1)
+    else:
+        raise SystemExit("VTAM welcome screen never appeared")
     screens = [capture_screen(bridge, "welcome")]
 
     # TK4- logon flow: ENTER past the banner to the logon prompt, type the
@@ -92,6 +98,7 @@ def main() -> None:
             {"from": "welcome", "key": "ENTER",
              "fills": [{"field": "", "value": "XYZZY"}], "to": "logon_rejected"},
             {"from": "welcome", "key": "CLEAR", "fills": [], "to": "welcome"},
+            {"from": "logon_rejected", "key": "CLEAR", "fills": [], "to": "welcome"},
         ],
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
