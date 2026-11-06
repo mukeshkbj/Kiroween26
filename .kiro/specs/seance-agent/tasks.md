@@ -45,10 +45,10 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 6.5 Milestone: Agent C can run the UI against `python -m seance_agent` with the scripted provider and `fake-insurance` (handoff note in `docs/handoff/d/`).
 
 ## 7. Real providers (REQ-009, REQ-011, REQ-029b) (by 20 Nov)
-- [ ] 7.1 `anthropic_provider.py` with recorded-payload tests; no key in logs (test greps log output).
-- [ ] 7.2 `bedrock_provider.py` (Converse tool use); same tests.
-- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal.
-- [ ] 7.4 `llm_unavailable` path tested.
+- [x] 7.1 `anthropic_provider.py` with recorded-payload tests; no key in logs (test greps log output).
+- [x] 7.2 `bedrock_provider.py` (Converse tool use); same tests.
+- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal. (Test written: `tests/test_llm_real.py`, skipped without credentials. OPEN: needs one real run with a key or AWS access to save the transcript.)
+- [x] 7.4 `llm_unavailable` path tested.
 
 ## 8. Integration (by 24 Nov)
 - [ ] 8.1 Merge spirit-map tool pack runtime; swap the stub; rerun everything.
