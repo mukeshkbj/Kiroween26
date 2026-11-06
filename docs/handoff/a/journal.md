@@ -260,3 +260,30 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   after an IPL lands on the Hercules banner, which is a different screen_id.
   The tk4-builtins capture is re-recorded with the terminal id masked;
   `from_capture` OK.
+
+## 2026-11-06 D's live e2e: tk4-builtins 3/3 PASS; seance-insurance wiring gap found
+
+- Set up `agent/.venv` on **Python 3.12.4** (the stack's version; `py -3.12`
+  is not registered, so I used `C:\Python312\python.exe`). Installed D's
+  `anthropic`+`bedrock` extras, because `test_providers` imports them. D's suite
+  shows 80 passed, plus 1 expected failure in my worktree: the "refused without
+  permission" test sees my `.gss-live-ok`. It passes with the marker moved
+  aside.
+- D's `test_live_e2e` on tk4-builtins: **3/3 PASS**. The test keeps no audit,
+  so `legacy/scripts/live_agent_evidence.py` recorded one more run. The live
+  screen_id equals the committed capture, the audit is connect/read/disconnect
+  with no key, and nothing leaked.
+- **Found:** the agent gives every live app the TK4- volatile regions. For
+  seance-insurance, `(0,11,6)` cuts the title, so its screen_id differs from the
+  fake's. Proved live: `cf68541fac` with the agent's settings vs `ba02cc6364`
+  (= fake) with the contract regions. B's policy and tools would not apply.
+  There is also no seance-insurance pack yet (business tools 0), and `apps.json`
+  still uses `TN3270_PORT` and "(KICKS)". Filed
+  `request-d-seance-insurance-wiring.md`.
+- My slip: my pre-flight counted 6 "competing" python processes and I ran
+  anyway. They were Kiro's own idle `seance_mcp` servers from other IDE
+  windows, with no connection to 3270/3271 (checked afterwards). The contract
+  says stop them, not just check them; next time I stop them first.
+- The capture's XYZZY shows in the TK4- log as `LGN001I ... logon in progress`
+  (TK4- logs every attempt), but no TSU job ever started, so the rejection was
+  real.
