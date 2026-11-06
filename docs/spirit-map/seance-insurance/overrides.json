@@ -1,0 +1,22 @@
+{
+  "_comment": "Human renames so the generated tools read as business operations. Overrides win over labels (REQ-019). Map field keys come from screen text; here we give them the business names the demo uses.",
+  "tool_names": {
+    "lookup_enquiry": "lookup_policy",
+    "list_lists": "list_policies",
+    "update_update": "update_policy"
+  },
+  "param_names": {
+    "lookup_policy.polno": "policy_number",
+    "update_policy.polno": "policy_number",
+    "update_policy.status": "status",
+    "update_policy.premium": "premium"
+  },
+  "field_keys": {
+    "n_419888f22d:updated": "last_updated"
+  },
+  "descriptions": {
+    "lookup_policy": "Find one insurance policy by number and return its holder, status, premium and last update.",
+    "list_policies": "List the policies shown on the policy list screen, one page at a time.",
+    "update_policy": "Prepare a change to a policy's status or premium."
+  }
+}
