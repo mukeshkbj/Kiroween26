@@ -323,3 +323,25 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   started yet and read intermediate files. I now wait for the process to
   *appear*, then to exit.
 - Health check after all of it: OK.
+
+## 2026-11-06 ~18:40 BLOCKED: Docker Desktop stopped responding
+
+- After merging main (`dfa4990`), the stand-in tests passed (21), but the
+  health check failed. The bridge raised `AmbiguousAckError: no answer from
+  s3270 to Enter ... nothing was resent`.
+- Cause: the **Docker engine is unresponsive.** `docker ps`, `docker version`
+  and `docker exec` all hang (60 s+). The stand-in calls the COBOL via
+  `docker cp`/`docker exec`, so its answer to ENTER never came, and the
+  integrator's new 15 s AID bound turned that into a correct, safe
+  `ambiguous_ack` instead of a hang. Good behaviour, wrong day.
+- Not done by me: I did not restart Docker Desktop, kill the engine, or touch
+  the container. The host is the user's. The stand-in process (pid 60640) is
+  still up, with one half-open connection from the failed check.
+- Finding for later (mine): the stand-in has no timeout on its COBOL calls.
+  When Docker stalls, it should answer the 3270 ENTER with "BACKEND UNAVAILABLE"
+  on the message line, not leave the terminal waiting. Will fix once Docker is
+  back.
+- State is safe: everything is committed and pushed up to `b866936`, plus the
+  merge. Nothing was mid-write on the mainframe: the last job was the 18:0x
+  replay, and any interrupted SEANCSVC request would be a read (no update was in
+  flight).
