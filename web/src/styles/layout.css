@@ -238,7 +238,7 @@
   padding: 0.75rem;
   font-family: var(--mono);
   font-size: 0.85rem;
-  min-width: 22rem;
+  min-width: min(22rem, 100%);
 }
 .audit-head { display: flex; justify-content: space-between; align-items: center; }
 .audit-tools { display: flex; gap: 1rem; align-items: center; margin: 0.5rem 0; }
@@ -254,13 +254,13 @@
 .spirit-map .map-node:focus-visible rect { stroke: var(--focus); stroke-width: 3; }
 .spirit-map .node-here rect { stroke: var(--phosphor-bright); }
 .spirit-map .node-selected rect { fill: var(--field-fill); }
-.spirit-map .node-name { fill: var(--phosphor); font-size: 13px; font-weight: 600; }
-.spirit-map .node-sub { fill: var(--phosphor-dim); font-size: 11px; }
-.spirit-map .node-tag { fill: var(--phosphor-bright); font-size: 11px; font-weight: 700; }
+.spirit-map .node-name { fill: var(--phosphor); font-size: 0.8rem; font-weight: 600; }
+.spirit-map .node-sub { fill: var(--phosphor-dim); font-size: 0.7rem; }
+.spirit-map .node-tag { fill: var(--phosphor-bright); font-size: 0.7rem; font-weight: 700; }
 .spirit-map .node-tag-review { fill: var(--warn); }
 .spirit-map .map-edge path, .spirit-map .map-frontier path { stroke: currentColor; stroke-width: 1.5; }
 .spirit-map .edge-trail path { stroke: var(--phosphor-bright); stroke-width: 3.5; }
-.spirit-map .edge-label { fill: var(--phosphor-dim); font-size: 10px; }
+.spirit-map .edge-label { fill: var(--phosphor-dim); font-size: 0.65rem; }
 .map-table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 0.85rem; }
 .map-table th, .map-table td { text-align: left; vertical-align: top; padding: 0.2rem 0.5rem; border-bottom: 1px solid var(--phosphor-dim); }
 .map-uncharted { color: var(--warn); border: 1px solid var(--warn); padding: 0.4rem; }
