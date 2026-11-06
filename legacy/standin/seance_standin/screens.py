@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .datastream import COLS, OutField, field_attr, rc
+from .datastream import COLS, SIZE, OutField, OutText, field_attr, rc
 
 LEGEND_ROW = 23
 MSG_ROW = 22
@@ -41,30 +41,43 @@ class Screen:
     # output spans and message line.
     data: dict[str, str] = field(default_factory=dict)
 
+    def texts(self) -> list[OutText]:
+        """Static labels and the legend: plain buffer text, no field starts."""
+        out = [OutText(r, c, text) for r, c, text in self.labels]
+        out.append(OutText(LEGEND_ROW, 1, self.legend))
+        return out
+
     def out_fields(self, values: dict[str, str]) -> list[OutField]:
-        fields: list[OutField] = []
-        # title + static labels
-        for r, c, text in self.labels:
-            fields.append(OutField(r, c - 1, field_attr(protected=True), text))
-        # legend row (protected)
-        fields.append(OutField(LEGEND_ROW, 0, field_attr(protected=True), self.legend))
-        # message line (volatile, intensified) always present
-        fields.append(OutField(MSG_ROW, 0, field_attr(protected=True, intensified=True),
-                                values.get("msg", "")[:70]))
-        # output display spans (protected, carry data)
-        for r, c, length in self.outputs:
-            key = f"out_{r}_{c}"
-            fields.append(OutField(r, c - 1, field_attr(protected=True),
-                                   values.get(key, "")[:length]))
-        # input fields (unprotected); add a protected stop one past the end
+        """Field starts exactly as ``seance_mcp.fake.build_screen`` lays them out,
+        so the stand-in's screen_ids equal the fake's (B's approved key policy is
+        keyed by screen_id and then applies to the real-backed app unchanged):
+
+        * a protected start at buffer offset 0;
+        * per named field an attribute byte at (row, col-1) -- unprotected for
+          inputs (numeric if so), protected for outputs and the message line;
+        * a protected terminator right after each named field's data, unless
+          another field starts there.
+        Static text is not a field; see ``texts()``.
+        """
+        named: list[tuple[int, int, int, int, str]] = []   # row, col, len, attr, data
         for spec in self.inputs:
-            fields.append(OutField(spec.row, spec.col - 1,
-                                   field_attr(protected=False, numeric=spec.numeric),
-                                   values.get(spec.name, "")[:spec.length]))
-            stop_col = spec.col + spec.length
-            if stop_col < COLS:
-                fields.append(OutField(spec.row, stop_col, field_attr(protected=True), ""))
-        return fields
+            named.append((spec.row, spec.col, spec.length,
+                          field_attr(protected=False, numeric=spec.numeric),
+                          values.get(spec.name, "")[:spec.length]))
+        for r, c, length in self.outputs:
+            named.append((r, c, length, field_attr(protected=True),
+                          values.get(f"out_{r}_{c}", "")[:length]))
+        named.append((MSG_ROW, 1, 70, field_attr(protected=True), values.get("msg", "")[:70]))
+
+        starts: dict[int, tuple[int, str]] = {0: (field_attr(protected=True), "")}
+        for r, c, length, _, _ in named:                 # terminators first ...
+            end = rc(r, c) + length
+            if end < SIZE:
+                starts.setdefault(end, (field_attr(protected=True), ""))
+        for r, c, _, attr, data in named:                # ... named starts override
+            starts[rc(r, c) - 1] = (attr, data)
+        return [OutField(pos // COLS, pos % COLS, attr, data)
+                for pos, (attr, data) in sorted(starts.items())]
 
     def cursor_offset(self) -> int:
         if self.cursor_field:

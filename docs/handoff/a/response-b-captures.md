@@ -20,6 +20,7 @@ ScreenParser (so screen_ids, fields and labels are genuine):
 - Two REAL TK4- screens: `welcome` (live clock, declared volatile) and
   `logon_rejected` = `IKJ56420I USERID XYZZY NOT AUTHORIZED TO USE TSO` after
   the harmless non-existent test id `XYZZY`. No logon completed, no password.
+- **Update 2026-11-06:** re-recorded; see `response-b-live-run-tk4-builtins.md`.
 - **Heads-up / known issue:** `FakeApp.from_capture` currently rejects this file
   with `welcome: field starts at the first cell`. The TK4- welcome has a field
   whose attribute byte is at buffer position 0, and

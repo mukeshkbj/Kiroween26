@@ -130,16 +130,32 @@ class OutField:
     text: str = ""                # initial data to the right of the attribute
 
 
-def build_erase_write(fields: list[OutField], cursor: int | None = None) -> bytes:
-    """Build an Erase/Write stream: WCC, then SF+data per field, then IC.
+@dataclass
+class OutText:
+    """Plain text written into the buffer at (row, col) with no field start;
+    it belongs to whichever field covers that position."""
 
-    The screen is addressed field by field: SBA to the attribute position, SF
-    with the attribute byte, then the field's EBCDIC data. ``cursor`` is an
-    absolute buffer offset for the Insert Cursor order.
+    row: int
+    col: int
+    text: str
+
+
+def build_erase_write(fields: list[OutField], cursor: int | None = None,
+                      texts: list[OutText] | tuple[OutText, ...] = ()) -> bytes:
+    """Build an Erase/Write stream: WCC, plain texts, then SF+data per field, then IC.
+
+    Plain texts are written first and field starts after them, so a start
+    always wins over text at the same cell (the attribute byte is not a
+    character). ``cursor`` is an absolute buffer offset for Insert Cursor.
     """
     out = bytearray()
     out.append(CMD_ERASE_WRITE)
     out.append(WCC_RESTORE_RESET)
+    for t in texts:
+        if t.text:
+            out.append(ORDER_SBA)
+            out += encode_ba(rc(t.row, t.col))
+            out += ascii_to_ebcdic(t.text)
     for f in sorted(fields, key=lambda x: rc(x.row, x.col)):
         pos = rc(f.row, f.col)
         out.append(ORDER_SBA)

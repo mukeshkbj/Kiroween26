@@ -1,0 +1,132 @@
+{
+  "app_id": "tk4-builtins",
+  "edges": [
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "id": "e_d8db3da092",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_a713a47305",
+      "why_read_only": "not_commit_capable"
+    }
+  ],
+  "frontier": [
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [
+        {
+          "field": "logon",
+          "probe": "-"
+        }
+      ],
+      "from": "n_a713a47305",
+      "key": "ENTER",
+      "reason": "unsafe_field"
+    },
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_a713a47305",
+      "key": "PF14",
+      "reason": "unvisited"
+    }
+  ],
+  "home": "n_a713a47305",
+  "nodes": [
+    {
+      "fields": [
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 143,
+          "intensified": true,
+          "key": "logon",
+          "label": "Logon ===>",
+          "length": 128,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 22
+        }
+      ],
+      "id": "n_a713a47305",
+      "rows": [
+        "Terminal   CUU0C0                                                 Date  06.11.26",
+        "                                                                  Time  05:17:38",
+        "                                                                                ",
+        "                           ************   ****  *****          ||               ",
+        "                           **   **   **    **    **           |||               ",
+        "                           **   **   **    **   **           ||||               ",
+        "                                **         **  **           || ||               ",
+        "        |l      _,,,---,,_      **         ** **           ||  ||               ",
+        " ZZZzz /,'.-'`'    -.  ;-;;,    **         ****           ||   ||               ",
+        "      |,4-  ) )-,_. ,( (  ''-'  **         *****         ||    ||               ",
+        "     '---''(_/--'  `-')_)       **         **  **       ||     ||    |||||||||| ",
+        "                                **         **   **      |||||||||||             ",
+        "       The MVS 3.8j             **         **    **            ||               ",
+        "     Tur(n)key System           **         **     **           ||               ",
+        "                              ******      ****     ***       ||||||             ",
+        "                                                                                ",
+        "            TK3 created by Volker Bandke       vbandke@bsp-gmbh.com             ",
+        "            TK4- update by Juergen Winkelmann  winkelmann@id.ethz.ch            ",
+        "                     see TK4-.CREDITS for complete credits                      ",
+        "                                                                                ",
+        "                              MVS 3.8j Level 8505                               ",
+        "                                                                                ",
+        "Logon ===>                                                                      ",
+        "                                                            RUNNING  TK4-       "
+      ],
+      "screen_id": "a713a47305bd344b01e211a28fde9200fc766a0786fb195a44522d35ec1e568f",
+      "visits": 2,
+      "volatile": [
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    }
+  ],
+  "run": {
+    "budgets": {
+      "max_depth": 5,
+      "max_screens": 20,
+      "max_steps": 80
+    },
+    "id": "r_1",
+    "reason": "session_lost",
+    "started_at": "2026-11-06T04:17:44.000Z",
+    "status": "halted",
+    "steps": 2
+  },
+  "schema": "gss.spiritmap/1"
+}

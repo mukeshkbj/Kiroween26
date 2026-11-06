@@ -1,14 +1,14 @@
 {
   "schema": "gss.capture/1",
   "app_id": "seance-insurance",
-  "captured_at": "2026-11-05T18:56:42Z",
+  "captured_at": "2026-11-06T04:51:47Z",
   "note": "Seance Insurance stand-in (legacy/standin). Presentation is a Python TN3270 stand-in; business logic is the real COBOL SEANCSVC on TK4-. See legacy/README.md.",
   "screens": [
     {
       "name": "menu",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "27954efe5e7bde43e2c34b05dea1888d5c752d99b98b0228221e1869dc370cb2",
+        "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
         "cursor": [
           7,
           15
@@ -44,64 +44,16 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 241,
+            "length": 573,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - MAIN MENU                                                                                                                                                                                                                     "
+            "value": "SEANCE INSURANCE - MAIN MENU                                                                                                                                                                                                                      1  POLICY ENQUIRY                                                               2  POLICY LIST                                                                  3  POLICY UPDATE                                                                                                                                                OPTION ===>"
           },
           {
             "index": 1,
-            "row": 3,
-            "col": 3,
-            "length": 79,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "1  POLICY ENQUIRY                                                              "
-          },
-          {
-            "index": 2,
-            "row": 4,
-            "col": 3,
-            "length": 79,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "2  POLICY LIST                                                                 "
-          },
-          {
-            "index": 3,
-            "row": 5,
-            "col": 3,
-            "length": 159,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "3  POLICY UPDATE                                                                                                                                               "
-          },
-          {
-            "index": 4,
-            "row": 7,
-            "col": 3,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "OPTION ===>"
-          },
-          {
-            "index": 5,
             "row": 7,
             "col": 15,
             "length": 1,
@@ -113,7 +65,7 @@
             "value": " "
           },
           {
-            "index": 6,
+            "index": 2,
             "row": 7,
             "col": 17,
             "length": 1183,
@@ -125,29 +77,166 @@
             "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
           },
           {
-            "index": 7,
+            "index": 3,
             "row": 22,
             "col": 1,
-            "length": 79,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "                                                                               "
-          },
-          {
-            "index": 8,
-            "row": 23,
-            "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "ENTER=SELECT  CLEAR=EXIT                                                       "
+            "value": "                                                                      "
+          },
+          {
+            "index": 4,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=SELECT  CLEAR=EXIT                                                       "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [
@@ -337,7 +426,7 @@
       "name": "enquiry",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "1025a751fbb734eb853f141766e2b004d766e7016aa5a297fe50e25f10e0936d",
+        "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
         "cursor": [
           3,
           13
@@ -373,28 +462,16 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 239,
+            "length": 251,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                              "
+            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                               POLNO ===> "
           },
           {
             "index": 1,
-            "row": 3,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "POLNO ===> "
-          },
-          {
-            "index": 2,
             "row": 3,
             "col": 13,
             "length": 8,
@@ -406,137 +483,274 @@
             "value": "        "
           },
           {
-            "index": 3,
+            "index": 2,
             "row": 3,
             "col": 22,
-            "length": 138,
+            "length": 150,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "POLNO ===>",
-            "value": "                                                                                                                                          "
+            "value": "                                                                                                                                           HOLDER:    "
           },
           {
-            "index": 4,
-            "row": 5,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "HOLDER:    "
-          },
-          {
-            "index": 5,
+            "index": 3,
             "row": 5,
             "col": 13,
-            "length": 67,
+            "length": 20,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "HOLDER:",
-            "value": "                                                                   "
+            "value": "                    "
           },
           {
-            "index": 6,
-            "row": 6,
-            "col": 1,
-            "length": 11,
+            "index": 4,
+            "row": 5,
+            "col": 34,
+            "length": 58,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "STATUS:    "
+            "label": "HOLDER:",
+            "value": "                                               STATUS:    "
           },
           {
-            "index": 7,
+            "index": 5,
             "row": 6,
             "col": 13,
-            "length": 67,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "STATUS:",
-            "value": "                                                                   "
+            "value": "          "
           },
           {
-            "index": 8,
-            "row": 7,
-            "col": 1,
-            "length": 11,
+            "index": 6,
+            "row": 6,
+            "col": 24,
+            "length": 68,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "PREMIUM:   "
+            "label": "STATUS:",
+            "value": "                                                         PREMIUM:   "
           },
           {
-            "index": 9,
+            "index": 7,
             "row": 7,
             "col": 13,
-            "length": 67,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "PREMIUM:",
-            "value": "                                                                   "
+            "value": "          "
           },
           {
-            "index": 10,
-            "row": 8,
-            "col": 1,
-            "length": 11,
+            "index": 8,
+            "row": 7,
+            "col": 24,
+            "length": 68,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "UPDATED:   "
+            "label": "PREMIUM:",
+            "value": "                                                         UPDATED:   "
           },
           {
-            "index": 11,
+            "index": 9,
             "row": 8,
             "col": 13,
-            "length": 1107,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "UPDATED:",
-            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+            "value": "          "
           },
           {
-            "index": 12,
-            "row": 22,
-            "col": 1,
-            "length": 79,
+            "index": 10,
+            "row": 8,
+            "col": 24,
+            "length": 1096,
             "protected": true,
             "numeric": false,
             "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "                                                                               "
+            "intensified": false,
+            "label": "UPDATED:",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
           },
           {
-            "index": 13,
-            "row": 23,
+            "index": 11,
+            "row": 22,
             "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "ENTER=LOOK UP  PF3=BACK                                                        "
+            "value": "                                                                      "
+          },
+          {
+            "index": 12,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=LOOK UP  PF3=BACK                                                        "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [
@@ -726,7 +940,7 @@
       "name": "enquiry_result",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "1025a751fbb734eb853f141766e2b004d766e7016aa5a297fe50e25f10e0936d",
+        "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
         "cursor": [
           3,
           13
@@ -762,28 +976,16 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 239,
+            "length": 251,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                              "
+            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                               POLNO ===> "
           },
           {
             "index": 1,
-            "row": 3,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "POLNO ===> "
-          },
-          {
-            "index": 2,
             "row": 3,
             "col": 13,
             "length": 8,
@@ -795,137 +997,274 @@
             "value": "P0000003"
           },
           {
-            "index": 3,
+            "index": 2,
             "row": 3,
             "col": 22,
-            "length": 138,
+            "length": 150,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000003",
-            "value": "                                                                                                                                          "
+            "value": "                                                                                                                                           HOLDER:    "
           },
           {
-            "index": 4,
-            "row": 5,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "HOLDER:    "
-          },
-          {
-            "index": 5,
+            "index": 3,
             "row": 5,
             "col": 13,
-            "length": 67,
+            "length": 20,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "HOLDER:",
-            "value": "A. ROSE                                                            "
+            "value": "A. ROSE             "
           },
           {
-            "index": 6,
-            "row": 6,
-            "col": 1,
-            "length": 11,
+            "index": 4,
+            "row": 5,
+            "col": 34,
+            "length": 58,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "STATUS:    "
+            "label": "A. ROSE",
+            "value": "                                               STATUS:    "
           },
           {
-            "index": 7,
+            "index": 5,
             "row": 6,
             "col": 13,
-            "length": 67,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "STATUS:",
-            "value": "ACTIVE                                                             "
+            "value": "ACTIVE    "
           },
           {
-            "index": 8,
-            "row": 7,
-            "col": 1,
-            "length": 11,
+            "index": 6,
+            "row": 6,
+            "col": 24,
+            "length": 68,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "PREMIUM:   "
+            "label": "ACTIVE",
+            "value": "                                                         PREMIUM:   "
           },
           {
-            "index": 9,
+            "index": 7,
             "row": 7,
             "col": 13,
-            "length": 67,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "PREMIUM:",
-            "value": "250.00                                                             "
+            "value": "250.00    "
           },
           {
-            "index": 10,
-            "row": 8,
-            "col": 1,
-            "length": 11,
+            "index": 8,
+            "row": 7,
+            "col": 24,
+            "length": 68,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "UPDATED:   "
+            "label": "250.00",
+            "value": "                                                         UPDATED:   "
           },
           {
-            "index": 11,
+            "index": 9,
             "row": 8,
             "col": 13,
-            "length": 1107,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "UPDATED:",
-            "value": "2026-10-21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+            "value": "2026-10-21"
           },
           {
-            "index": 12,
-            "row": 22,
-            "col": 1,
-            "length": 79,
+            "index": 10,
+            "row": 8,
+            "col": 24,
+            "length": 1096,
             "protected": true,
             "numeric": false,
             "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "                                                                               "
+            "intensified": false,
+            "label": "2026-10-21",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
           },
           {
-            "index": 13,
-            "row": 23,
+            "index": 11,
+            "row": 22,
             "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "ENTER=LOOK UP  PF3=BACK                                                        "
+            "value": "                                                                      "
+          },
+          {
+            "index": 12,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=LOOK UP  PF3=BACK                                                        "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [
@@ -1115,7 +1454,7 @@
       "name": "list",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "052ee12dd841d8636c736790b0b4cf37389435df37ffa3853bbac6a516679237",
+        "screen_id": "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952",
         "cursor": [
           3,
           13
@@ -1151,28 +1490,16 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 239,
+            "length": 251,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - POLICY LIST                                                                                                                                                                                                                 "
+            "value": "SEANCE INSURANCE - POLICY LIST                                                                                                                                                                                                                  SELECT ===>"
           },
           {
             "index": 1,
-            "row": 3,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "SELECT ===>"
-          },
-          {
-            "index": 2,
             "row": 3,
             "col": 13,
             "length": 2,
@@ -1184,341 +1511,754 @@
             "value": "  "
           },
           {
-            "index": 3,
+            "index": 2,
             "row": 3,
             "col": 16,
-            "length": 144,
+            "length": 224,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "SELECT ===>",
-            "value": "                                                                                                                                                "
+            "value": "                                                                                                                                                 POLNO     HOLDER               STATUS                                          "
+          },
+          {
+            "index": 3,
+            "row": 6,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000001"
           },
           {
             "index": 4,
-            "row": 5,
-            "col": 1,
-            "length": 79,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "POLNO     HOLDER               STATUS                                          "
-          },
-          {
-            "index": 5,
             "row": 6,
-            "col": 1,
-            "length": 9,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "P0000001 "
-          },
-          {
-            "index": 6,
-            "row": 6,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000001",
-            "value": "J. MARLOWE           "
+            "value": ""
           },
           {
-            "index": 7,
+            "index": 5,
             "row": 6,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000001",
+            "value": "J. MARLOWE          "
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "J. MARLOWE",
-            "value": "ACTIVE                                         "
+            "value": ""
+          },
+          {
+            "index": 7,
+            "row": 6,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "J. MARLOWE",
+            "value": "ACTIVE    "
           },
           {
             "index": 8,
+            "row": 6,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 9,
             "row": 7,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000002 "
+            "value": "P0000002"
           },
           {
-            "index": 9,
+            "index": 10,
             "row": 7,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000002",
-            "value": "K. OKAFOR            "
+            "value": ""
           },
           {
-            "index": 10,
+            "index": 11,
             "row": 7,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000002",
+            "value": "K. OKAFOR           "
+          },
+          {
+            "index": 12,
+            "row": 7,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "K. OKAFOR",
-            "value": "ACTIVE                                         "
+            "value": ""
           },
           {
-            "index": 11,
+            "index": 13,
+            "row": 7,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "K. OKAFOR",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 14,
+            "row": 7,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 15,
             "row": 8,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000003 "
+            "value": "P0000003"
           },
           {
-            "index": 12,
+            "index": 16,
             "row": 8,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000003",
-            "value": "A. ROSE              "
+            "value": ""
           },
           {
-            "index": 13,
+            "index": 17,
             "row": 8,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000003",
+            "value": "A. ROSE             "
+          },
+          {
+            "index": 18,
+            "row": 8,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "A. ROSE",
-            "value": "ACTIVE                                         "
+            "value": ""
           },
           {
-            "index": 14,
+            "index": 19,
+            "row": 8,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 20,
+            "row": 8,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 21,
             "row": 9,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000004 "
+            "value": "P0000004"
           },
           {
-            "index": 15,
+            "index": 22,
             "row": 9,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000004",
-            "value": "T. NAKAMURA          "
+            "value": ""
           },
           {
-            "index": 16,
+            "index": 23,
             "row": 9,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000004",
+            "value": "T. NAKAMURA         "
+          },
+          {
+            "index": 24,
+            "row": 9,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "T. NAKAMURA",
-            "value": "LAPSED                                         "
+            "value": ""
           },
           {
-            "index": 17,
+            "index": 25,
+            "row": 9,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "T. NAKAMURA",
+            "value": "LAPSED    "
+          },
+          {
+            "index": 26,
+            "row": 9,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "LAPSED",
+            "value": "                                    "
+          },
+          {
+            "index": 27,
             "row": 10,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000005 "
+            "value": "P0000005"
           },
           {
-            "index": 18,
+            "index": 28,
             "row": 10,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000005",
-            "value": "S. LINDQVIST         "
+            "value": ""
           },
           {
-            "index": 19,
+            "index": 29,
             "row": 10,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000005",
+            "value": "S. LINDQVIST        "
+          },
+          {
+            "index": 30,
+            "row": 10,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "S. LINDQVIST",
-            "value": "ACTIVE                                         "
+            "value": ""
           },
           {
-            "index": 20,
+            "index": 31,
+            "row": 10,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "S. LINDQVIST",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 32,
+            "row": 10,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 33,
             "row": 11,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000006 "
+            "value": "P0000006"
           },
           {
-            "index": 21,
+            "index": 34,
             "row": 11,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000006",
-            "value": "M. DUBOIS            "
+            "value": ""
           },
           {
-            "index": 22,
+            "index": 35,
             "row": 11,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000006",
+            "value": "M. DUBOIS           "
+          },
+          {
+            "index": 36,
+            "row": 11,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "M. DUBOIS",
-            "value": "CANCELLED                                      "
+            "value": ""
           },
           {
-            "index": 23,
+            "index": 37,
+            "row": 11,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "M. DUBOIS",
+            "value": "CANCELLED "
+          },
+          {
+            "index": 38,
+            "row": 11,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "CANCELLED",
+            "value": "                                    "
+          },
+          {
+            "index": 39,
             "row": 12,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000007 "
+            "value": "P0000007"
           },
           {
-            "index": 24,
+            "index": 40,
             "row": 12,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000007",
-            "value": "R. PATEL             "
+            "value": ""
           },
           {
-            "index": 25,
+            "index": 41,
             "row": 12,
-            "col": 33,
-            "length": 47,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000007",
+            "value": "R. PATEL            "
+          },
+          {
+            "index": 42,
+            "row": 12,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "R. PATEL",
-            "value": "ACTIVE                                         "
+            "value": ""
           },
           {
-            "index": 26,
+            "index": 43,
+            "row": 12,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "R. PATEL",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 44,
+            "row": 12,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 45,
             "row": 13,
             "col": 1,
-            "length": 9,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "P0000008 "
+            "value": "P0000008"
           },
           {
-            "index": 27,
+            "index": 46,
             "row": 13,
-            "col": 11,
-            "length": 21,
+            "col": 10,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "P0000008",
-            "value": "H. KOWALSKI          "
+            "value": ""
           },
           {
-            "index": 28,
+            "index": 47,
             "row": 13,
-            "col": 33,
-            "length": 687,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000008",
+            "value": "H. KOWALSKI         "
+          },
+          {
+            "index": 48,
+            "row": 13,
+            "col": 32,
+            "length": 0,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "H. KOWALSKI",
-            "value": "LAPSED                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+            "value": ""
           },
           {
-            "index": 29,
-            "row": 22,
-            "col": 1,
-            "length": 79,
+            "index": 49,
+            "row": 13,
+            "col": 33,
+            "length": 10,
             "protected": true,
             "numeric": false,
             "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "                                                                               "
+            "intensified": false,
+            "label": "H. KOWALSKI",
+            "value": "LAPSED    "
           },
           {
-            "index": 30,
-            "row": 23,
+            "index": 50,
+            "row": 13,
+            "col": 44,
+            "length": 676,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "LAPSED",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
+          },
+          {
+            "index": 51,
+            "row": 22,
             "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "PF7=UP  PF8=DOWN  PF3=BACK                                                     "
+            "value": "                                                                      "
+          },
+          {
+            "index": 52,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         PF7=UP  PF8=DOWN  PF3=BACK                                                     "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [
@@ -1708,7 +2448,7 @@
       "name": "update",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "1174c997011b86b57ef04d9e7d5da983903111d35f92ca446c59458ae7031d11",
+        "screen_id": "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a",
         "cursor": [
           3,
           13
@@ -1744,28 +2484,16 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 239,
+            "length": 251,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - POLICY UPDATE                                                                                                                                                                                                               "
+            "value": "SEANCE INSURANCE - POLICY UPDATE                                                                                                                                                                                                                POLNO ===> "
           },
           {
             "index": 1,
-            "row": 3,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "POLNO ===> "
-          },
-          {
-            "index": 2,
             "row": 3,
             "col": 13,
             "length": 8,
@@ -1777,31 +2505,19 @@
             "value": "        "
           },
           {
-            "index": 3,
+            "index": 2,
             "row": 3,
             "col": 22,
-            "length": 138,
+            "length": 159,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "POLNO ===>",
-            "value": "                                                                                                                                          "
+            "value": "                                                                                                                                           STATUS (A/L/C) ===> "
           },
           {
-            "index": 4,
-            "row": 5,
-            "col": 1,
-            "length": 20,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "STATUS (A/L/C) ===> "
-          },
-          {
-            "index": 5,
+            "index": 3,
             "row": 5,
             "col": 22,
             "length": 1,
@@ -1813,31 +2529,19 @@
             "value": " "
           },
           {
-            "index": 6,
+            "index": 4,
             "row": 5,
             "col": 24,
-            "length": 56,
+            "length": 77,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "STATUS (A/L/C) ===>",
-            "value": "                                                        "
+            "value": "                                                         PREMIUM ===>        "
           },
           {
-            "index": 7,
-            "row": 6,
-            "col": 1,
-            "length": 20,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "PREMIUM ===>        "
-          },
-          {
-            "index": 8,
+            "index": 5,
             "row": 6,
             "col": 22,
             "length": 7,
@@ -1849,65 +2553,202 @@
             "value": "       "
           },
           {
-            "index": 9,
+            "index": 6,
             "row": 6,
             "col": 30,
-            "length": 130,
+            "length": 142,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "PREMIUM ===>",
-            "value": "                                                                                                                                  "
+            "value": "                                                                                                                                   HOLDER:    "
           },
           {
-            "index": 10,
-            "row": 8,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "HOLDER:    "
-          },
-          {
-            "index": 11,
+            "index": 7,
             "row": 8,
             "col": 13,
-            "length": 1107,
+            "length": 20,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "HOLDER:",
-            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+            "value": "                    "
           },
           {
-            "index": 12,
-            "row": 22,
-            "col": 1,
-            "length": 79,
+            "index": 8,
+            "row": 8,
+            "col": 34,
+            "length": 1086,
             "protected": true,
             "numeric": false,
             "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "                                                                               "
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
           },
           {
-            "index": 13,
-            "row": 23,
+            "index": 9,
+            "row": 22,
             "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "ENTER=REVIEW CHANGE  PF3=BACK                                                  "
+            "value": "                                                                      "
+          },
+          {
+            "index": 10,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=REVIEW CHANGE  PF3=BACK                                                  "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [
@@ -2097,7 +2938,7 @@
       "name": "confirm",
       "screen": {
         "trust": "untrusted-screen-data",
-        "screen_id": "ed689e8fe0591fed7a8977c1c5727205aa0674299c4e9ae16a115d916497db44",
+        "screen_id": "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
         "cursor": [
           0,
           0
@@ -2133,182 +2974,319 @@
             "index": 0,
             "row": 0,
             "col": 1,
-            "length": 239,
+            "length": 251,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "SEANCE INSURANCE - CONFIRM UPDATE                                                                                                                                                                                                              "
+            "value": "SEANCE INSURANCE - CONFIRM UPDATE                                                                                                                                                                                                               POLNO:     "
           },
           {
             "index": 1,
             "row": 3,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "POLNO:     "
-          },
-          {
-            "index": 2,
-            "row": 3,
             "col": 13,
-            "length": 67,
+            "length": 8,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "POLNO:",
-            "value": "P0000003                                                           "
+            "value": "P0000003"
           },
           {
-            "index": 3,
-            "row": 4,
-            "col": 1,
-            "length": 11,
+            "index": 2,
+            "row": 3,
+            "col": 22,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "HOLDER:    "
+            "label": "P0000003",
+            "value": "                                                           HOLDER:    "
           },
           {
-            "index": 4,
+            "index": 3,
             "row": 4,
             "col": 13,
-            "length": 79,
+            "length": 20,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "HOLDER:",
-            "value": "A. ROSE                                                                        "
+            "value": "A. ROSE             "
+          },
+          {
+            "index": 4,
+            "row": 4,
+            "col": 34,
+            "length": 138,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": "                                                           OLD         NEW                                                     STATUS:    "
           },
           {
             "index": 5,
-            "row": 5,
-            "col": 13,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "OLD        "
-          },
-          {
-            "index": 6,
-            "row": 5,
-            "col": 25,
-            "length": 55,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "OLD",
-            "value": "NEW                                                    "
-          },
-          {
-            "index": 7,
-            "row": 6,
-            "col": 1,
-            "length": 11,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": false,
-            "label": "",
-            "value": "STATUS:    "
-          },
-          {
-            "index": 8,
             "row": 6,
             "col": 13,
-            "length": 11,
+            "length": 1,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "STATUS:",
-            "value": "A          "
+            "value": "A"
           },
           {
-            "index": 9,
+            "index": 6,
             "row": 6,
-            "col": 25,
-            "length": 55,
+            "col": 15,
+            "length": 9,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "A",
-            "value": "L                                                      "
+            "value": "         "
           },
           {
-            "index": 10,
-            "row": 7,
-            "col": 1,
-            "length": 11,
+            "index": 7,
+            "row": 6,
+            "col": 25,
+            "length": 1,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
-            "label": "",
-            "value": "PREMIUM:   "
+            "label": "A",
+            "value": "L"
           },
           {
-            "index": 11,
+            "index": 8,
+            "row": 6,
+            "col": 27,
+            "length": 65,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "L",
+            "value": "                                                      PREMIUM:   "
+          },
+          {
+            "index": 9,
             "row": 7,
             "col": 13,
-            "length": 11,
+            "length": 7,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "PREMIUM:",
-            "value": "250.00     "
+            "value": "250.00 "
           },
           {
-            "index": 12,
+            "index": 10,
             "row": 7,
-            "col": 25,
-            "length": 1175,
+            "col": 21,
+            "length": 3,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "250.00",
-            "value": "250.00                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+            "value": "   "
+          },
+          {
+            "index": 11,
+            "row": 7,
+            "col": 25,
+            "length": 7,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "250.00 "
+          },
+          {
+            "index": 12,
+            "row": 7,
+            "col": 33,
+            "length": 1167,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
           },
           {
             "index": 13,
             "row": 22,
             "col": 1,
-            "length": 79,
-            "protected": true,
-            "numeric": false,
-            "hidden": false,
-            "intensified": true,
-            "label": "",
-            "value": "ENTER=CONFIRM  PF3=CANCEL                                                      "
-          },
-          {
-            "index": 14,
-            "row": 23,
-            "col": 1,
-            "length": 79,
+            "length": 70,
             "protected": true,
             "numeric": false,
             "hidden": false,
             "intensified": false,
             "label": "",
-            "value": "ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
+            "value": "ENTER=CONFIRM  PF3=CANCEL                                             "
+          },
+          {
+            "index": 14,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PF3=CANCEL",
+            "value": "         ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
           }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
         ]
       },
       "volatile": [

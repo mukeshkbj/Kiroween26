@@ -105,3 +105,58 @@ real COBOL (COBUCLG) fallback stands and the demo milestone is met. `src/kicks/`
 kept as a documented stretch (the SMENMAP BMS mapset does assemble+link).
 (Two JCL 72-column traps hit again on the way: a quoted PARM whose closing
 apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
+
+## 2026-11-06 Docker restart, health check, B's live tk4-builtins run
+
+- Docker Desktop had stopped overnight. After the integrator restarted it,
+  `gss-legacy` IPLed, and the health check passed first try (`P0000001 -> J.
+  MARLOWE` from COBOL). The policy data and the SEANCSVC load module survived
+  the restart. I restarted the stand-in.
+- Merged main (spirit-map, contracts with ScreenOut.volatile).
+- Surprise: my first tk4-builtins capture had grabbed the **Hercules device
+  banner**, not the VTAM welcome. TK4- paints the banner first, and the bridge's
+  "input field + stable" wait accepted it. The capture now waits for a row 0
+  starting with `Terminal`. Clock volatile is now TK4_CLOCK_REGIONS (0,64,16;1,64,16).
+- B's explorer, live (7.3), three attempts:
+  1. Bridge as shipped: halted `session_lost` on the first PA1. The cause is the
+     PF/PA key-form bug (bridge sends `PA1`, s3270 wants `PA(1)`; nothing is
+     sent).
+  2. `legacy/scripts/live_explore.py` (PF/PA form fix only): reaches 7 screens,
+     then **hangs forever** on the next AID after CLEAR on a blank VTAM screen.
+     A faulthandler watchdog showed `Session._exec` blocked in readline: the key
+     was sent and the host never answered, so this is an ambiguous ack with no
+     timeout. Filed `request-integrator-bridge-aid-blocks.md`.
+  3. Same, plus a bounded pre-press `Wait(Unlock)`: the same hang, which
+     confirmed the keyboard was unlocked and the AID itself was the problem.
+  Partial map (7 nodes, 12 edges, 17 frontier) handed to B in
+  `docs/handoff/a/live-runs/tk4-builtins/` with a response file.
+- Surprise: the welcome's `screen_id` changes per connection because row 0
+  shows the VTAM terminal `CUU0C0`/`CUU0C1`. Suggested to B: volatile `[0,11,6]`.
+- My mistake: the tool returned before a background explorer exited, and I
+  started a second one. For a short time two sessions overlapped on separate
+  VTAM terminals. I discarded those artefacts. I now check for a live explorer
+  process before starting one, and the runner has a watchdog.
+- Safety check of every audit: only read-only keys were sent (CLEAR, PA1-3,
+  PF13-14). ENTER stayed `denied_commit`, and `Logon ===>` stayed
+  `unsafe_field`. No password or real userid appears in any artefact.
+
+## 2026-11-06 Live exploration of the COBOL-backed insurance app: identical to the fake
+
+- Surprise (good catch): before today, the stand-in's `screen_id`s did NOT equal
+  the fake's, even though every row was identical. The stand-in used one field
+  start per label, while `build_screen` uses one protected start at offset 0
+  plus starts only for named fields, and `screen_id` hashes the field structure.
+  That would have quietly kept B's approved key policy off the real app. I now
+  emit exactly `build_screen`'s structure. Static text is written as plain SBA
+  text before the field starts, so a start always wins its cell. Added
+  `test_parity.py` (offline, all 5 screens) and `check_parity.py` (live capture):
+  PARITY OK. Health check and demo path 3x still pass.
+- Surprise: B's CLI ignores `TN3270_HOST/PORT` (it always connects to
+  localhost:3270). The runner passes host/port from Settings; reported to B.
+- Ran B's explorer with B's own fake-insurance seed and approved policy
+  (app_id changed only): completed, 5 screens / 30 edges / 1 frontier / 64
+  steps. Nodes, edges and frontier are **identical** to B's fake-insurance map.
+  ENTER on confirm stayed `denied_commit`. There is no SVCUPD job on the
+  mainframe after the pre-run reset, so nothing committed.
+- So the full chain works on the live, COBOL-backed app, unchanged from the fake:
+  spirit-map discovery, then B's approved policy and tools.
