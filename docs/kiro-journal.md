@@ -32,3 +32,4 @@ How Kiro was used on Green Screen Seance: spec and steering changes, in order.
   Surprise 2: the ownership check I wrote on day one produced a wall of false "violations" the moment a branch had been merged into main and main merged back (criss-cross history; a three-dot diff then charges main's files to the branch). It now inspects only branch-unique commits.
   Surprise 3: the random-seed half of the merge gate caught a flaky test of mine from P0.6 (a 200 ms Hypothesis deadline on a per-example temp dir). That is the reason the gate runs a fixed seed and a random one.
   Surprise 4 (A): the COBOL-backed stand-in now produces the same `screen_id` as the fake on all five screens, so spirit-map's human-approved key policy and tools apply to the live app unchanged, and exploring the live app yields a map identical to the fake's.
+- 2026-11-06: `.kiro/steering/tech.md` changed

@@ -209,10 +209,16 @@ class FakePort:
         self.calls: list[tuple] = []
         self._connected = False
         self.fail_next: Exception | None = None  # raised once by the next read/fill/press
+        self.fail_next_press: Exception | None = None  # raised once by the next press AFTER it was sent
 
     def _maybe_fail(self) -> None:
         if self.fail_next is not None:
             exc, self.fail_next = self.fail_next, None
+            raise exc
+
+    def _maybe_fail_press(self) -> None:
+        if self.fail_next_press is not None:
+            exc, self.fail_next_press = self.fail_next_press, None
             raise exc
 
     @property
@@ -257,6 +263,7 @@ class FakePort:
     async def press(self, key: Key) -> ScreenModel:
         self._maybe_fail()
         self.calls.append(("press", key.value))  # the key IS sent before any timeout
+        self._maybe_fail_press()
         if key.value in self.timeout_keys:
             raise KeyboardTimeoutError("keyboard still locked")
         self.current = self.transitions.get((self.current, key.value), self.current)
@@ -342,6 +349,7 @@ class FakeApp(FakePort):
     async def press(self, key: Key) -> ScreenModel:
         self._maybe_fail()
         self.calls.append(("press", key.value))
+        self._maybe_fail_press()
         if key.value in self.timeout_keys:
             raise KeyboardTimeoutError("keyboard still locked")
         values = self.values()
