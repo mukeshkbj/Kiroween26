@@ -124,7 +124,7 @@ Source of truth is the Python models in `mcp-server` (`seance_mcp.screens`, `sea
 Outcomes in use: `ok`, `error`, `proposed`, `superseded`, `rejected`, `expired`, `stale_screen`, `blocked_read_only`, `needs_resync`, `ambiguous_ack`, `session_lost`, `field_invalid`, `not_connected`, `confirmation_unavailable`, `awaiting_oob`, `unknown_action`.
 
 ### 3.5 Error codes (stable)
-From mcp-server: `not_connected`, `field_invalid`, `keyboard_timeout`, `session_lost`, `unknown_action`, `action_expired`, `stale_screen`, `read_only`, `confirmation_unavailable`, `awaiting_oob`, `bad_key`, `bridge_error`, `needs_resync`.
+From mcp-server: `not_connected`, `field_invalid`, `keyboard_timeout`, `session_lost`, `unknown_action`, `action_expired`, `stale_screen`, `read_only`, `ambiguous_ack` (the host stopped answering a command: it may have run; the session was closed and nothing was resent; reconnect and re-read the screen), `confirmation_unavailable`, `awaiting_oob`, `bad_key`, `bridge_error`, `needs_resync`.
 From the tool-pack runtime: `screen_mismatch`, `unknown_start`, `unexpected_pending`, `step_budget`, `invalid_arguments`.
 From the agent: `denied_by_user` (tool result when the human pressed Deny), `llm_unavailable`, `llm_error`, `max_steps`, `bad_message`, `observer_only`, `unknown_app`, `live_not_allowed`, `session_busy`, `turn_in_progress`.
 
@@ -461,6 +461,7 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
 Change log:
+- 2026-11-06 (additive): error code ``ambiguous_ack`` (section 3.5). The bridge bounds every s3270 command; silence raises ``AmbiguousAckError`` (session killed, nothing resent), surfaced as ``ambiguous_ack`` with audit outcome ``ambiguous_ack``. From Agent A's live finding on TK4-.
 - 2026-11-05 (additive, B request `screenout-volatile`): `ScreenOut` gains `volatile` ((row, col, length) runs). Regenerated schemas/examples. Consumers ignore unknown fields, so this is a v1 addition.
 - 2026-11-04 (P0.7, additive): schemas and examples generated into `docs/contracts/` (`seance_mcp.contracts`); section 3 timestamp note; `denied_by_user` error code; section 4.3 screen/focus/confirmation rules; `Fill.skip_if_absent`; `extract_list.row_fields` pattern.
 - 2026-11-04 (P0.5, clarification): section 6.1 states the exact `register` signature and the `RecipeService` facade; approval enforcement lives in mcp-server.

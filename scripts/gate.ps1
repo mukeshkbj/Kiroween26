@@ -79,6 +79,19 @@ foreach ($comp in 'bridge', 'mcp-server', 'spirit-map', 'agent') {
   }
 }
 
+if (Want 'legacy') {
+  $py = Venv-Python 'mcp-server'
+  $tests = Join-Path $root 'legacy/standin/tests'
+  if (-not (Test-Path $tests)) { Note 'legacy' 'skip' 'no stand-in tests in this checkout' }
+  elseif ($null -eq $py) { Note 'legacy' 'skip' 'mcp-server/.venv missing' }
+  else {
+    $env:PYTHONPATH = Join-Path $root 'legacy/standin'
+    $l = Run $py @('-m', 'pytest', '-q', $tests) $root
+    Remove-Item Env:PYTHONPATH
+    Note 'legacy' ($(if ($l -eq 0) { 'pass' } else { 'FAIL' })) 'TN3270 stand-in unit tests (no container needed)'
+  }
+}
+
 if (Want 'web') {
   $web = Join-Path $root 'web'
   if (-not (Test-Path (Join-Path $web 'package.json'))) { Note 'web' 'skip' 'not created yet' }

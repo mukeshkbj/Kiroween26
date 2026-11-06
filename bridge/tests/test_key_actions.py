@@ -43,7 +43,7 @@ class _Recorder(Session):
         self._proc = None  # never spawn s3270: _exec is replaced below
         self.sent: list[str] = []
 
-    def _exec(self, command):  # type: ignore[override]
+    def _exec(self, command, timeout_s=None):  # type: ignore[override]
         self.sent.append(command)
         return [], "", True
 
@@ -54,7 +54,7 @@ class _Recorder(Session):
 def test_press_key_sends_the_translated_action_once_then_waits():
     s = _Recorder()
     s.press_key("PF3")
-    assert s.sent == ["PF(3)", "<wait_unlock>"]
+    assert s.sent == ["Wait(5,Unlock)", "PF(3)", "<wait_unlock>"]  # unlock checked first, key once, then wait
     s.sent.clear()
     with pytest.raises(SessionError):
         s.press_key("Quit")

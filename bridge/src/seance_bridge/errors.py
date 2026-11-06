@@ -18,7 +18,11 @@ class KeyboardTimeoutError(ScreenBridgeError):
 
 
 class AmbiguousAckError(ScreenBridgeError):
-    """Internal guard: never re-send a key whose acknowledgement is ambiguous."""
+    """s3270 stopped answering a command, so it may or may not have been processed.
+
+    Raised by ``Session._exec`` when its deadline expires. The s3270 process is killed
+    and the session is dead: the key (or typed text) is **never** resent, and the caller
+    must reconnect and re-read the screen before doing anything else."""
 
 
 class FieldValidationError(ScreenBridgeError):
