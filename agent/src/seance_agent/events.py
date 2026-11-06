@@ -314,7 +314,7 @@ ServerEvent = Annotated[
 server_event_adapter: TypeAdapter[Any] = TypeAdapter(ServerEvent)
 
 # data payload -> event class, so make_event can wrap a payload into its envelope.
-_EVENT_FOR_DATA: dict[type, type[_Envelope]] = {
+_EVENT_FOR_DATA: dict[type, Any] = {
     SessionStateData: SessionStateEvent,
     AckData: AckEvent,
     TurnStartedData: TurnStartedEvent,

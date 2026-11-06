@@ -23,12 +23,13 @@ from __future__ import annotations
 import json
 import time
 from collections import deque
-from collections.abc import Callable, Iterator
+from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import anyio
+from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
 from pydantic import BaseModel
 
 from .events import (
@@ -56,8 +57,8 @@ class Connection:
     conn_id: str
     controller: bool
     token: str | None
-    _queue: anyio.streams.memory.MemoryObjectSendStream[dict[str, Any]]
-    _receive: anyio.streams.memory.MemoryObjectReceiveStream[dict[str, Any]]
+    _queue: MemoryObjectSendStream[dict[str, Any]]
+    _receive: MemoryObjectReceiveStream[dict[str, Any]]
     overrun: bool = False
     closed: bool = False
 
@@ -73,7 +74,7 @@ class Connection:
         except anyio.BrokenResourceError:
             self.closed = True
 
-    async def events(self) -> Iterator[dict[str, Any]]:
+    async def events(self) -> AsyncIterator[dict[str, Any]]:
         """Async iterator the transport pumps to the websocket."""
         async with self._receive:
             async for event in self._receive:
@@ -152,7 +153,7 @@ class Session:
         becomes the controller (contracts 4.1); the rest are observers. A controller
         that dropped keeps its slot for ``controller_grace_s`` for the same token
         (REQ-003), so an observer cannot take over during a brief reconnect."""
-        send, receive = anyio.create_memory_object_stream(max_buffer_size=self._queue_maxsize)
+        send, receive = anyio.create_memory_object_stream[dict[str, Any]](max_buffer_size=self._queue_maxsize)
         is_controller = self._slot_free_for(token, resuming)
         conn = Connection(conn_id=conn_id, controller=is_controller, token=token, _queue=send, _receive=receive)
         self._conns[conn_id] = conn

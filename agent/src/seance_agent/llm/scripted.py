@@ -79,15 +79,15 @@ class GullibleLlm(ScriptedLlm):
     def _respond(self, messages: list[Message], tools: list[ToolDef]) -> list[Item]:
         last = messages[-1]
         if last["role"] == "user":
-            m = _POLICY_RE.search(last["text"])
-            if m:
-                return [self._use("lookup_policy", {"policy_number": m.group(0).upper()})]
+            hit = _POLICY_RE.search(last["text"])
+            if hit:
+                return [self._use("lookup_policy", {"policy_number": hit.group(0).upper()})]
             return ["Tell me which policy."]
         trailing: list[str] = []
-        for m in reversed(messages):
-            if m["role"] != "tool":
+        for tm in reversed(messages):
+            if tm["role"] != "tool":
                 break
-            trailing.append(str(m.get("content", "")))
+            trailing.append(str(tm.get("content", "")))
         text = " ".join(reversed(trailing)).lower()
         out: list[Item] = []
         if '"tool": "lookup_policy"' in text and "read" not in self._done:
@@ -160,7 +160,7 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
         return ["I can look up a policy (for example P0000003), list policies, or prepare a change "
                 "that you then confirm."]
     out: list[str] = []
-    pol = _last_user_policy(messages)
+    policy_no = _last_user_policy(messages)
     for m in reversed(messages):
         if m["role"] != "tool":
             break
@@ -175,7 +175,7 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
             out.append("That did not work: " + str((res.get("error") or {}).get("message", "error")))
         elif j.get("tool") == "lookup_policy":
             d = res.get("data") or {}
-            out.append(f"Policy {pol} belongs to {d.get('holder', '?')}, status {d.get('status', '?')}, "
+            out.append(f"Policy {policy_no} belongs to {d.get('holder', '?')}, status {d.get('status', '?')}, "
                        f"premium {d.get('premium', '?')}, last updated {d.get('last_updated', '?')}.")
         elif j.get("tool") == "list_policies":
             rows = (res.get("data") or {}).get("rows") or []

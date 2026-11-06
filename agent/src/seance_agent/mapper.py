@@ -101,7 +101,7 @@ class EventMapper:
             elif ev.outcome == "ok" and ev.screen_after is not None:
                 self._emit_screen("after", scope, ev.screen_after)
 
-    def _emit_screen(self, phase: str, scope: CallScope | None, screen: Any) -> None:
+    def _emit_screen(self, phase: Literal["before", "after", "snapshot"], scope: CallScope | None, screen: Any) -> None:
         self.last_screen = screen
         if scope is not None:
             scope.cur_screen_id = screen.screen_id

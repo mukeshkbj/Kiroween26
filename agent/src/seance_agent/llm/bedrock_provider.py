@@ -100,9 +100,10 @@ class BedrockProvider:
             resp = await anyio.to_thread.run_sync(lambda: self._client.converse_stream(**kwargs))
             it = iter(resp["stream"])
             while True:
-                event = await anyio.to_thread.run_sync(next, it, _END)
-                if event is _END:
+                nxt = await anyio.to_thread.run_sync(next, it, _END)
+                if nxt is _END:
                     break
+                event: dict[str, Any] = nxt  # type: ignore[assignment]
                 if "contentBlockStart" in event:
                     e = event["contentBlockStart"]
                     tu = e.get("start", {}).get("toolUse")

@@ -30,6 +30,7 @@ dev = [
     "pytest==8.4.2",
     "hypothesis==6.170.14",
     "jsonschema==4.26.0",
+    "mypy==2.4.1",
 ]
 
 [tool.setuptools.packages.find]
@@ -42,3 +43,9 @@ markers = [
     "llm: needs real LLM provider credentials (skipped by default)",
 ]
 addopts = "-ra -m 'not integration and not llm'"
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src"]
+ignore_missing_imports = true
+warn_unused_ignores = true

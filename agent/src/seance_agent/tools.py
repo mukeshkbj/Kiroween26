@@ -227,11 +227,11 @@ class ToolBroker:
             # structured content. Parse it, or a pending commit would read as ok.
             structured = self._parse_text_json(result)
         status = self._status_of(name, kind, structured)
-        code = None
+        env_code: str | None = None
         if status == "error" and structured:
             err = structured.get("error")
-            code = str(err.get("code")) if isinstance(err, dict) and err.get("code") else _DEFAULT_ERROR_CODE
-        return ToolOutcome(tool=name, kind=kind, status=status, error_code=code,
+            env_code = str(err.get("code")) if isinstance(err, dict) and err.get("code") else _DEFAULT_ERROR_CODE
+        return ToolOutcome(tool=name, kind=kind, status=status, error_code=env_code,
                            structured=structured, summary=self._summary(name, status, structured))
 
     @staticmethod
