@@ -11,6 +11,7 @@ and fields 8-9 (cursor row/col, **0-origin**, same base as MoveCursor).
 from __future__ import annotations
 
 import math
+import re
 import os
 import subprocess
 import time
@@ -205,7 +206,28 @@ class Session:
             raise SessionError(f"MoveCursor({row},{col}) failed")
 
     def press_key(self, key: str, timeout_s: float = 5.0) -> None:
-        _, _, ok = self._exec(key)
+        _, _, ok = self._exec(s3270_key_action(key))
         if not ok:
             raise SessionError(f"{key} failed")
         self.wait_unlock(timeout_s)
+
+
+_KEY_RE = re.compile(r"(PF|PA)([1-9]\d?)")
+
+
+def s3270_key_action(key: str) -> str:
+    """The s3270 action for an attention key name (the bridge's ``Key`` values).
+
+    s3270 wants ``PF(3)`` and ``PA(1)``, not the bare ``PF3``; ``Enter`` and ``Clear``
+    are already valid action names. This is an **allowlist**: anything else is
+    refused rather than forwarded, because the string becomes an s3270 command and
+    a key name must never be a way to inject one (found by Agent A, 2026-11-05).
+    """
+    if key in ("Enter", "Clear"):
+        return key
+    m = _KEY_RE.fullmatch(key)
+    if m:
+        kind, n = m.group(1), int(m.group(2))
+        if (kind == "PF" and 1 <= n <= 24) or (kind == "PA" and 1 <= n <= 3):
+            return f"{kind}({n})"
+    raise SessionError(f"unsupported key {key!r}")
