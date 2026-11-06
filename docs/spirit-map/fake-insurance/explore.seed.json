@@ -1,0 +1,255 @@
+{
+  "app_id": "fake-insurance",
+  "budgets": {
+    "max_depth": 8,
+    "max_screens": 50,
+    "max_steps": 300
+  },
+  "declared_read_only": {
+    "n_419888f22d": [
+      "ENTER",
+      "PF3"
+    ],
+    "n_483e5fe116": [
+      "PF3"
+    ],
+    "n_96fa848aaa": [
+      "ENTER",
+      "PF3"
+    ],
+    "n_ba02cc6364": [
+      "ENTER",
+      "PF3"
+    ],
+    "n_c5d11dedae": [
+      "ENTER",
+      "PF3",
+      "PF7",
+      "PF8"
+    ]
+  },
+  "deny": {
+    "field_label_patterns": [
+      "PASS|PWD|PIN|SECRET|TOKEN"
+    ],
+    "keys": [],
+    "nodes": [],
+    "screen_keys": {}
+  },
+  "harvest": false,
+  "probes": [
+    {
+      "field_label": "^OPTION",
+      "name": "menu_policy_enquiry",
+      "value": "1"
+    },
+    {
+      "field_label": "^OPTION",
+      "name": "menu_policy_list",
+      "value": "2"
+    },
+    {
+      "field_label": "^OPTION",
+      "name": "menu_policy_update",
+      "value": "3"
+    },
+    {
+      "field_label": "POLNO|POLICY",
+      "name": "known_policy",
+      "value": "P0000001"
+    },
+    {
+      "field_label": "^STATUS",
+      "name": "new_status",
+      "value": "L"
+    },
+    {
+      "field_label": "^PREMIUM",
+      "name": "new_premium",
+      "value": "300"
+    }
+  ],
+  "start_recipe": [],
+  "volatile": [
+    [
+      22,
+      1,
+      70
+    ],
+    [
+      5,
+      13,
+      20
+    ],
+    [
+      6,
+      13,
+      10
+    ],
+    [
+      7,
+      13,
+      10
+    ],
+    [
+      8,
+      13,
+      10
+    ],
+    [
+      6,
+      1,
+      8
+    ],
+    [
+      7,
+      1,
+      8
+    ],
+    [
+      8,
+      1,
+      8
+    ],
+    [
+      9,
+      1,
+      8
+    ],
+    [
+      10,
+      1,
+      8
+    ],
+    [
+      11,
+      1,
+      8
+    ],
+    [
+      12,
+      1,
+      8
+    ],
+    [
+      13,
+      1,
+      8
+    ],
+    [
+      6,
+      11,
+      20
+    ],
+    [
+      7,
+      11,
+      20
+    ],
+    [
+      8,
+      11,
+      20
+    ],
+    [
+      9,
+      11,
+      20
+    ],
+    [
+      10,
+      11,
+      20
+    ],
+    [
+      11,
+      11,
+      20
+    ],
+    [
+      12,
+      11,
+      20
+    ],
+    [
+      13,
+      11,
+      20
+    ],
+    [
+      6,
+      33,
+      10
+    ],
+    [
+      7,
+      33,
+      10
+    ],
+    [
+      8,
+      33,
+      10
+    ],
+    [
+      9,
+      33,
+      10
+    ],
+    [
+      10,
+      33,
+      10
+    ],
+    [
+      11,
+      33,
+      10
+    ],
+    [
+      12,
+      33,
+      10
+    ],
+    [
+      13,
+      33,
+      10
+    ],
+    [
+      8,
+      13,
+      20
+    ],
+    [
+      3,
+      13,
+      8
+    ],
+    [
+      4,
+      13,
+      20
+    ],
+    [
+      6,
+      13,
+      1
+    ],
+    [
+      6,
+      25,
+      1
+    ],
+    [
+      7,
+      13,
+      7
+    ],
+    [
+      7,
+      25,
+      7
+    ]
+  ]
+}

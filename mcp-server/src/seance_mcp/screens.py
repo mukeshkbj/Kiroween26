@@ -62,6 +62,9 @@ class ScreenOut(BaseModel):
     cursor: tuple[int, int]
     rows: list[str]
     fields: list[FieldOut]
+    # Positions masked out of screen_id (clocks, paint-time dates, output fields), as
+    # (row, col, length) runs, 0-origin. Additive in v1; consumers ignore unknowns.
+    volatile: list[tuple[int, int, int]] = []
 
 
 class PendingOut(BaseModel):
@@ -103,12 +106,30 @@ def fields_out(screen: ScreenModel) -> list[FieldOut]:
     ]
 
 
+def volatile_runs(positions: tuple[int, ...], cols: int = 80) -> list[tuple[int, int, int]]:
+    """Flat masked positions -> (row, col, length) runs, 0-origin.
+
+    A run breaks at a row boundary or a non-consecutive position, so each run stays
+    on one row. Deterministic (sorted, unique)."""
+    runs: list[tuple[int, int, int]] = []
+    for p in sorted(set(positions)):
+        row, col = divmod(p, cols)
+        if runs:
+            r, c, n = runs[-1]
+            if r == row and c + n == col:
+                runs[-1] = (r, c, n + 1)
+                continue
+        runs.append((row, col, 1))
+    return runs
+
+
 def screen_out(screen: ScreenModel) -> ScreenOut:
     return ScreenOut(
         screen_id=screen.screen_id,
         cursor=screen.cursor,
         rows=[sanitize(r) for r in screen.rows],
         fields=fields_out(screen),
+        volatile=volatile_runs(screen.volatile),
     )
 
 

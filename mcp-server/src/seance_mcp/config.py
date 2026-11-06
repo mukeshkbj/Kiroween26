@@ -51,6 +51,7 @@ class Settings(BaseModel):
     host: str = "localhost"
     port: int = 3270
     wait_timeout_ms: int = 5000
+    app: str | None = None  # SEANCE_APP: a fake app name (e.g. "fake-insurance") for a no-container server; None = live bridge
     allow_commit: bool = False
     confirm_mode: ConfirmMode = ConfirmMode.ELICIT
     pending_ttl_s: float = 300.0
@@ -84,6 +85,7 @@ class Settings(BaseModel):
             raise ValueError("SEANCE_ALLOW_UNREVIEWED_TOOLS must be 0 or 1")
         data: dict[str, object] = {"allow_commit": allow == "1", "allow_unreviewed_tools": unreviewed == "1"}
         for key, field in (
+            ("SEANCE_APP", "app"),
             ("GENERATED_TOOLS_PATH", "generated_tools_path"),
             ("TOOL_APPROVALS_PATH", "tool_approvals_path"),
             ("TN3270_HOST", "host"),
