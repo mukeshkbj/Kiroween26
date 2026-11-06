@@ -198,8 +198,8 @@ def rest_examples(audit_entries: list[dict[str, Any]]) -> dict[str, Any]:
             {"app_id": "tk4-builtins", "name": "TK4- built-in screens", "kind": "live",
              "description": "Real MVS 3.8j screens that need no logon.", "reachable": True, "has_map": False,
              "tools": {"business": 0, "approved": 0}, "read_only": True},
-            {"app_id": "seance-insurance", "name": "Seance Insurance (KICKS)", "kind": "live",
-             "description": "The demo business app on the legacy system.", "reachable": False, "has_map": False,
+            {"app_id": "seance-insurance", "name": "Seance Insurance (COBOL on TK4-)", "kind": "live",
+             "description": "Real COBOL on TK4-; the five screens are served by a labelled Python TN3270 stand-in.", "reachable": False, "has_map": False,
              "tools": {"business": 0, "approved": 0}, "read_only": False}]},
         "rest/audit.json": {"entries": audit_entries, "chain_ok": True, "broken_seq": None},
     }
