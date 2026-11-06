@@ -106,3 +106,5 @@ select { max-width: 100%; }
   .planchette { border-color: Highlight; }
   .cell-input { border-bottom-color: Highlight; }
 }
+
+.step-ambiguous { color: var(--warn); border-left: 3px solid var(--warn); padding-left: 0.6ch; margin: 0.3rem 0; }

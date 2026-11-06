@@ -33,6 +33,11 @@ function ResultView({ call }: { call: ToolCallState }) {
         {strings.step.statusLabel}: <span>{call.status}</span>
         {call.errorCode && <span className="step-error"> ({call.errorCode})</span>}
       </p>
+      {call.errorCode === 'ambiguous_ack' && (
+        <p className="step-ambiguous" role="note">
+          {strings.states.ambiguousAckShort}
+        </p>
+      )}
       {call.summary && <p className="step-summary">{call.summary}</p>}
       {resultData != null && (
         <div className="step-data">

@@ -201,6 +201,17 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
     dragging.current = false;
   };
 
+  // Reconnect = a fresh connect_system for the system we had, never a re-send of anything that was in flight.
+  // If the agent itself is unreachable there is nothing to talk to, so reload.
+  const reconnect = () => {
+    if (state.connection !== 'open') {
+      window.location.reload();
+      return;
+    }
+    if (state.session.appId) connectSystem(state.session.appId);
+    else document.querySelector<HTMLButtonElement>('.system-card button:not(:disabled)')?.focus();
+  };
+
   const node = currentNodeId(state);
   const screenName = state.map?.nodes.find((n) => n.id === node)?.name ?? null;
   const busy = isBusy(state);
@@ -333,7 +344,7 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
           </div>
         </header>
 
-        <StateBanner state={state} onReconnect={() => window.location.reload()} />
+        <StateBanner state={state} onReconnect={reconnect} />
         {replayHint && (
           <p className="replay-hint" role="status">
             {strings.shell.replayHint(replayHint)}

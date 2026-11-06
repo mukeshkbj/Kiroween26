@@ -169,6 +169,9 @@ export const strings = {
     unchartedTitle: 'Uncharted screen',
     uncharted: 'This screen is not in the spirit-map. It still renders, but there is no map node for it.',
     resync: 'Reconnected. Some activity was missed, so the log may be incomplete.',
+    ambiguousAck: 'The mainframe did not answer. Nothing was resent. Reconnect and check the screen.',
+    ambiguousAckShort: 'No answer from the mainframe. The key may or may not have run. It was not resent.',
+    reconnectTo: (name: string) => `Reconnect to ${name}`,
   },
 
   step: {
@@ -222,3 +225,13 @@ export const strings = {
     rowCol: (row: number, col: number) => `row ${row}, column ${col}`,
   },
 } as const;
+
+/** Plain-language text for error codes the user can act on. Anything else shows the server's own message as text. */
+const ERROR_TEXT: Record<string, string> = {
+  ambiguous_ack: strings.states.ambiguousAck,
+  live_not_allowed: 'The agent refused to connect to a live system: this setup is not cleared for it. Nothing was sent.',
+  session_busy: 'Another operator is using this session. Nothing was sent.',
+  turn_in_progress: 'The séance is still answering the last question. Wait for it to finish or cancel it.',
+};
+
+export const friendlyError = (code: string, serverMessage: string): string => ERROR_TEXT[code] ?? serverMessage;

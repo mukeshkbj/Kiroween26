@@ -19,17 +19,23 @@ interface Banner {
   action?: { label: string; onClick: () => void };
 }
 
+/**
+ * A tool/protocol error is a banner only while it is the latest thing in the conversation. Older errors stay in the
+ * chat as history but must not hold a banner up forever. `ambiguous_ack` has its own state and is excluded here.
+ */
 function lastToolError(messages: Message[]): Message | null {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const m = messages[i];
-    if (m && m.kind === 'system' && m.level === 'error' && m.code && m.code !== 'resync') return m;
-  }
+  const m = messages[messages.length - 1];
+  if (m && m.kind === 'system' && m.level === 'error' && m.code && m.code !== 'resync' && m.code !== 'ambiguous_ack') return m;
   return null;
 }
-
 export function bannerFor(state: AppState, onReconnect: () => void): Banner | null {
   if (state.connection === 'closed') return { level: 'error', text: strings.states.unreachable, action: { label: strings.states.reconnect, onClick: onReconnect } };
   if (state.connection === 'reconnecting') return { level: 'warn', text: strings.states.reconnecting };
+  // The host went silent and a key may have run. Its own state, ahead of every other: say what is known, what was NOT done.
+  if (state.ambiguousAck) {
+    const label = state.session.appId ? strings.states.reconnectTo(state.session.appId) : strings.states.reconnect;
+    return { level: 'error', text: strings.states.ambiguousAck, action: { label, onClick: onReconnect } };
+  }
   if (state.session.state === 'session_lost')
     return { level: 'error', text: strings.states.sessionLost, action: { label: strings.states.reconnect, onClick: onReconnect } };
   if (state.observerOnly) return { level: 'info', text: strings.states.observerOnly };

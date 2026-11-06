@@ -1,3 +1,4 @@
+import { friendlyError, strings } from '../strings';
 import type {
   AuditEntry,
   AuditResponse,
@@ -130,6 +131,11 @@ export interface AppState {
   /** Set when a gap in `seq` was seen: the store should send hello{resume_from: session.lastSeq}. */
   needsResume: boolean;
   unknownTypes: string[];
+  /**
+   * The host stopped answering and a key MAY have run (contracts 3.5 `ambiguous_ack`). Its own state, never a
+   * generic tool error, and never retried. Cleared when a new session is connecting or connected.
+   */
+  ambiguousAck: boolean;
   ui: UiState;
 }
 
@@ -178,6 +184,7 @@ export function initialState(ui: Partial<UiState> = {}): AppState {
     observerOnly: false,
     needsResume: false,
     unknownTypes: [],
+    ambiguousAck: false,
     ui: { ...defaultUi, ...ui },
   };
 }
@@ -410,6 +417,8 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
       if (d.state !== 'connected' && d.state !== 'connecting' && next.confirmation) {
         next = { ...next, confirmation: closedForDecision(next.confirmation) };
       }
+      // A new session replaces the ambiguous one; until then the warning stays.
+      if ((d.state === 'connecting' || d.state === 'connected') && next.ambiguousAck) next = { ...next, ambiguousAck: false };
       return next;
     }
 
@@ -489,10 +498,13 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
 
     case 'tool_result': {
       const d = ev.data;
-      const call = s.toolCalls[d.tool_call_id];
-      if (!call || call.status !== 'running') return s; // unmatched or duplicate result: never invent a call
+      // Flag the ambiguity even if the call is unknown to us: the safety message matters more than bookkeeping.
+      let s0: AppState = d.error_code === 'ambiguous_ack' && !s.ambiguousAck ? { ...s, ambiguousAck: true } : s;
+      if (d.error_code === 'ambiguous_ack') s0 = addSystem(s0, ev.seq, 'ambiguous', 'error', 'ambiguous_ack', strings.states.ambiguousAck);
+      const call = s0.toolCalls[d.tool_call_id];
+      if (!call || call.status !== 'running') return s0; // unmatched or duplicate result: never invent a call
       return {
-        ...s,
+        ...s0,
         toolCalls: {
           ...s.toolCalls,
           [d.tool_call_id]: {
@@ -602,6 +614,7 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
       const d = ev.data;
       let next = s;
       if (d.code === 'observer_only') next = { ...next, observerOnly: true };
+      if (d.code === 'ambiguous_ack') next = { ...next, ambiguousAck: true };
       if (d.ref !== null) {
         const i = next.messages.findIndex((m) => m.kind === 'user' && m.id === d.ref);
         if (i >= 0) {
@@ -610,7 +623,7 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
           next = { ...next, messages };
         }
       }
-      return addSystem(next, ev.seq, 'error', 'error', d.code, d.message);
+      return addSystem(next, ev.seq, 'error', 'error', d.code, friendlyError(d.code, d.message));
     }
 
     case 'pong':
