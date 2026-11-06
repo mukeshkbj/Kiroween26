@@ -149,7 +149,7 @@ class _Handler(socketserver.BaseRequestHandler):
     def _send_screen(self, conn: _Conn, app: InsuranceApp) -> None:
         screen = app.screen()
         fields = screen.out_fields(app.render_values())
-        stream = ds.build_erase_write(fields, cursor=screen.cursor_offset())
+        stream = ds.build_erase_write(fields, cursor=screen.cursor_offset(), texts=screen.texts())
         conn.send_record(stream)
 
 
