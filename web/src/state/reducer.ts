@@ -114,6 +114,8 @@ export interface AppState {
   screensById: Record<string, ScreenState>;
   /** Screens seen during the current tool call, in order, consecutive duplicates collapsed (map path trail). */
   trail: { toolCallId: string | null; screenIds: string[] };
+  /** The most recent fill_field focus (position only, never a value), for the typing reveal. */
+  lastFill: { seq: number; row: number; col: number; length: number } | null;
   messages: Message[];
   turns: Record<string, TurnState>;
   turnOrder: string[];
@@ -162,6 +164,7 @@ export function initialState(ui: Partial<UiState> = {}): AppState {
     screen: null,
     screensById: {},
     trail: { toolCallId: null, screenIds: [] },
+    lastFill: null,
     messages: [],
     turns: {},
     turnOrder: [],
@@ -520,7 +523,17 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
 
     case 'field_focus': {
       const queue = [...s.focusQueue, { ...ev.data, seq: ev.seq }];
-      return { ...s, focusQueue: queue.length > MAX_FOCUS_QUEUE ? queue.slice(queue.length - MAX_FOCUS_QUEUE) : queue };
+      const d = ev.data;
+      // Remember the latest fill with a position: the typing reveal animates that field when its screen arrives.
+      const lastFill =
+        d.mode === 'fill' && d.row !== null && d.col !== null && d.length !== null
+          ? { seq: ev.seq, row: d.row, col: d.col, length: d.length }
+          : s.lastFill;
+      return {
+        ...s,
+        lastFill,
+        focusQueue: queue.length > MAX_FOCUS_QUEUE ? queue.slice(queue.length - MAX_FOCUS_QUEUE) : queue,
+      };
     }
 
     case 'confirmation_required': {

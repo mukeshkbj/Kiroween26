@@ -44,7 +44,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 ## 6. Accessibility and motion (REQ-018 to REQ-022, REQ-028, REQ-031) (by 22 Nov)
 - [x] 6.1 Landmarks, skip links, shortcuts, splitter keyboard support, tab order test.
 - [x] 6.2 `vitest-axe` over every view and state; keyboard-only flow test.
-- [ ] 6.3 `useReducedMotion` (OS + in-app); verify every animation honours it (a test that fails if an animation runs with reduce on).
+- [x] 6.3 `useReducedMotion` (OS + in-app); verify every animation honours it (a test that fails if an animation runs with reduce on).
 - [ ] 6.4 `prefers-contrast: more`, `forced-colors`, 200%/400% zoom checks.
 - [ ] 6.5 Manual pass recorded in `web/A11Y.md`: NVDA, keyboard-only, zoom, contrast values, reduced motion. Note anything not done. No conformance claim beyond "designed to meet".
 

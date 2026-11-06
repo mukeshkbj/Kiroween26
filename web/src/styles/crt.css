@@ -64,3 +64,9 @@
     animation: none !important;
   }
 }
+
+/* The in-app Reduce motion toggle (data-motion="reduce" on <html>) does the same as the OS setting. */
+[data-motion="reduce"] .term-screen,
+[data-motion="reduce"] .crt-overlay::after {
+  animation: none !important;
+}

@@ -231,6 +231,7 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
           effects={state.ui.effects}
           showAsText={state.ui.screenAsText}
           onFocusConsumed={(seq) => dispatch({ type: 'focus_done', seq })}
+          lastFill={state.lastFill}
         />
       ) : (
         <MapView view={state.map} loading={mapLoading} currentNodeId={node} uncharted={isUncharted(state)} trail={trailNodeIds(state)} />

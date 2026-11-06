@@ -2,6 +2,7 @@ import { Grid } from './Grid';
 import { Oia } from './Oia';
 import { ScreenAsText } from './ScreenAsText';
 import { Planchette } from '../planchette/Planchette';
+import { useRevealedRows, type FillHint } from './useRevealedRows';
 import { strings } from '../strings';
 import type { FieldFocus, SessionStateName } from '../protocol/types';
 import type { ScreenState } from '../state/reducer';
@@ -25,12 +26,15 @@ export interface TerminalPaneProps {
   effects: 'full' | 'low' | 'off';
   showAsText: boolean;
   onFocusConsumed?: (seq: number) => void;
+  /** The latest fill position (no value) for the typing reveal. */
+  lastFill?: FillHint | null;
 }
 
 const blankRows = () => Array.from({ length: 24 }, () => ' '.repeat(80));
 
 export function TerminalPane(p: TerminalPaneProps) {
-  const rows = p.screen?.rows ?? blankRows();
+  const rawRows = p.screen?.rows ?? blankRows();
+  const rows = useRevealedRows(rawRows, p.lastFill ?? null, { reduceMotion: p.reduceMotion, skip: p.focusQueue.length > 0 });
   const fields = p.screen?.fields ?? [];
   const cursor = p.screen?.cursor ?? [0, 0];
   const dormant = p.screen === null;
