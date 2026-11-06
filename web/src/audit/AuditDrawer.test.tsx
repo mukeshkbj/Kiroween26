@@ -115,6 +115,21 @@ describe('AuditDrawer (REQ-015)', () => {
     expect(JSON.parse(onExport.mock.calls[0]?.[0] as string)).toEqual(entries);
   });
 
+  it('export is the whole log, not the filtered view (found by the 8.2 vibe-coding experiment)', async () => {
+    const onExport = vi.fn();
+    const entries = [entry(1, 'ok'), entry(2, 'rejected'), entry(3, 'blocked_read_only')];
+    render(<AuditDrawer {...base} entries={entries} onExport={onExport} />);
+    const user = userEvent.setup();
+    await user.selectOptions(screen.getByLabelText(/Show outcomes/), 'rejected');
+    expect(screen.getByText('1 of 3 entries')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Export JSON' }));
+    expect(JSON.parse(onExport.mock.calls[0]?.[0] as string)).toEqual(entries);
+  });
+
+  it('shows the time of day exactly as the server wrote it, whatever the viewer\'s timezone', () => {
+    expect(shortTime('2026-11-24T10:15:30.123000+00:00')).toBe('10:15:30.123');
+    expect(shortTime('2026-11-24T23:59:59.000000+00:00')).toBe('23:59:59.000'); // no day rollover from a zone shift
+  });
   it('shows chain status honestly: ok / broken at N / unknown', () => {
     const { rerender } = render(<AuditDrawer {...base} entries={[entry(1, 'ok')]} />);
     expect(screen.getByTestId('chain-status')).toHaveTextContent('verified by the server');
