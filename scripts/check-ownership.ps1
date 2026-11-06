@@ -3,8 +3,8 @@
   Merge gate: fail if a branch changed paths its owner may not touch (docs/contracts.md section 1).
 
 .DESCRIPTION
-  Compares the branch against a base with a three-dot diff (changes made on the branch since it
-  last merged the base), so merging main into your branch does not count as your change.
+  Looks at the files touched by the commits unique to the branch (base..branch, merge commits
+  excluded), so merging main into your branch, or your branch into main, never counts as your change.
   Branch -> allowed prefixes:
     agent/a-legacy        legacy/  .kiro/specs/legacy-environment/  docs/handoff/a/
     agent/b-spirit-map    spirit-map/  docs/spirit-map/  .kiro/specs/spirit-map/  docs/handoff/b/
@@ -45,8 +45,12 @@ if ($integrator -contains $Branch) {
   exit 2
 }
 
-$changed = @(git diff --name-only --no-renames "$Base...$Branch")
-if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: git diff $Base...$Branch failed"; exit 2 }
+# Only the files touched by commits the branch itself authored: reachable from the branch but not
+# from the base, merge commits excluded. A three-dot diff is wrong once a branch has been merged
+# into the base and the base merged back (criss-cross history: several merge bases, and the diff
+# then charges the base's own files to the branch).
+$changed = @(git log --no-merges --name-only --no-renames --pretty=format: "$Base..$Branch" | Where-Object { $_ -ne '' } | Sort-Object -Unique)
+if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: git log $Base..$Branch failed"; exit 2 }
 
 $forbiddenAlways = '(^|/)\.env$', '(^|/)\.env\.local$', '(^|/)\.gss-live-ok$', '\.(pem|key|pfx|p12)$', '(^|/)id_(rsa|ed25519)$'
 

@@ -1,0 +1,3563 @@
+{
+  "schema": "gss.capture/1",
+  "app_id": "seance-insurance",
+  "captured_at": "2026-11-06T04:51:47Z",
+  "note": "Seance Insurance stand-in (legacy/standin). Presentation is a Python TN3270 stand-in; business logic is the real COBOL SEANCSVC on TK4-. See legacy/README.md.",
+  "screens": [
+    {
+      "name": "menu",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+        "cursor": [
+          7,
+          15
+        ],
+        "rows": [
+          " SEANCE INSURANCE - MAIN MENU                                                   ",
+          "                                                                                ",
+          "                                                                                ",
+          "   1  POLICY ENQUIRY                                                            ",
+          "   2  POLICY LIST                                                               ",
+          "   3  POLICY UPDATE                                                             ",
+          "                                                                                ",
+          "   OPTION ===>                                                                  ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " ENTER=SELECT  CLEAR=EXIT                                                       "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 573,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - MAIN MENU                                                                                                                                                                                                                      1  POLICY ENQUIRY                                                               2  POLICY LIST                                                                  3  POLICY UPDATE                                                                                                                                                OPTION ===>"
+          },
+          {
+            "index": 1,
+            "row": 7,
+            "col": 15,
+            "length": 1,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "OPTION ===>",
+            "value": " "
+          },
+          {
+            "index": 2,
+            "row": 7,
+            "col": 17,
+            "length": 1183,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "OPTION ===>",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+          },
+          {
+            "index": 3,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "                                                                      "
+          },
+          {
+            "index": 4,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=SELECT  CLEAR=EXIT                                                       "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "enquiry",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+        "cursor": [
+          3,
+          13
+        ],
+        "rows": [
+          " SEANCE INSURANCE - POLICY ENQUIRY                                              ",
+          "                                                                                ",
+          "                                                                                ",
+          " POLNO ===>                                                                     ",
+          "                                                                                ",
+          " HOLDER:                                                                        ",
+          " STATUS:                                                                        ",
+          " PREMIUM:                                                                       ",
+          " UPDATED:                                                                       ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " ENTER=LOOK UP  PF3=BACK                                                        "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 251,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                               POLNO ===> "
+          },
+          {
+            "index": 1,
+            "row": 3,
+            "col": 13,
+            "length": 8,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO ===>",
+            "value": "        "
+          },
+          {
+            "index": 2,
+            "row": 3,
+            "col": 22,
+            "length": 150,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO ===>",
+            "value": "                                                                                                                                           HOLDER:    "
+          },
+          {
+            "index": 3,
+            "row": 5,
+            "col": 13,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "                    "
+          },
+          {
+            "index": 4,
+            "row": 5,
+            "col": 34,
+            "length": 58,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "                                               STATUS:    "
+          },
+          {
+            "index": 5,
+            "row": 6,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS:",
+            "value": "          "
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 24,
+            "length": 68,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS:",
+            "value": "                                                         PREMIUM:   "
+          },
+          {
+            "index": 7,
+            "row": 7,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM:",
+            "value": "          "
+          },
+          {
+            "index": 8,
+            "row": 7,
+            "col": 24,
+            "length": 68,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM:",
+            "value": "                                                         UPDATED:   "
+          },
+          {
+            "index": 9,
+            "row": 8,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "UPDATED:",
+            "value": "          "
+          },
+          {
+            "index": 10,
+            "row": 8,
+            "col": 24,
+            "length": 1096,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "UPDATED:",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+          },
+          {
+            "index": 11,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "                                                                      "
+          },
+          {
+            "index": 12,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=LOOK UP  PF3=BACK                                                        "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "enquiry_result",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+        "cursor": [
+          3,
+          13
+        ],
+        "rows": [
+          " SEANCE INSURANCE - POLICY ENQUIRY                                              ",
+          "                                                                                ",
+          "                                                                                ",
+          " POLNO ===>  P0000003                                                           ",
+          "                                                                                ",
+          " HOLDER:     A. ROSE                                                            ",
+          " STATUS:     ACTIVE                                                             ",
+          " PREMIUM:    250.00                                                             ",
+          " UPDATED:    2026-10-21                                                         ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " ENTER=LOOK UP  PF3=BACK                                                        "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 251,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - POLICY ENQUIRY                                                                                                                                                                                                               POLNO ===> "
+          },
+          {
+            "index": 1,
+            "row": 3,
+            "col": 13,
+            "length": 8,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO ===>",
+            "value": "P0000003"
+          },
+          {
+            "index": 2,
+            "row": 3,
+            "col": 22,
+            "length": 150,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000003",
+            "value": "                                                                                                                                           HOLDER:    "
+          },
+          {
+            "index": 3,
+            "row": 5,
+            "col": 13,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "A. ROSE             "
+          },
+          {
+            "index": 4,
+            "row": 5,
+            "col": 34,
+            "length": 58,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": "                                               STATUS:    "
+          },
+          {
+            "index": 5,
+            "row": 6,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS:",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 24,
+            "length": 68,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                                         PREMIUM:   "
+          },
+          {
+            "index": 7,
+            "row": 7,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM:",
+            "value": "250.00    "
+          },
+          {
+            "index": 8,
+            "row": 7,
+            "col": 24,
+            "length": 68,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "                                                         UPDATED:   "
+          },
+          {
+            "index": 9,
+            "row": 8,
+            "col": 13,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "UPDATED:",
+            "value": "2026-10-21"
+          },
+          {
+            "index": 10,
+            "row": 8,
+            "col": 24,
+            "length": 1096,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "2026-10-21",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+          },
+          {
+            "index": 11,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "                                                                      "
+          },
+          {
+            "index": 12,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=LOOK UP  PF3=BACK                                                        "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "list",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952",
+        "cursor": [
+          3,
+          13
+        ],
+        "rows": [
+          " SEANCE INSURANCE - POLICY LIST                                                 ",
+          "                                                                                ",
+          "                                                                                ",
+          " SELECT ===>                                                                    ",
+          "                                                                                ",
+          " POLNO     HOLDER               STATUS                                          ",
+          " P0000001  J. MARLOWE            ACTIVE                                         ",
+          " P0000002  K. OKAFOR             ACTIVE                                         ",
+          " P0000003  A. ROSE               ACTIVE                                         ",
+          " P0000004  T. NAKAMURA           LAPSED                                         ",
+          " P0000005  S. LINDQVIST          ACTIVE                                         ",
+          " P0000006  M. DUBOIS             CANCELLED                                      ",
+          " P0000007  R. PATEL              ACTIVE                                         ",
+          " P0000008  H. KOWALSKI           LAPSED                                         ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " PF7=UP  PF8=DOWN  PF3=BACK                                                     "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 251,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - POLICY LIST                                                                                                                                                                                                                  SELECT ===>"
+          },
+          {
+            "index": 1,
+            "row": 3,
+            "col": 13,
+            "length": 2,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "SELECT ===>",
+            "value": "  "
+          },
+          {
+            "index": 2,
+            "row": 3,
+            "col": 16,
+            "length": 224,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "SELECT ===>",
+            "value": "                                                                                                                                                 POLNO     HOLDER               STATUS                                          "
+          },
+          {
+            "index": 3,
+            "row": 6,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000001"
+          },
+          {
+            "index": 4,
+            "row": 6,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000001",
+            "value": ""
+          },
+          {
+            "index": 5,
+            "row": 6,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000001",
+            "value": "J. MARLOWE          "
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "J. MARLOWE",
+            "value": ""
+          },
+          {
+            "index": 7,
+            "row": 6,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "J. MARLOWE",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 8,
+            "row": 6,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 9,
+            "row": 7,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000002"
+          },
+          {
+            "index": 10,
+            "row": 7,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000002",
+            "value": ""
+          },
+          {
+            "index": 11,
+            "row": 7,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000002",
+            "value": "K. OKAFOR           "
+          },
+          {
+            "index": 12,
+            "row": 7,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "K. OKAFOR",
+            "value": ""
+          },
+          {
+            "index": 13,
+            "row": 7,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "K. OKAFOR",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 14,
+            "row": 7,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 15,
+            "row": 8,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000003"
+          },
+          {
+            "index": 16,
+            "row": 8,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000003",
+            "value": ""
+          },
+          {
+            "index": 17,
+            "row": 8,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000003",
+            "value": "A. ROSE             "
+          },
+          {
+            "index": 18,
+            "row": 8,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": ""
+          },
+          {
+            "index": 19,
+            "row": 8,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 20,
+            "row": 8,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 21,
+            "row": 9,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000004"
+          },
+          {
+            "index": 22,
+            "row": 9,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000004",
+            "value": ""
+          },
+          {
+            "index": 23,
+            "row": 9,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000004",
+            "value": "T. NAKAMURA         "
+          },
+          {
+            "index": 24,
+            "row": 9,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "T. NAKAMURA",
+            "value": ""
+          },
+          {
+            "index": 25,
+            "row": 9,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "T. NAKAMURA",
+            "value": "LAPSED    "
+          },
+          {
+            "index": 26,
+            "row": 9,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "LAPSED",
+            "value": "                                    "
+          },
+          {
+            "index": 27,
+            "row": 10,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000005"
+          },
+          {
+            "index": 28,
+            "row": 10,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000005",
+            "value": ""
+          },
+          {
+            "index": 29,
+            "row": 10,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000005",
+            "value": "S. LINDQVIST        "
+          },
+          {
+            "index": 30,
+            "row": 10,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "S. LINDQVIST",
+            "value": ""
+          },
+          {
+            "index": 31,
+            "row": 10,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "S. LINDQVIST",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 32,
+            "row": 10,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 33,
+            "row": 11,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000006"
+          },
+          {
+            "index": 34,
+            "row": 11,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000006",
+            "value": ""
+          },
+          {
+            "index": 35,
+            "row": 11,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000006",
+            "value": "M. DUBOIS           "
+          },
+          {
+            "index": 36,
+            "row": 11,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "M. DUBOIS",
+            "value": ""
+          },
+          {
+            "index": 37,
+            "row": 11,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "M. DUBOIS",
+            "value": "CANCELLED "
+          },
+          {
+            "index": 38,
+            "row": 11,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "CANCELLED",
+            "value": "                                    "
+          },
+          {
+            "index": 39,
+            "row": 12,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000007"
+          },
+          {
+            "index": 40,
+            "row": 12,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000007",
+            "value": ""
+          },
+          {
+            "index": 41,
+            "row": 12,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000007",
+            "value": "R. PATEL            "
+          },
+          {
+            "index": 42,
+            "row": 12,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "R. PATEL",
+            "value": ""
+          },
+          {
+            "index": 43,
+            "row": 12,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "R. PATEL",
+            "value": "ACTIVE    "
+          },
+          {
+            "index": 44,
+            "row": 12,
+            "col": 44,
+            "length": 36,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "ACTIVE",
+            "value": "                                    "
+          },
+          {
+            "index": 45,
+            "row": 13,
+            "col": 1,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "P0000008"
+          },
+          {
+            "index": 46,
+            "row": 13,
+            "col": 10,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000008",
+            "value": ""
+          },
+          {
+            "index": 47,
+            "row": 13,
+            "col": 11,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000008",
+            "value": "H. KOWALSKI         "
+          },
+          {
+            "index": 48,
+            "row": 13,
+            "col": 32,
+            "length": 0,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "H. KOWALSKI",
+            "value": ""
+          },
+          {
+            "index": 49,
+            "row": 13,
+            "col": 33,
+            "length": 10,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "H. KOWALSKI",
+            "value": "LAPSED    "
+          },
+          {
+            "index": 50,
+            "row": 13,
+            "col": 44,
+            "length": 676,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "LAPSED",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
+          },
+          {
+            "index": 51,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "                                                                      "
+          },
+          {
+            "index": 52,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         PF7=UP  PF8=DOWN  PF3=BACK                                                     "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "update",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a",
+        "cursor": [
+          3,
+          13
+        ],
+        "rows": [
+          " SEANCE INSURANCE - POLICY UPDATE                                               ",
+          "                                                                                ",
+          "                                                                                ",
+          " POLNO ===>                                                                     ",
+          "                                                                                ",
+          " STATUS (A/L/C) ===>                                                            ",
+          " PREMIUM ===>                                                                   ",
+          "                                                                                ",
+          " HOLDER:                                                                        ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " ENTER=REVIEW CHANGE  PF3=BACK                                                  "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 251,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - POLICY UPDATE                                                                                                                                                                                                                POLNO ===> "
+          },
+          {
+            "index": 1,
+            "row": 3,
+            "col": 13,
+            "length": 8,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO ===>",
+            "value": "        "
+          },
+          {
+            "index": 2,
+            "row": 3,
+            "col": 22,
+            "length": 159,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO ===>",
+            "value": "                                                                                                                                           STATUS (A/L/C) ===> "
+          },
+          {
+            "index": 3,
+            "row": 5,
+            "col": 22,
+            "length": 1,
+            "protected": false,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS (A/L/C) ===>",
+            "value": " "
+          },
+          {
+            "index": 4,
+            "row": 5,
+            "col": 24,
+            "length": 77,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS (A/L/C) ===>",
+            "value": "                                                         PREMIUM ===>        "
+          },
+          {
+            "index": 5,
+            "row": 6,
+            "col": 22,
+            "length": 7,
+            "protected": false,
+            "numeric": true,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM ===>",
+            "value": "       "
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 30,
+            "length": 142,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM ===>",
+            "value": "                                                                                                                                   HOLDER:    "
+          },
+          {
+            "index": 7,
+            "row": 8,
+            "col": 13,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "                    "
+          },
+          {
+            "index": 8,
+            "row": 8,
+            "col": 34,
+            "length": 1086,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+          },
+          {
+            "index": 9,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "                                                                      "
+          },
+          {
+            "index": 10,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "         ENTER=REVIEW CHANGE  PF3=BACK                                                  "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "confirm",
+      "screen": {
+        "trust": "untrusted-screen-data",
+        "screen_id": "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
+        "cursor": [
+          0,
+          0
+        ],
+        "rows": [
+          " SEANCE INSURANCE - CONFIRM UPDATE                                              ",
+          "                                                                                ",
+          "                                                                                ",
+          " POLNO:      P0000003                                                           ",
+          " HOLDER:     A. ROSE                                                            ",
+          "             OLD         NEW                                                    ",
+          " STATUS:     A           L                                                      ",
+          " PREMIUM:    250.00      250.00                                                 ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          "                                                                                ",
+          " ENTER=CONFIRM  PF3=CANCEL                                                      ",
+          " ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
+        ],
+        "fields": [
+          {
+            "index": 0,
+            "row": 0,
+            "col": 1,
+            "length": 251,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "SEANCE INSURANCE - CONFIRM UPDATE                                                                                                                                                                                                               POLNO:     "
+          },
+          {
+            "index": 1,
+            "row": 3,
+            "col": 13,
+            "length": 8,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "POLNO:",
+            "value": "P0000003"
+          },
+          {
+            "index": 2,
+            "row": 3,
+            "col": 22,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "P0000003",
+            "value": "                                                           HOLDER:    "
+          },
+          {
+            "index": 3,
+            "row": 4,
+            "col": 13,
+            "length": 20,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "HOLDER:",
+            "value": "A. ROSE             "
+          },
+          {
+            "index": 4,
+            "row": 4,
+            "col": 34,
+            "length": 138,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A. ROSE",
+            "value": "                                                           OLD         NEW                                                     STATUS:    "
+          },
+          {
+            "index": 5,
+            "row": 6,
+            "col": 13,
+            "length": 1,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "STATUS:",
+            "value": "A"
+          },
+          {
+            "index": 6,
+            "row": 6,
+            "col": 15,
+            "length": 9,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A",
+            "value": "         "
+          },
+          {
+            "index": 7,
+            "row": 6,
+            "col": 25,
+            "length": 1,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "A",
+            "value": "L"
+          },
+          {
+            "index": 8,
+            "row": 6,
+            "col": 27,
+            "length": 65,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "L",
+            "value": "                                                      PREMIUM:   "
+          },
+          {
+            "index": 9,
+            "row": 7,
+            "col": 13,
+            "length": 7,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PREMIUM:",
+            "value": "250.00 "
+          },
+          {
+            "index": 10,
+            "row": 7,
+            "col": 21,
+            "length": 3,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "   "
+          },
+          {
+            "index": 11,
+            "row": 7,
+            "col": 25,
+            "length": 7,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "250.00 "
+          },
+          {
+            "index": 12,
+            "row": 7,
+            "col": 33,
+            "length": 1167,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "250.00",
+            "value": "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+          },
+          {
+            "index": 13,
+            "row": 22,
+            "col": 1,
+            "length": 70,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "",
+            "value": "ENTER=CONFIRM  PF3=CANCEL                                             "
+          },
+          {
+            "index": 14,
+            "row": 22,
+            "col": 72,
+            "length": 88,
+            "protected": true,
+            "numeric": false,
+            "hidden": false,
+            "intensified": false,
+            "label": "PF3=CANCEL",
+            "value": "         ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
+          }
+        ],
+        "volatile": [
+          [
+            3,
+            13,
+            8
+          ],
+          [
+            4,
+            13,
+            20
+          ],
+          [
+            5,
+            13,
+            20
+          ],
+          [
+            6,
+            1,
+            8
+          ],
+          [
+            6,
+            11,
+            20
+          ],
+          [
+            6,
+            33,
+            10
+          ],
+          [
+            7,
+            1,
+            8
+          ],
+          [
+            7,
+            11,
+            21
+          ],
+          [
+            7,
+            33,
+            10
+          ],
+          [
+            8,
+            1,
+            8
+          ],
+          [
+            8,
+            11,
+            32
+          ],
+          [
+            9,
+            1,
+            8
+          ],
+          [
+            9,
+            11,
+            20
+          ],
+          [
+            9,
+            33,
+            10
+          ],
+          [
+            10,
+            1,
+            8
+          ],
+          [
+            10,
+            11,
+            20
+          ],
+          [
+            10,
+            33,
+            10
+          ],
+          [
+            11,
+            1,
+            8
+          ],
+          [
+            11,
+            11,
+            20
+          ],
+          [
+            11,
+            33,
+            10
+          ],
+          [
+            12,
+            1,
+            8
+          ],
+          [
+            12,
+            11,
+            20
+          ],
+          [
+            12,
+            33,
+            10
+          ],
+          [
+            13,
+            1,
+            8
+          ],
+          [
+            13,
+            11,
+            20
+          ],
+          [
+            13,
+            33,
+            10
+          ],
+          [
+            22,
+            1,
+            70
+          ]
+        ]
+      },
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "from": "menu",
+      "key": "ENTER",
+      "fills": [
+        {
+          "field": "OPTION",
+          "value": "1"
+        }
+      ],
+      "to": "enquiry"
+    },
+    {
+      "from": "menu",
+      "key": "ENTER",
+      "fills": [
+        {
+          "field": "OPTION",
+          "value": "2"
+        }
+      ],
+      "to": "list"
+    },
+    {
+      "from": "menu",
+      "key": "ENTER",
+      "fills": [
+        {
+          "field": "OPTION",
+          "value": "3"
+        }
+      ],
+      "to": "update"
+    },
+    {
+      "from": "menu",
+      "key": "CLEAR",
+      "fills": [],
+      "to": "menu"
+    },
+    {
+      "from": "enquiry",
+      "key": "ENTER",
+      "fills": [
+        {
+          "field": "POLNO",
+          "value": "P0000003"
+        }
+      ],
+      "to": "enquiry_result"
+    },
+    {
+      "from": "enquiry",
+      "key": "PF3",
+      "fills": [],
+      "to": "menu"
+    },
+    {
+      "from": "list",
+      "key": "PF3",
+      "fills": [],
+      "to": "menu"
+    },
+    {
+      "from": "update",
+      "key": "ENTER",
+      "fills": [
+        {
+          "field": "POLNO",
+          "value": "P0000003"
+        }
+      ],
+      "to": "confirm"
+    },
+    {
+      "from": "update",
+      "key": "PF3",
+      "fills": [],
+      "to": "menu"
+    },
+    {
+      "from": "confirm",
+      "key": "PF3",
+      "fills": [],
+      "to": "menu"
+    }
+  ]
+}

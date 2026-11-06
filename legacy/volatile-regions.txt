@@ -1,0 +1,20 @@
+# VOLATILE_REGIONS for the Seance Insurance demo app (contracts section 10.4).
+#
+# Format: row,col,len;row,col,len;...  (0-origin). These are the protected
+# output/message spans whose text changes with the data, so they are excluded
+# from screen_id (otherwise every policy would look like a different screen).
+#
+# This string MUST equal DEMO_VOLATILE_REGIONS in mcp-server/src/seance_mcp/fake.py
+# and seance_standin.screens.VOLATILE_REGIONS. Verified equal on 2026-11-05.
+# If a field moves, Agent A files a request so the contract, the fake and this
+# file change together.
+#
+# Spans, by screen:
+#   all screens : message line           (22,1,70)
+#   enquiry     : holder/status/prem/upd (5,13,20)(6,13,10)(7,13,10)(8,13,10)
+#   list        : 8 rows polno/holder/st (6..13,1,8)(6..13,11,20)(6..13,33,10)
+#   update      : holder                 (8,13,20)
+#   confirm     : polno/holder, old/new  (3,13,8)(4,13,20)(6,13,1)(6,25,1)
+#                 status & premium       (7,13,7)(7,25,7)
+
+22,1,70;5,13,20;6,13,10;7,13,10;8,13,10;6,1,8;7,1,8;8,1,8;9,1,8;10,1,8;11,1,8;12,1,8;13,1,8;6,11,20;7,11,20;8,11,20;9,11,20;10,11,20;11,11,20;12,11,20;13,11,20;6,33,10;7,33,10;8,33,10;9,33,10;10,33,10;11,33,10;12,33,10;13,33,10;8,13,20;3,13,8;4,13,20;6,13,1;6,25,1;7,13,7;7,25,7

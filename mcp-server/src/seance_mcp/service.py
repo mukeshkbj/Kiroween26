@@ -14,6 +14,7 @@ from collections.abc import AsyncIterator, Callable
 import anyio
 
 from seance_bridge import (
+    AmbiguousAckError,
     FieldValidationError,
     Key,
     KeyboardTimeoutError,
@@ -107,6 +108,14 @@ class SeanceService:
         return s
 
     def _bridge_error(self, tool: str, exc: ScreenBridgeError, **audit_kw: object) -> GateError:
+        if isinstance(exc, AmbiguousAckError):
+            self.gate.mark_ambiguous()  # also drops any pending action
+            self.audit.append(tool, "ambiguous_ack", **audit_kw)  # type: ignore[arg-type]
+            return GateError(
+                "ambiguous_ack",
+                "the host stopped answering, so the last command may or may not have run. The session was "
+                "closed and NOTHING was resent. Call connect, then read_screen, before anything else.",
+            )
         if isinstance(exc, KeyboardTimeoutError):
             self.gate.mark_ambiguous()
             self.audit.append(tool, "ambiguous_ack", **audit_kw)  # type: ignore[arg-type]
