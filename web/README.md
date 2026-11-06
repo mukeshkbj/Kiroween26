@@ -43,10 +43,13 @@ of them, or a reducer that cannot play any transcript, fails the suite (REQ-030)
 
 ## Real-browser screenshots and checks
 
-```n# terminal 1: npm run dev:mock
-# terminal 2 (first time: npx playwright install chromium):
+```
+# terminal 1
+npm run dev:mock
+# terminal 2 (first time: npx playwright install chromium)
 npm run shots
-```n
+```
+
 Writes PNGs and `browser-checks.json` to `docs/handoff/c/shots/` and runs axe-core (with colour contrast) in Chromium.
 It plays recordings only; it never touches a backend or the live container.
 
