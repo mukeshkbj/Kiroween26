@@ -40,6 +40,7 @@ export function TerminalPane(p: TerminalPaneProps) {
   const dormant = p.screen === null;
 
   return (
+    <div className="term-frame">
     <div className="term-screen" data-effects={p.effects} data-dormant={dormant ? 'true' : 'false'}>
       <div className="term-stage">
         <Grid rows={rows} fields={fields} cursor={cursor} screenName={p.screenName} />
@@ -58,6 +59,7 @@ export function TerminalPane(p: TerminalPaneProps) {
       {p.showAsText && (
         <ScreenAsText rows={rows} fields={fields} cursor={cursor} screenName={p.screenName} />
       )}
+    </div>
     </div>
   );
 }

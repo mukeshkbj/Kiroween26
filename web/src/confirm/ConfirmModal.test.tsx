@@ -128,7 +128,7 @@ describe('ConfirmModal safety (REQ-017, REQ-029)', () => {
     const h = setup({}, conf({ receivedAt: 10_000, expiresInS: 60 }));
     h.clock.t = 10_000 + 20_000;
     h.rerender();
-    expect(screen.getByText(/40 s left/)).toBeInTheDocument();
+    expect(screen.getByText(/Time left: 40 s/)).toBeInTheDocument();
   });
 
   it('Approve stays disabled when no screen with the gate screen_id is known', () => {

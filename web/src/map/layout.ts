@@ -67,7 +67,7 @@ export function frontierLabel(f: Pick<MapFrontier, 'reason'>): string {
 
 export function layoutMap(view: SpiritMapView): Layout {
   const g = new dagre.graphlib.Graph({ multigraph: true });
-  g.setGraph({ rankdir: 'LR', nodesep: 36, ranksep: 90, marginx: 24, marginy: 24, ranker: 'network-simplex' });
+  g.setGraph({ rankdir: 'TB', nodesep: 44, ranksep: 64, marginx: 24, marginy: 24, ranker: 'network-simplex' });
   g.setDefaultEdgeLabel(() => ({}));
 
   const nodes = [...view.nodes].sort(byId);

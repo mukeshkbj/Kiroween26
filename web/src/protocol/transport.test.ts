@@ -350,6 +350,26 @@ describe('ReplayTransport (REQ-023)', () => {
     expect(r.rec.unknown).toEqual([]);
   });
 
+  it('accepts an action that comes a moment early and uses it when the script gets there', () => {
+    const r = replay('lookup');
+    r.t.start();
+    // the user clicks before the first recorded event (80 ms) has even played
+    expect(r.t.send({ id: 'u_01', type: 'connect_system', app_id: 'fake-insurance' })).toBe(true);
+    r.clock.advance(100_000);
+    // the script did not stall waiting for a click that already happened
+    expect(r.t.expecting()?.type).toBe('user_message');
+    expect(r.rec.events.some((e) => e.type === 'session_state' && e.data.state === 'connected')).toBe(true);
+    expect(r.t.rejected).toHaveLength(0);
+  });
+
+  it('an early action of the wrong kind, or a second early action, is still refused', () => {
+    const r = replay('lookup');
+    r.t.start();
+    expect(r.t.send({ id: 'x', type: 'user_message', text: 'too early and out of order' })).toBe(false);
+    expect(r.t.send({ id: 'a', type: 'connect_system', app_id: 'fake-insurance' })).toBe(true);
+    expect(r.t.send({ id: 'b', type: 'connect_system', app_id: 'fake-insurance' })).toBe(false);
+  });
+
   it('rejects messages the script is not waiting for', () => {
     const r = replay('lookup');
     r.t.start();

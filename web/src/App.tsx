@@ -43,11 +43,15 @@ function MockApp() {
   useEffect(() => {
     let live = true;
     setTransport(null);
+    let created: ReplayTransport | null = null;
     loadScenario(scenario).then((lines) => {
-      if (live) setTransport(new ReplayTransport({ lines, speed: config.replaySpeed }));
+      if (!live) return;
+      created = new ReplayTransport({ lines, speed: config.replaySpeed });
+      setTransport(created);
     });
     return () => {
       live = false;
+      created?.close();
     };
   }, [scenario]);
 
@@ -68,7 +72,10 @@ function MockApp() {
 
 function LiveApp() {
   const rest = useMemo(() => new RestClient(config.agentUrl), []);
-  const transport = useMemo<Transport>(() => {
+  const [transport, setTransport] = useState<Transport | null>(null);
+
+  // Created in an effect and closed by its own cleanup, so StrictMode's mount/unmount/mount gets a fresh one.
+  useEffect(() => {
     let lastSeq = 0;
     let sessionId: string | null = null;
     const t = new WebSocketTransport({
@@ -84,8 +91,11 @@ function LiveApp() {
       onInvalid: () => {},
       onStatus: () => {},
     });
-    return t;
+    setTransport(t);
+    return () => t.close();
   }, []);
+
+  if (!transport) return <p>{strings.dormant}</p>;
   return (
     <AnnouncerProvider>
       <StoreProvider transport={transport}>

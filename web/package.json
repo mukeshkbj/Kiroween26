@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "vite --mode mock --strictPort",
+    "shots": "node e2e/shots.mjs",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest --run"
@@ -25,6 +27,7 @@
     "axe-core": "4.14.0",
     "fast-check": "4.10.2",
     "jsdom": "30.1.3",
+    "playwright": "1.65.0",
     "typescript": "7.0.2",
     "vite": "8.3.5",
     "vitest": "5.1.0",

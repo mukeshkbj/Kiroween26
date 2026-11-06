@@ -112,7 +112,7 @@ export const strings = {
     fieldsLabel: 'Fields on this screen',
     noFields: 'No editable fields on this screen. Review the screen above.',
     hiddenValue: 'hidden',
-    timeLeft: (s: number) => `${Math.ceil(s)} s left`,
+    timeLeft: (s: number) => `Time left: ${Math.ceil(s)} s`,
     expiresLabel: 'Time left',
     approve: 'Approve',
     approveWait: (ms: number) => `Approve (${Math.ceil(ms / 100) / 10}s)`,

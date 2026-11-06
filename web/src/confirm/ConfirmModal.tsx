@@ -160,7 +160,7 @@ export function ConfirmModal(p: ConfirmModalProps) {
 
           {active && (
             <p className="confirm-time" data-seconds={Math.ceil(left)}>
-              {strings.confirm.expiresLabel}: {strings.confirm.timeLeft(left)}
+              {strings.confirm.timeLeft(left)}
             </p>
           )}
         </div>

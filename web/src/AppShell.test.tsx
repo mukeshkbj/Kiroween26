@@ -229,7 +229,9 @@ describe('keyboard-only flow: connect -> ask -> confirm -> deny (REQ-028)', () =
     await user.keyboard('{Escape}');
     h.clock.advance(1_000_000);
     await waitFor(() => expect(screen.getByRole('status', { name: '' })).toBeDefined());
-    await waitFor(() => expect(screen.getByText(/Denied\. Nothing was changed/)).toBeInTheDocument());
+    await waitFor(() => expect(within(screen.getByRole('alertdialog')).getByText(/Denied\. Nothing was changed/)).toBeInTheDocument());
+    // the same outcome is also announced to screen readers through the polite live region
+    await waitFor(() => expect(screen.getByTestId('live-polite')).toHaveTextContent(/Denied\. Nothing was changed/));
     await user.click(screen.getByRole('button', { name: 'Dismiss' }));
     expect(screen.queryByRole('alertdialog')).toBeNull();
     expect(document.querySelector('.app')?.hasAttribute('inert')).toBe(false);

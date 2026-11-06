@@ -4,7 +4,7 @@
   display: grid;
   grid-template-rows: repeat(var(--rows, 24), var(--line));
   width: calc(var(--cols, 80) * var(--cell-w));
-  font-size: var(--font);
+  font-size: inherit; /* set on .term-screen so the grid, planchette and status line share one em */
   line-height: var(--line);
   white-space: pre;
   tab-size: 1;
@@ -59,7 +59,7 @@
   height: var(--line);
   padding: 0 0.5ch;
   font-family: var(--mono);
-  font-size: calc(var(--font) * 0.85);
+  font-size: inherit;
   color: var(--phosphor-dim);
   border-top: 1px solid var(--phosphor-dim);
 }
@@ -89,12 +89,9 @@
 }
 .sat-line { margin: 0; white-space: pre-wrap; }
 
-/* Container scaling: shrink the font to fit the pane, but not below readability; then scroll. */
-@container (max-width: 80ch) {
-  .term-grid { font-size: clamp(0.7rem, 2.2cqw, 1rem); }
-}
 
-/* Planchette: a lens/ring with a transparent centre, positioned in grid cell units. */
+
+/* Planchette: a lens with a transparent centre, positioned in grid cell units. It never fills, so the text stays readable. */
 .term-stage {
   position: relative;
 }
@@ -108,29 +105,88 @@
   pointer-events: none;
   z-index: 3;
   border: 2px solid var(--phosphor-bright);
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(201, 255, 217, 0.6), inset 0 0 6px rgba(201, 255, 217, 0.3);
-  background: transparent; /* never covers the text underneath */
+  border-radius: 50%;
+  box-shadow:
+    0 0 10px rgba(201, 255, 217, 0.75),
+    0 0 28px rgba(61, 255, 122, 0.45),
+    inset 0 0 10px rgba(201, 255, 217, 0.35);
+  background: transparent;
 }
 
 .planchette-sweep { border-style: solid; }
-.planchette-settle { border-radius: 50%; animation: planchette-ring 600ms ease-out; animation-play-state: var(--sweep-play, running); }
-.planchette-press { border-style: dashed; }
+.planchette-settle { animation: planchette-ring 700ms ease-out; animation-play-state: var(--sweep-play, running); }
+.planchette-press { border-style: dashed; border-radius: 999px; }
+
+/* A read with no position sweeps the whole screen: a scan band, not a box over the text. */
+.planchette[data-shape="screen"] {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.planchette-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(2 * var(--line));
+  background: linear-gradient(to bottom, rgba(61, 255, 122, 0.04), rgba(61, 255, 122, 0.16) 12%, transparent);
+  border-top: 1px solid var(--phosphor-bright);
+  box-shadow: 0 -2px 10px rgba(201, 255, 217, 0.45);
+  animation: planchette-scan 1.3s ease-in-out infinite alternate;
+}
 
 .planchette[data-reduce="true"] { animation: none; }
 
+/* The label has its own backing so it stays readable over any text; it sits below the lens, never on the field. */
 .planchette-label {
   position: absolute;
-  left: 0;
-  top: -1.2em;
-  font-size: 0.7rem;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 0.3em;
+  padding: 0 0.6ch;
+  font-size: 0.72em;
   color: var(--phosphor-bright);
+  background: var(--bg);
+  border: 1px solid var(--phosphor-dim);
+  border-radius: 3px;
   white-space: nowrap;
+  text-shadow: none;
 }
+.planchette[data-shape="key"] .planchette-label { top: auto; bottom: 100%; margin: 0 0 0.3em; }
+.planchette[data-shape="screen"] .planchette-label { top: 50%; left: auto; right: 1ch; transform: translateY(-50%); margin: 0; }
 
 @keyframes planchette-ring {
-  from { box-shadow: 0 0 0 0 rgba(201, 255, 217, 0.5); }
-  to { box-shadow: 0 0 0 8px rgba(201, 255, 217, 0); }
+  from { box-shadow: 0 0 0 0 rgba(201, 255, 217, 0.6), 0 0 10px rgba(201, 255, 217, 0.75); }
+  to { box-shadow: 0 0 0 12px rgba(201, 255, 217, 0), 0 0 10px rgba(201, 255, 217, 0.75); }
+}
+
+@keyframes planchette-scan {
+  from { top: 0; }
+  to { top: calc(100% - 2 * var(--line)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planchette-settle { animation: none; }
+  .planchette-scan { animation: none; top: calc(50% - var(--line)); }
+}
+
+/* The terminal as an object: a bezel with an inner glow, and font size that follows the pane width. */
+.term-frame {
+  container-type: inline-size;
+}
+.term-screen {
+  font-size: clamp(0.8rem, calc(100cqw / 50), 1.45rem);
+  padding: 0.6em 0.9em 0.4em;
+  border: 1px solid var(--phosphor-dim);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 0 48px rgba(61, 255, 122, 0.1),
+    0 0 26px rgba(61, 255, 122, 0.12);
+}
+.term-oia > * { font-size: 0.85em; }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -268,6 +324,11 @@
 .map-keys { margin: 0; padding-left: 1.2rem; }
 
 .chat-list { list-style: none; margin: 0; padding: 0; }
+
+[data-motion="reduce"] .planchette-scan {
+  animation: none;
+  top: calc(50% - var(--line));
+}
 
 [data-motion="reduce"] .planchette-settle {
   animation: none;

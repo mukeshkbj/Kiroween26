@@ -59,8 +59,7 @@ export function SpiritMap({ view, currentNodeId, trail, selectedId, onSelect, la
   return (
     <svg
       className="spirit-map"
-      width={l.width}
-      height={l.height}
+      style={{ width: '100%', maxWidth: l.width, height: 'auto' }}
       viewBox={`0 0 ${l.width} ${l.height}`}
       role="group"
       aria-label={strings.map.graphLabel}
@@ -74,8 +73,10 @@ export function SpiritMap({ view, currentNodeId, trail, selectedId, onSelect, la
       {l.edges.map((e) => (
         <g key={e.id} className={`map-edge ${e.readOnly ? 'edge-solid' : 'edge-dashed'}${trailEdges.has(e.id) ? ' edge-trail' : ''}`} data-edge={e.id}>
           <path d={path(e.points)} fill="none" strokeDasharray={e.readOnly ? undefined : '6 4'} markerEnd="url(#arrow)" />
+          {/* The visible label is just the key (the full meaning is in the table and the tooltip), so edges do not pile up. */}
+          <title>{e.label}</title>
           <text x={e.labelAt.x} y={e.labelAt.y - 4} textAnchor="middle" className="edge-label">
-            {e.readOnly ? e.label : `\u{1F512} ${e.label} (${strings.map.needsConfirmation})`}
+            {e.readOnly ? e.key : `\u{1F512} ${e.key} (${strings.map.needsConfirmation})`}
           </text>
         </g>
       ))}
@@ -100,7 +101,6 @@ export function SpiritMap({ view, currentNodeId, trail, selectedId, onSelect, la
             tabIndex={0}
             role="button"
             aria-pressed={sel}
-            aria-label={strings.map.nodeLabel(n.node.name, n.node.kind, here, n.node.needs_review)}
             onClick={() => onSelect(n.id)}
             onKeyDown={(e) => onKey(e, n.id)}
           >

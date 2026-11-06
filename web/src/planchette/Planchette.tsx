@@ -111,11 +111,19 @@ export function Planchette({ queue, reduceMotion, onConsumed }: PlanchetteProps)
       aria-hidden="true"
       style={{
         // size in cell units; the lens widens for a field sweep, is a ring for a settle, a pill on the key bar
-        ['--p-w' as string]: shape === 'field' ? rect.w : shape === 'key' ? rect.w : COLS,
-        ['--p-h' as string]: shape === 'screen' ? ROWS : 1,
+        // a lens a little wider and taller than the field so it rings the text instead of sitting on it
+        ['--p-w' as string]: shape === 'screen' ? COLS : Math.max(4, rect.w + 2),
+        ['--p-h' as string]: shape === 'screen' ? ROWS : 1.9,
       }}
     >
-      <span className="planchette-label">{placed.label}</span>
+      {shape === 'screen' ? (
+        // the label travels inside the scan band so it never sits on the screen's title or fields
+        <span className="planchette-scan">
+          <span className="planchette-label">{placed.label}</span>
+        </span>
+      ) : (
+        <span className="planchette-label">{placed.label}</span>
+      )}
     </div>
   );
 }

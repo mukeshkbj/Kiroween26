@@ -55,9 +55,11 @@ export function StoreProvider({ transport, children, uiPrefs, now, newId = defau
       onStatus: (status) => dispatch({ type: 'connection', status }),
     });
     transport.start();
+    // Only unsubscribe here. The transport's lifetime belongs to whoever created it: React StrictMode runs
+    // mount -> unmount -> mount, and a transport closed by the first cleanup would never come back (found in a
+    // real browser; jsdom tests did not run StrictMode). start() is idempotent, so the second mount is safe.
     return () => {
       unsub();
-      transport.close();
     };
     // one transport per provider instance
     // eslint-disable-next-line react-hooks/exhaustive-deps

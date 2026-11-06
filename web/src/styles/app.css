@@ -35,10 +35,18 @@ a { color: var(--phosphor-bright); }
 }
 .skip-links a:focus { left: 0.5rem; top: 0.5rem; }
 
-.app { display: grid; grid-template-rows: auto auto auto 1fr; min-height: 100vh; }
+/* A flex column that fills the window. min-width:0 everywhere lets the 80-column terminal scroll inside its own pane instead of stretching the page (found in a real browser: 384 px of horizontal overflow at 390 px wide). */
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; }
+.app > * { min-width: 0; }
+.split, .tabs-layout { flex: 1; min-height: 0; }
+.tabs-layout { display: flex; flex-direction: column; }
+.tabs-layout > div[id^="panel-"]:not([hidden]) { flex: 1; min-height: 0; overflow: auto; }
+.tabs-layout .pane { height: 100%; }
 .app-header { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; padding: 0.5rem 1rem; border-bottom: 1px solid var(--phosphor-dim); }
-.app-header h1 { font-size: 1.1rem; margin: 0; }
-.header-controls { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-left: auto; }
+.app-header h1 { font-size: 1.1rem; margin: 0; letter-spacing: 0.14em; text-transform: uppercase; text-shadow: var(--glow); }
+.header-state { border: 1px solid var(--phosphor-dim); border-radius: 999px; padding: 0 0.8ch; font-size: 0.85rem; color: var(--phosphor-dim); }
+.header-controls { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; margin-left: auto; }
+select { max-width: 100%; }
 .header-replay { background: var(--warn); color: var(--bg); font-weight: 700; padding: 0.1rem 0.6rem; border-radius: 3px; }
 .replay-hint { margin: 0; padding: 0.3rem 1rem; color: var(--warn); border-bottom: 1px dashed var(--warn); }
 .shortcuts dl { margin: 0.5rem 0 0; }
@@ -51,7 +59,8 @@ a { color: var(--phosphor-bright); }
 .splitter:focus-visible { background: var(--focus); }
 .pane { padding: 0.75rem; min-width: 0; overflow: auto; }
 .pane-screen { background: var(--bg); }
-.pane-chat { display: flex; flex-direction: column; border-left: 0; }
+.pane-chat { display: flex; flex-direction: column; min-height: 0; border-left: 0; }
+.pane-screen { background: radial-gradient(ellipse at 50% 30%, rgba(61, 255, 122, 0.07), transparent 65%), var(--bg); }
 
 .tabs { display: flex; border-bottom: 1px solid var(--phosphor-dim); }
 .tabs [role="tab"] { border-radius: 3px 3px 0 0; border-bottom: none; }
@@ -66,8 +75,8 @@ a { color: var(--phosphor-bright); }
 .state-banner-info { color: var(--phosphor-bright); }
 
 /* Chat. */
-.chat { display: flex; flex-direction: column; flex: 1; min-height: 20rem; }
-.chat-log { list-style: none; margin: 0; padding: 0; flex: 1; overflow: auto; }
+.chat { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.chat-log { margin: 0; padding: 0 0.25rem 0 0; flex: 1; min-height: 0; overflow: auto; }
 .msg { margin: 0.5rem 0; padding: 0.4rem 0.6rem; border-left: 3px solid var(--phosphor-dim); }
 .msg-user { border-left-color: var(--phosphor-bright); }
 .msg-system { border-left-color: var(--warn); color: var(--warn); }

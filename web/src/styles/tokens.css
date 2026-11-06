@@ -20,7 +20,7 @@
   /* type and grid */
   --mono: ui-monospace, "Cascadia Mono", "SF Mono", "Consolas", "Liberation Mono", monospace;
   --cell-w: 1ch;
-  --line: 1.25rem;
+  --line: 1.3em;
   --font: 1rem;
 
   /* motion (overridden to 0 under reduced motion) */

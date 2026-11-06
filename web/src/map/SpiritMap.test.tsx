@@ -29,7 +29,8 @@ describe('SpiritMap SVG (REQ-013)', () => {
     expect(here.classList.contains('node-here')).toBe(true);
     expect(here.querySelector('rect')?.getAttribute('stroke-width')).toBe('4');
     expect(here.textContent).toContain('you are here');
-    expect(here.getAttribute('aria-label')).toContain('you are here');
+    // the accessible name comes from the visible text (an aria-label that differs from it fails WCAG 2.5.3)
+    expect(here.hasAttribute('aria-label')).toBe(false);
   });
 
   it('read-only edges are solid; confirmation edges are dashed with a lock AND a text label', () => {

@@ -66,6 +66,16 @@ export class ReplayTransport implements Transport {
       this.step();
       return true;
     }
+    // A person can act a moment before the recording has reached that step (found in a real browser: a click
+    // within the first 80 ms was lost). If the NEXT scripted client action is this one, hold it and use it the
+    // moment the script gets there. Anything else is still refused.
+    if (!want && this.early === null) {
+      const next = this.nextClientLine();
+      if (next && this.matches(next, msg)) {
+        this.early = msg;
+        return true;
+      }
+    }
     if (msg.type !== 'ping') this.rejected.push(msg);
     return false;
   }
@@ -76,6 +86,20 @@ export class ReplayTransport implements Transport {
     this.cancel = null;
     this.waiting = null;
     this.out.status('closed');
+  }
+
+  private early: ClientMessage | null = null;
+
+  /** The next scripted client action after the current position, skipping the transport's own hello. */
+  private nextClientLine(): ClientMessage | null {
+    for (let k = this.i; k < this.opts.lines.length; k++) {
+      const l = this.opts.lines[k];
+      if (l && l.dir === 'client') {
+        const m = l.msg as ClientMessage;
+        if (m.type !== 'hello') return m;
+      }
+    }
+    return null;
   }
 
   private matches(want: ClientMessage, got: ClientMessage): boolean {
@@ -95,6 +119,9 @@ export class ReplayTransport implements Transport {
       const msg = line.msg as ClientMessage;
       if (msg.type === 'hello') {
         // The transport itself says hello; the recording's hello is already satisfied.
+        this.step();
+      } else if (this.early && this.matches(msg, this.early)) {
+        this.early = null; // the user already did this; carry straight on
         this.step();
       } else {
         this.waiting = msg;

@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import { describe, expect, it } from 'vitest';
 import { act, render, waitFor } from '@testing-library/react';
 import { StoreProvider, useStore } from './store';
@@ -122,5 +123,31 @@ describe('store in mock/replay mode (REQ-023, 4.5)', () => {
     expect(decided).toBe(true);
     const s = h.get().state;
     expect(s.confirmation?.outcome).toBe('denied');
+  });
+});
+
+describe('React StrictMode (regression found in a real browser)', () => {
+  it('does not kill the transport: mount, unmount, mount still plays the recording', async () => {
+    const clock = new Clock();
+    const transport = new ReplayTransport({ lines: ex.transcripts['lookup'] ?? [], timer: clock.timer });
+    let api: StoreApi = null as unknown as StoreApi;
+    function Capture() {
+      api = useStore();
+      return null;
+    }
+    render(
+      <StrictMode>
+        <StoreProvider transport={transport} now={() => clock.now}>
+          <Capture />
+        </StoreProvider>
+      </StrictMode>,
+    );
+    clock.advance(100_000);
+    await waitFor(() => expect(transport.expecting()?.type).toBe('connect_system'));
+    expect(api.state.session.state).toBe('disconnected'); // first session_state was applied
+    expect(api.state.session.lastSeq).toBeGreaterThan(0);
+    act(() => api.connectSystem('fake-insurance'));
+    clock.advance(100_000);
+    await waitFor(() => expect(api.state.session.state).toBe('connected'));
   });
 });
