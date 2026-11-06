@@ -57,5 +57,5 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 ## 8. Polish (25 Nov to 1 Dec)
 - [ ] 8.1 Visual polish pass: motion timing, glow levels, copy; re-run a11y suite after each change.
 - [ ] 8.2 Spec-versus-vibe experiment (judges ask for it): build the audit drawer a second time by vibe coding in a throwaway branch, record time, bugs, rework against the spec-built one in `docs/handoff/c/experiment.md`.
-- [ ] 8.3 `web/README.md`: run (live, mock), keyboard shortcuts, accessibility statement linking `A11Y.md`.
+- [x] 8.3 `web/README.md`: run (live, mock), keyboard shortcuts, accessibility statement linking `A11Y.md`.
 - [ ] 8.4 Journal entries to `docs/handoff/c/journal.md`: one surprise per section 3, 5 and 6.
