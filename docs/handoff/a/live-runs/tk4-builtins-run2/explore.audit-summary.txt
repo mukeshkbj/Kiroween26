@@ -1,0 +1,26 @@
+   1 17:57:44 connect     ok              key=-      field=-   screen=81927ecdb6
+   2 17:57:44 press_key   ok              key=Clear  field=-   screen=81927ecdb6
+   3 17:57:45 press_key   ok              key=PA1    field=-   screen=81927ecdb6
+   4 17:57:46 press_key   ok              key=Clear  field=-   screen=9d4927e982
+   5 17:57:47 press_key   ok              key=Clear  field=-   screen=be4412fa93
+   6 17:57:48 press_key   ok              key=Clear  field=-   screen=be4412fa93
+   7 17:57:48 press_key   ok              key=Clear  field=-   screen=be4412fa93
+   8 17:57:49 press_key   ok              key=Clear  field=-   screen=be4412fa93
+   9 17:57:50 press_key   ok              key=Clear  field=-   screen=be4412fa93
+  10 17:57:51 press_key   ok              key=Clear  field=-   screen=be4412fa93
+  11 17:57:52 press_key   ok              key=Clear  field=-   screen=be4412fa93
+  12 17:57:52 press_key   ok              key=Clear  field=-   screen=be4412fa93
+  13 17:57:53 press_key   ok              key=PA1    field=-   screen=be4412fa93
+  14 17:57:54 press_key   ok              key=Clear  field=-   screen=176e286cbf
+  15 17:57:55 press_key   ok              key=PA2    field=-   screen=be4412fa93
+  16 17:57:56 press_key   ok              key=Clear  field=-   screen=dde92c5af7
+  17 17:57:56 press_key   ok              key=PA3    field=-   screen=be4412fa93
+  18 17:57:57 press_key   ok              key=Clear  field=-   screen=ee4cd45277
+  19 17:57:58 press_key   ok              key=PF13   field=-   screen=be4412fa93
+  20 17:57:59 press_key   ok              key=Clear  field=-   screen=ee4cd45277
+  21 17:58:00 press_key   ok              key=PF14   field=-   screen=be4412fa93
+  22 17:58:00 fill_field  ok              key=-      field=0   screen=ee4cd45277
+  23 17:58:01 press_key   ok              key=PA1    field=-   screen=ee4cd45277
+  24 17:58:02 press_key   ok              key=Clear  field=-   screen=2495368218
+  25 17:58:17 press_key   ambiguous_ack   key=PA1    field=-   screen=be4412fa93
+# 25 entries; outcomes={'ok': 24, 'ambiguous_ack': 1}; keys={'Clear': 15, 'PA1': 4, 'PA2': 1, 'PA3': 1, 'PF13': 1, 'PF14': 1}; hash chain linked: True

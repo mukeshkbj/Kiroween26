@@ -287,3 +287,39 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
 - The capture's XYZZY shows in the TK4- log as `LGN001I ... logon in progress`
   (TK4- logs every attempt), but no TSU job ever started, so the rejection was
   real.
+
+## 2026-11-06 B's second tk4-builtins live run (explore 2x + replay 2x)
+
+- Ran B's code at `6cf166d` from a temporary detached worktree
+  (`D:\Kiro\gss-wt\a-b-run`) with its own py3.12 venv, so nothing of B's was
+  edited and my venv was not repointed. Results go to
+  `docs/handoff/a/live-runs/tk4-builtins-run2/` (B's folder is B's).
+- Surprise 1: the first attempt halted `session_lost` at connect. The cause:
+  `.tools/s3270.exe` is gitignored and exists only in my main worktree, so the
+  temp worktree had no s3270. `S3270_PATH` fixed it. Nothing was sent.
+- **The bridge fix works:** the run reaches the known stall (the next AID after
+  CLEAR on the blank VTAM screen) and now ends in `ambiguous_ack` after 15 s,
+  with the map saved as `halted`, instead of hanging. Twice, identically:
+  7 screens / 14 edges / 35 frontier / 24 steps.
+- Surprise 2 (B's code): the seed's `volatile` is recorded on nodes but never
+  given to the bridge. The CLI passes `Settings.from_env()` regions, and B's
+  base main still has the clock-only default, so the terminal-id mask was not
+  applied in run 2a (home `n_a713…`). With `VOLATILE_REGIONS` = the seed's
+  spans (2b), home = `n_81927ecdb6`, stable, and equal to D's e2e and my
+  capture.
+- Surprise 3: replay first said `not_at_home`. After today's IPL, a fresh
+  connect shows the Hercules banner until a key is pressed. With a temporary
+  seed copy that adds `start_recipe: ["CLEAR"]`: 7 edges replayed, **2
+  mismatches**, then `ambiguous_ack`. The mismatches are PF14 and PA2 from the
+  blank screen landing on each other's target. The blank VTAM screens are a
+  sequence, not a function of the key, so they don't belong in the map.
+  Recommended to B: deny `n_be4412fa93` (and the welcome's PA1), and add the
+  CLEAR start recipe.
+- My slips: (a) Stopping "other seance_* processes" before the run also killed
+  two `seance_agent` dev servers, probably another agent's session on this
+  shared machine (worktrees `c`, `d`, `d-check-c` exist). They were fake-only
+  by rule and nothing is listening on 8000 now, but I should only stop what
+  touches 3270. (b) Twice more, my wait loop checked for a process that had not
+  started yet and read intermediate files. I now wait for the process to
+  *appear*, then to exit.
+- Health check after all of it: OK.
