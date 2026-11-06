@@ -46,7 +46,7 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [x] 6.2 `vitest-axe` over every view and state; keyboard-only flow test.
 - [x] 6.3 `useReducedMotion` (OS + in-app); verify every animation honours it (a test that fails if an animation runs with reduce on).
 - [x] 6.4 `prefers-contrast: more`, `forced-colors`, 200%/400% zoom checks.
-- [ ] 6.5 Manual pass recorded in `web/A11Y.md`: NVDA, keyboard-only, zoom, contrast values, reduced motion. Note anything not done. No conformance claim beyond "designed to meet".
+- [ ] 6.5 Manual pass recorded in `web/A11Y.md`: NVDA, keyboard-only, zoom, contrast values, reduced motion. Note anything not done. No conformance claim beyond "designed to meet". **Partly done:** A11Y.md exists with the automated evidence, computed contrast values and known limits; the manual checklist (section 3) needs a person with a real browser and NVDA, and is not ticked.
 
 ## 7. Integration with the agent (by 24 Nov)
 - [ ] 7.1 Switch to `VITE_MODE=live` on the integration branch against Agent D's service with the scripted provider and `fake-insurance`.
