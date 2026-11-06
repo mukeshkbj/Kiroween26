@@ -16,7 +16,7 @@ export function NodePreview({ node, tools }: NodePreviewProps) {
   const through = tools.filter((t) => t.path.includes(node.id));
   return (
     <section className="node-preview" aria-label={strings.map.selected}>
-      <h3>{node.name}</h3>
+      <h2>{node.name}</h2>
       <p>
         {node.kind} · {Math.round(node.confidence * 100)}% · {strings.map.visits(node.visits)}
         {node.needs_review && <strong> · {strings.map.needsReview}</strong>}
@@ -24,7 +24,7 @@ export function NodePreview({ node, tools }: NodePreviewProps) {
       <pre className="node-preview-screen" aria-label={strings.map.preview}>
         {node.preview.join('\n')}
       </pre>
-      <h4>{strings.map.fields}</h4>
+      <h3>{strings.map.fields}</h3>
       {node.fields.length === 0 ? (
         <p>{strings.map.none}</p>
       ) : (
@@ -38,7 +38,7 @@ export function NodePreview({ node, tools }: NodePreviewProps) {
           ))}
         </ul>
       )}
-      <h4>{strings.map.toolsThrough}</h4>
+      <h3>{strings.map.toolsThrough}</h3>
       {through.length === 0 ? (
         <p>{strings.map.none}</p>
       ) : (

@@ -46,7 +46,8 @@ a { color: var(--phosphor-bright); }
 .shortcuts div { margin: 0.15rem 0; }
 
 .split { display: grid; min-height: 0; }
-.splitter { background: var(--phosphor-dim); cursor: col-resize; width: 8px; }
+.pane-chat { position: relative; }
+.splitter { position: absolute; top: 0; bottom: 0; left: -4px; width: 8px; background: var(--phosphor-dim); cursor: col-resize; z-index: 5; }
 .splitter:focus-visible { background: var(--focus); }
 .pane { padding: 0.75rem; min-width: 0; overflow: auto; }
 .pane-screen { background: var(--bg); }

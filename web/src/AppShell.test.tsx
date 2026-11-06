@@ -96,7 +96,7 @@ describe('AppShell landmarks and skip links (REQ-018)', () => {
     const aside = all.findIndex((el) => el.closest('aside'));
     const mainIdx = all.findIndex((el) => el.closest('main'));
     expect(sep).toBeGreaterThan(mainIdx);
-    expect(sep).toBeLessThan(aside);
+    expect(sep).toBeLessThanOrEqual(aside); // the handle is the first stop inside the chat landmark
   });
 });
 
@@ -118,23 +118,26 @@ describe('splitter (REQ-001)', () => {
 });
 
 describe('narrow layout turns into tabs (REQ-001)', () => {
-  it('shows Screen and Séance tabs with arrow-key switching', async () => {
+  it('shows a Screen / Séance switcher in a labelled nav; the active view is aria-pressed and the other is hidden', async () => {
     mount('lookup', { wide: false });
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Screen', 'Séance']);
+    const nav = screen.getByRole('navigation', { name: 'Panes' });
+    const buttons = within(nav).getAllByRole('button');
+    expect(buttons.map((t) => t.textContent?.trim())).toEqual(['Screen', 'Séance']);
     expect(screen.queryByRole('separator')).toBeNull();
+    expect(buttons[0]).toHaveAttribute('aria-pressed', 'true');
     const user = userEvent.setup();
-    tabs[0]!.focus();
-    await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: /Séance/ })).toHaveAttribute('aria-selected', 'true');
+    buttons[1]!.focus();
+    await user.keyboard('{Enter}');
+    expect(screen.getByRole('button', { name: /^Séance/ })).toHaveAttribute('aria-pressed', 'true');
     expect(document.getElementById('panel-screen')).toHaveAttribute('hidden');
+    expect(document.getElementById('panel-seance')).not.toHaveAttribute('hidden');
   });
 
   it('marks the hidden Séance tab when new chat activity arrives while on the Screen tab', async () => {
     const h = mount('lookup', { wide: false });
     const user = userEvent.setup();
     h.clock.advance(1000);
-    await user.click(screen.getByRole('tab', { name: /Séance/ }));
+    await user.click(screen.getByRole('button', { name: /^Séance/ }));
     const cards = await screen.findAllByRole('button', { name: 'Begin séance' });
     const fake = cards.find((b) => b.closest('.system-card')?.textContent?.includes('simulated'))!;
     await user.click(fake);
@@ -144,12 +147,12 @@ describe('narrow layout turns into tabs (REQ-001)', () => {
     await user.type(composer, 'look up P0000003');
     await user.keyboard('{Enter}');
     // leave the Séance tab, then let the recording answer
-    await user.click(screen.getByRole('tab', { name: /Screen/ }));
+    await user.click(screen.getByRole('button', { name: /^Screen/ }));
     await act(async () => h.clock.advance(1_000_000));
-    expect(screen.getByRole('tab', { name: /Séance/ })).toHaveTextContent(/new activity/);
+    expect(screen.getByRole('button', { name: /^Séance/ })).toHaveTextContent(/new activity/);
     // opening the tab clears the marker
-    await user.click(screen.getByRole('tab', { name: /Séance/ }));
-    expect(screen.getByRole('tab', { name: /Séance/ })).not.toHaveTextContent(/new activity/);
+    await user.click(screen.getByRole('button', { name: /^Séance/ }));
+    expect(screen.getByRole('button', { name: /^Séance/ })).not.toHaveTextContent(/new activity/);
   });
 });
 

@@ -240,6 +240,23 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
 
   const chatPanel = (
     <aside id="chat-region" className="pane pane-chat" aria-label={strings.shell.chatLabel} tabIndex={-1}>
+      {wide && (
+        // The resize handle sits on the chat pane's left edge, inside its landmark, so it is never loose page content.
+        <div
+          className="splitter"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label={strings.shell.splitter}
+          aria-valuemin={30}
+          aria-valuemax={75}
+          aria-valuenow={split}
+          tabIndex={0}
+          onKeyDown={onSplitKey}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+        />
+      )}
       {showConnect && (
         <ConnectScreen load={apps} onConnect={(id) => connectSystem(id)} onRetry={loadApps} connecting={state.session.state === 'connecting'} />
       )}
@@ -323,55 +340,29 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
         )}
 
         {wide ? (
-          <div className="split" ref={splitHostRef} style={{ gridTemplateColumns: `${split}fr 8px ${100 - split}fr` }}>
+          <div className="split" ref={splitHostRef} style={{ gridTemplateColumns: `${split}fr ${100 - split}fr` }}>
             {screenPanel}
-            <div
-              className="splitter"
-              role="separator"
-              aria-orientation="vertical"
-              aria-label={strings.shell.splitter}
-              aria-valuemin={30}
-              aria-valuemax={75}
-              aria-valuenow={split}
-              tabIndex={0}
-              onKeyDown={onSplitKey}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-            />
+
             {chatPanel}
           </div>
         ) : (
           <div className="tabs-layout">
+            {/* A two-way view switcher rather than ARIA tabs: tab panels wrapped around landmarks trip the
+                "content outside landmarks" rule, and the main/aside landmarks must stay top level. */}
             <nav aria-label={strings.shell.panesNav}>
-              <div role="tablist" className="tabs">
+              <div className="tabs">
                 {(['screen', 'seance'] as const).map((t) => (
-                  <button
-                    key={t}
-                    role="tab"
-                    id={`tab-${t}`}
-                    aria-selected={tab === t}
-                    aria-controls={`panel-${t}`}
-                    tabIndex={tab === t ? 0 : -1}
-                    onClick={() => selectTab(t)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-                        const n: Tab = t === 'screen' ? 'seance' : 'screen';
-                        selectTab(n);
-                        document.getElementById(`tab-${n}`)?.focus();
-                      }
-                    }}
-                  >
+                  <button key={t} type="button" id={`tab-${t}`} aria-pressed={tab === t} aria-controls={`panel-${t}`} onClick={() => selectTab(t)}>
                     {t === 'screen' ? strings.shell.tabScreen : strings.shell.tabSeance}
                     {activity === t && tab !== t && <span className="tab-activity"> ({strings.shell.newActivity})</span>}
                   </button>
                 ))}
               </div>
             </nav>
-            <div role="tabpanel" id="panel-screen" aria-labelledby="tab-screen" hidden={tab !== 'screen'}>
+            <div id="panel-screen" hidden={tab !== 'screen'}>
               {screenPanel}
             </div>
-            <div role="tabpanel" id="panel-seance" aria-labelledby="tab-seance" hidden={tab !== 'seance'}>
+            <div id="panel-seance" hidden={tab !== 'seance'}>
               {chatPanel}
             </div>
           </div>

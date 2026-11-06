@@ -18,7 +18,7 @@ export interface ChatProps {
 }
 
 export function Chat({ state, onSend, onCancel }: ChatProps) {
-  const logRef = useRef<HTMLOListElement | null>(null);
+  const logRef = useRef<HTMLDivElement | null>(null);
   const block = composerBlock(state);
   const turnId = activeTurnId(state);
 
@@ -30,16 +30,19 @@ export function Chat({ state, onSend, onCancel }: ChatProps) {
 
   return (
     <section className="chat" aria-label={strings.chat.region}>
-      <ol className="chat-log" ref={logRef} role="log" aria-live="polite" aria-label={strings.chat.log}>
-        {state.messages.map((m) => (
-          <Message
-            key={m.id}
-            message={m}
-            turn={m.kind === 'assistant' && m.turnId ? state.turns[m.turnId] : undefined}
-            toolCalls={state.toolCalls}
-          />
-        ))}
-      </ol>
+      {/* role="log" lives on a div: an <ol> may not carry that role, and it would also hide the list items. */}
+      <div className="chat-log" ref={logRef} role="log" aria-live="polite" aria-label={strings.chat.log}>
+        <ol className="chat-list">
+          {state.messages.map((m) => (
+            <Message
+              key={m.id}
+              message={m}
+              turn={m.kind === 'assistant' && m.turnId ? state.turns[m.turnId] : undefined}
+              toolCalls={state.toolCalls}
+            />
+          ))}
+        </ol>
+      </div>
       <Composer
         block={block}
         canCancel={turnId !== null && !state.observerOnly}
