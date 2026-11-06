@@ -63,3 +63,19 @@ The three business tools are B's real, approved pack for `fake-insurance`
 ## Not done yet (so do not build on it)
 
 Anthropic and Bedrock providers (section 7). With them missing, only `scripted` is usable.
+
+## Update (task 8): real streams and a reconnect finding
+
+- **Real streams to test against.** `docs/handoff/d/streams/*.jsonl` are recorded from the
+  agent's own code path (lookup, list, commit-approve, commit-deny, commit-expire,
+  read-only), in the contracts transcript format. Regenerate with
+  `agent\.venv\Scripts\python.exe agent\scripts\dump_streams.py`. They pass `check_stream` and
+  the server-event models. Feed them to your guards and reducer; they are closer to what you
+  will really receive than the integrator's stand-in transcripts.
+- **Your reconnect works with the agent.** I read `web/src/protocol/wsTransport.ts` on your
+  branch. It fetches a fresh token on every reconnect and sends `resume_from` only when the
+  session id matches. The agent therefore lets a connection that sends `resume_from`
+  reclaim the controller slot reserved for 60 s after a drop; a fresh tab without
+  `resume_from` stays an observer. (Keying it on the token alone would have broken you.)
+- Not checked: I have not run your reducer on my streams. That is the 8.2 run on the
+  integration branch.

@@ -271,6 +271,18 @@ def test_controller_resumes_and_keeps_the_slot_for_its_token() -> None:
         assert last2 >= last
 
 
+def test_reconnect_with_a_fresh_token_still_reclaims_the_slot_when_resuming() -> None:
+    """The web client fetches a NEW token on every reconnect (found by reading its transport)."""
+    with make_client() as c:
+        with open_ws(c, tok=token(c)) as s:
+            connect_fake(s)
+            last = s.seen[-1]["seq"]
+        with open_ws(c, tok=token(c)) as fresh:          # a new tab, not resuming: observer
+            assert fresh.until("session_state")["data"]["controller"] is False
+        with open_ws(c, tok=token(c), resume_from=last) as back:  # new token, resuming: controller
+            assert back.until("session_state")["data"]["controller"] is True
+
+
 def test_resume_outside_the_ring_resyncs_with_a_snapshot() -> None:
     with make_client() as c:
         with open_ws(c) as s:

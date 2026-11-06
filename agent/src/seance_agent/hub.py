@@ -138,14 +138,14 @@ class SeanceHub:
         s = self.session
         if resume_from is not None and resume_from <= s.last_seq and s.can_replay(resume_from):
             self.emit_state()
-            conn = s.add_connection(conn_id, token)
+            conn = s.add_connection(conn_id, token, resuming=True)
             s.deliver_to(conn, s.replay(resume_from))
             return conn
         first = s.last_seq + 1
         self.emit_state(resync=resume_from is not None)
         if self.live is not None and self.live.mapper.last_screen is not None:
             s.emit(ScreenData(phase="snapshot", tool_call_id=None, screen=self.live.mapper.last_screen), turn_id=None)
-        conn = s.add_connection(conn_id, token)
+        conn = s.add_connection(conn_id, token, resuming=resume_from is not None)
         s.deliver_to(conn, s.replay(first - 1))
         return conn
 

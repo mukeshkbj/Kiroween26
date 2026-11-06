@@ -136,3 +136,30 @@ Smaller catches: my first API test hung because the helper waited for a
 the secrets test I first wrote ended in `or True`, so it proved nothing. The API
 key is now a `SecretStr` and the test asserts it is absent from repr, dump and
 JSON.
+
+### 2026-11-06 — real providers, integration prep (tasks 7, 8, 9)
+
+- Anthropic and Bedrock adapters keep conversion in pure functions and are tested
+  against recorded-shape payloads. Errors are mapped from the exception class and
+  HTTP status only. I never use `str(exc)`.
+
+Surprise (section 7 / secrets): the SDK exception text can contain request
+detail, including the key. The tests raise exceptions whose message embeds a fake
+key and assert it is absent from the `LlmError`, from `caplog` and from the
+provider's repr. Making the key a `SecretStr` came from the same worry. The
+Anthropic SDK is also at 2.5.0 now and uses `httpx2`, which coexists with our
+`httpx` (noted earlier); `AsyncMessageStream` has no `text_stream` helper, so the
+adapter iterates events and reads `TextEvent.text`.
+
+Surprise (section 8 / integration, found by reading C's branch): the web
+client fetches a new token on every reconnect. My controller reservation was
+keyed by token, so a returning controller would have been demoted to observer for
+60 s, exactly when the UI most needs its modal. The slot is now reclaimed by any
+connection that sends `resume_from` (the client sends it only for the same
+session id). Found without running C's code, which I cannot merge. Ownership
+holds and the cost was a `git show`.
+
+Open: 7.3 needs one real run with credentials for the saved transcript (the test
+exists and skips honestly). 8.2 needs the integration branch with C's `web/`. 8.3
+is requested from A in `request-a-live-e2e.md`. mypy is not run yet (not in the
+dev extras).

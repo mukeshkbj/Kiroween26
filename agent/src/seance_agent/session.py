@@ -135,22 +135,25 @@ class Session:
         cid = self._controller_id
         return cid is not None and cid in self._conns and not self._conns[cid].closed
 
-    def _slot_free_for(self, token: str | None) -> bool:
-        """No live controller, and no unexpired reservation held for another token."""
+    def _slot_free_for(self, token: str | None, resuming: bool) -> bool:
+        """No live controller, and no unexpired reservation held for someone else.
+        The reservation is reclaimed by the same token, or by any connection that is
+        *resuming* (it names a ``resume_from``): the web client fetches a fresh token
+        on every reconnect, so the token alone cannot identify the returning tab."""
         if self.has_controller():
             return False
         r = self._reserved
         if r is None or self._clock() >= r[1]:
             return True
-        return token is not None and token == r[0]
+        return resuming or (token is not None and token == r[0])
 
-    def add_connection(self, conn_id: str, token: str | None = None) -> Connection:
+    def add_connection(self, conn_id: str, token: str | None = None, resuming: bool = False) -> Connection:
         """Register a connection. The first one (while no live controller exists)
         becomes the controller (contracts 4.1); the rest are observers. A controller
         that dropped keeps its slot for ``controller_grace_s`` for the same token
         (REQ-003), so an observer cannot take over during a brief reconnect."""
         send, receive = anyio.create_memory_object_stream(max_buffer_size=self._queue_maxsize)
-        is_controller = self._slot_free_for(token)
+        is_controller = self._slot_free_for(token, resuming)
         conn = Connection(conn_id=conn_id, controller=is_controller, token=token, _queue=send, _receive=receive)
         self._conns[conn_id] = conn
         if is_controller:

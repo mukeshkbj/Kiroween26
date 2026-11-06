@@ -18,6 +18,32 @@ does not depend on the model behaving: the test suite drives it with an obedient
 `GullibleLlm` that executes whatever it reads on screen, and asserts no commit
 key is ever sent without a human approval.
 
+## Trust model, in plain words
+
+- The model can read screens, fill fields and propose changes. It cannot **approve** one.
+  There is no tool for it, and the model never sees the text that tells callers how.
+- When a change is proposed, the turn stops and the browser shows a confirmation. The
+  details come from the safety gate (key, screen, fields), never from what the model said.
+  Its own wording is shown separately, labelled unverified.
+- Only the **controller** connection (the first valid `hello`) can approve, deny, start a
+  turn or connect a system. Later connections are observers and are told `observer_only`.
+- Text that came from a screen reaches the model only inside tool results marked
+  `trust: "untrusted-screen-data"`. It is information, never instructions.
+- A denied, expired or blocked change is final for that turn. A key press that times out
+  is never resent; the agent reads the screen and tells the model it may or may not have run.
+- `SEANCE_ALLOW_COMMIT=0` (the default) shows the confirmation and then reports it as
+  blocked, so read-only is visible instead of silent.
+- A live host is refused (`live_not_allowed`) unless `GSS_LIVE_OK=1` or `.gss-live-ok`
+  exists. A `.env` cannot set it.
+
+## Origin and token
+
+Any web page can try `ws://localhost:8000`. The websocket is accepted only to be closed
+with code 4403 unless its `Origin` is in `AGENT_ALLOWED_ORIGINS`. `hello` must carry a
+token from `GET /api/session`; CORS headers go only to allowed origins, so another origin
+cannot read it. Other close codes: 4400 first message was not `hello`, 4401 bad token,
+4429 client too slow.
+
 ## Layout
 
 ```
@@ -25,6 +51,7 @@ src/seance_agent/
   __main__.py   python -m seance_agent (uvicorn)
   config.py     env -> Settings; unknown provider is an error, missing key -> llm.available=false
   api.py        FastAPI app, routes, origin + token checks, CORS, websocket
+  hub.py        everything behind the socket: session, runtime, loop, message handling (no HTTP)
   session.py    Session: controller/observers, seq, ring buffer, resume, event log
   events.py     pydantic models for every websocket event and client message (contracts section 4)
   loop.py       AgentLoop.run_turn(): model <-> tools, budgets, cancel, suspend on pending
@@ -50,7 +77,7 @@ py -3.12 -m venv .venv
 .venv\Scripts\python.exe -m seance_agent
 ```
 
-Defaults bind to `127.0.0.1:8000`. With `LLM_PROVIDER=scripted` the agent needs no
+Defaults bind to `127.0.0.1:8000` and the server is read-only. With `LLM_PROVIDER=scripted` the agent needs no
 keys and no network; it is the offline demo fallback and what CI uses.
 
 ## Environment

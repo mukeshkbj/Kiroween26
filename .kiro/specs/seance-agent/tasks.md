@@ -51,10 +51,10 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 7.4 `llm_unavailable` path tested.
 
 ## 8. Integration (by 24 Nov)
-- [ ] 8.1 Merge spirit-map tool pack runtime; swap the stub; rerun everything.
-- [ ] 8.2 Conformance run against the real UI build on the integration branch (with Agent C).
-- [ ] 8.3 Handoff request to Agent A for the live end-to-end (REQ-032): scripted provider, `gss-legacy`, three runs in a row.
+- [x] 8.1 Merge spirit-map tool pack runtime; swap the stub; rerun everything.
+- [ ] 8.2 Conformance run against the real UI build on the integration branch (with Agent C). (Prepared: real streams in `docs/handoff/d/streams/`, C transport read and reconnect fixed. OPEN: C's web/ is not on integration yet.)
+- [x] 8.3 Handoff request to Agent A for the live end-to-end (REQ-032): scripted provider, `gss-legacy`, three runs in a row. (Request written: `docs/handoff/d/request-a-live-e2e.md`; the run itself is A's and is pending.)
 
 ## 9. Docs and journal
-- [ ] 9.1 `agent/README.md`: run, env, trust model in plain words (the model cannot confirm), origin/token.
-- [ ] 9.2 Journal entries to `docs/handoff/d/journal.md`: one surprise per section 4, 5 and 7.
+- [x] 9.1 `agent/README.md`: run, env, trust model in plain words (the model cannot confirm), origin/token.
+- [x] 9.2 Journal entries to `docs/handoff/d/journal.md`: one surprise per section 4, 5 and 7.
