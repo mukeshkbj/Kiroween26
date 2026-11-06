@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import anyio
 import pytest
@@ -177,3 +178,72 @@ def test_random_walk_invariants(steps):
 
 def test_region_positions_clip():
     assert region_positions([(23, 78, 10)]) <= set(range(1920))
+
+
+# ---------------------------------------------------------------- real captures (Agent A, 2026-11-05)
+
+CAPTURES = sorted((Path(__file__).resolve().parents[2] / "legacy" / "captures").glob("*/capture.json"))
+
+
+@pytest.mark.skipif(not CAPTURES, reason="no captures in this checkout")
+@pytest.mark.parametrize("path", CAPTURES, ids=lambda p: p.parent.name)
+def test_every_real_capture_rebuilds_with_the_recorded_screen_ids(path):
+    """Includes tk4-builtins, whose welcome screen has a zero-length field in the last cell."""
+    app = FakeApp.from_capture(path)  # raises CaptureError on any screen_id mismatch
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    assert list(app.screens) == [s["name"] for s in raw["screens"]]
+    for s in raw["screens"]:
+        assert app.screens[s["name"]].model().screen_id == s["screen"]["screen_id"]
+        assert all(f.value is None for f in app.screens[s["name"]].model().fields if f.hidden)
+
+
+def _screen_out_dict(spec):
+    from seance_mcp.screens import screen_out
+
+    return screen_out(spec.model()).model_dump(mode="json")
+
+
+def test_capture_with_a_field_in_the_last_cell_wraps_to_offset_1919(tmp_path):
+    """The parser reports an attribute in the last cell as a zero-length field at (0, 0)."""
+    from seance_bridge import BUFFER_SIZE, FieldAttrs
+    from seance_mcp.fake import P, ScreenSpec
+
+    spec = ScreenSpec({10: "HELLO"}, [(8, P), (BUFFER_SIZE - 1, FieldAttrs(protected=True))])
+    so = _screen_out_dict(spec)
+    assert any(f["row"] == 0 and f["col"] == 0 and f["length"] == 0 for f in so["fields"])
+    cap = {"schema": "gss.capture/1", "app_id": "t", "captured_at": "2026-11-06T00:00:00.000Z",
+           "screens": [{"name": "s", "screen": so, "volatile": []}], "transitions": []}
+    p = tmp_path / "c.json"
+    p.write_text(json.dumps(cap), encoding="utf-8")
+    app = FakeApp.from_capture(p)
+    assert app.screens["s"].model().screen_id == so["screen_id"]
+    assert BUFFER_SIZE - 1 in [fs.pos for fs in app.screens["s"].starts]
+
+
+def test_capture_does_not_invent_a_field_at_the_top_left(tmp_path):
+    """A screen whose first field is not at the top-left must keep its recorded structure."""
+    from seance_bridge import FieldAttrs
+    from seance_mcp.fake import ScreenSpec
+
+    spec = ScreenSpec({0: "TEXT BEFORE ANY FIELD"}, [(30, FieldAttrs(protected=False))])
+    so = _screen_out_dict(spec)
+    cap = {"schema": "gss.capture/1", "app_id": "t", "captured_at": "2026-11-06T00:00:00.000Z",
+           "screens": [{"name": "s", "screen": so, "volatile": []}], "transitions": []}
+    p = tmp_path / "c.json"
+    p.write_text(json.dumps(cap), encoding="utf-8")
+    app = FakeApp.from_capture(p)
+    assert [fs.pos for fs in app.screens["s"].starts] == [30]
+    assert app.screens["s"].model().screen_id == so["screen_id"]
+
+
+def test_legacy_volatile_regions_file_equals_the_fakes_demo_regions():
+    """docs/contracts.md 10.4: the real app's VOLATILE_REGIONS must equal DEMO_VOLATILE_REGIONS."""
+    from seance_mcp.config import parse_regions
+    from seance_mcp.fake import DEMO_VOLATILE_REGIONS
+
+    f = Path(__file__).resolve().parents[2] / "legacy" / "volatile-regions.txt"
+    if not f.exists():
+        pytest.skip("legacy/volatile-regions.txt not in this checkout")
+    spec = [ln for ln in f.read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.lstrip().startswith("#")]
+    assert len(spec) == 1
+    assert set(parse_regions(spec[0])) == set(DEMO_VOLATILE_REGIONS)
