@@ -47,13 +47,9 @@ Prerequisites: Docker, and (for the stand-in / checks) Python 3.12 with the
 # 1. Start the mainframe (first cold IPL ~1 min to a reachable 3270 port)
 docker compose -f legacy/docker-compose.yml up -d        # container: gss-legacy
 
-# 2. One-time install on the mainframe (idempotent; see "Install" below)
-#    - build the COBOL business logic into HERC01.SEANCE.LOAD
-powershell -File legacy/scripts/submit-jcl.ps1 -Jcl legacy/src/jcl/mkpds.jcl
-#    (upload SEANCSVC source, then:)
-powershell -File legacy/scripts/submit-jcl.ps1 -Jcl legacy/src/jcl/build-seancsvc.jcl
-#    - seed the 8 demo policies
-powershell -File legacy/reset-data.ps1
+# 2. Install the demo app on the mainframe from source (~1 min; safe to rerun:
+#    it deletes and rebuilds only HERC01.SEANCE.*, then smoke-tests a lookup)
+powershell -File legacy/setup-app.ps1
 
 # 3. Start the stand-in (serves TN3270 on STANDIN_PORT, default 3271)
 #    It reads MVS_USER / MVS_PASSWORD from the environment or legacy/.env.
@@ -61,6 +57,17 @@ $env:PYTHONPATH="legacy/standin"; python -m seance_standin
 
 # 4. Point the bridge / s3270 (and the rest of the stack) at the stand-in port.
 ```
+
+**Where the mainframe's state lives (read before `docker compose down`).** All
+MVS datasets (the demo app, the policy file, KICKS) are on TK4-'s DASD in
+`/tk4-/dasd`. The base image declares that path as an *anonymous* Docker
+volume. A restart or a `docker compose up` recreate keeps it. **`docker compose
+down` followed by `up` gives a new, empty volume**: you get a pristine TK4-
+without the app (the old volume is orphaned, not deleted). After that, run
+`legacy/setup-app.ps1` to reinstall the app (~1 min). KICKS would need its
+install jobs rerun (see the KICKS section below). A named volume would remove
+this trap; that change is proposed in `docs/handoff/a/journal.md` and needs the
+user's approval, because it means migrating the live volume.
 
 Cold-start time: the TK4- container reaches a reachable 3270 port in about one
 minute from a cold `up`. The stand-in starts instantly. A lookup/list/update

@@ -177,3 +177,24 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
 - Open in legacy-environment, both KICKS stretch: 3.5-followup (KFIX via our own
   MCP) and 4.5 (KICKS tables). Neither is useful while KICKS COBOL S0C4s; 4.5 is
   only needed by a working KICKS transaction.
+
+## 2026-11-06 Reproducible install + a volume trap (needs the user's decision)
+
+- `legacy/setup-app.ps1`: one command reinstalls the demo app from source: clean
+  HERC01.SEANCE.*, create the PDS, upload, compile+link, TSO cards, seed, smoke
+  test. Ran it live: every job RC=0000 (compile RC=0004 is warnings), ~1 min,
+  and the health check passes against the rebuilt module. The stand-in kept
+  serving, because it reads the files per request.
+- Found while checking durability: `/tk4-/dasd`, where all our MVS state lives,
+  is an **anonymous** volume declared by the base image. A restart or compose
+  recreate keeps it, which is why yesterday's Docker restart was harmless.
+  `docker compose down` + `up` would mount a fresh one, losing the app, the
+  seed data and KICKS (the old volume is orphaned, not deleted). This is now in
+  the README.
+- **Proposal (NOT done, needs the user's OK; it touches the live container):**
+  in `legacy/docker-compose.yml`, mount named volumes (`gss-dasd:/tk4-/dasd`,
+  plus `conf`/`local_conf`) and migrate once: stop `gss-legacy`, copy the current
+  anonymous volume into `gss-dasd` (`docker run --rm -v <anon>:/from -v
+  gss-dasd:/to alpine cp -a /from/. /to/`), recreate, then run the health
+  check. It is reversible while the old anonymous volume is kept. Expected
+  downtime ~5 min including IPL.
