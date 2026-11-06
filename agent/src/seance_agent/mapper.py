@@ -65,6 +65,7 @@ class EventMapper:
         self._turn_id = turn_id_getter
         self._bus: list[BusItem] = []
         self._unsub: list[Callable[[], None]] = []
+        self.last_screen: Any = None  # latest ScreenOut seen (for argument redaction)
 
     def attach(self, service: Any) -> None:
         self._unsub.append(service.observe(lambda e: self._bus.append(("op", e))))
@@ -101,6 +102,7 @@ class EventMapper:
                 self._emit_screen("after", scope, ev.screen_after)
 
     def _emit_screen(self, phase: str, scope: CallScope | None, screen: Any) -> None:
+        self.last_screen = screen
         if scope is not None:
             scope.cur_screen_id = screen.screen_id
         self._session.emit(

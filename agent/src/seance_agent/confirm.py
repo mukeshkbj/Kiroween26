@@ -212,6 +212,30 @@ class ConfirmBroker:
         self._resolve(entry, res, confirmed_by=None)
         return res
 
+    async def wait(self, action_id: str) -> Resolution:
+        """Block until the in-flight action ``action_id`` is resolved."""
+        entry = self._pending
+        if entry is None or entry.action_id != action_id:
+            raise GateError("unknown_action", "that action is not awaiting a decision")
+        await entry.event.wait()
+        assert entry.resolution is not None
+        return entry.resolution
+
+    async def abandon(self, action_id: str) -> Resolution | None:
+        """The turn was cancelled while the action was pending: drop it unsent.
+        Resolved as ``denied`` with no confirmer (a person did not approve it)."""
+        entry = self._pending
+        if entry is None or entry.action_id != action_id or entry.resolution is not None:
+            return None
+        try:
+            await self._service.deny_action(action_id, "turn-cancelled")
+        except GateError:
+            pass
+        self._flush_after(entry)
+        res = Resolution("denied")
+        self._resolve(entry, res, confirmed_by=None)
+        return res
+
     # -- internals --------------------------------------------------------
 
     def _flush_after(self, entry: _Pending) -> None:

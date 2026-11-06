@@ -25,6 +25,7 @@ the memory streams and yields a ready, initialised broker.
 """
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -44,7 +45,7 @@ WITHHELD_TOOLS = frozenset({"confirm_action", "connect", "get_audit_log"})
 # The generic screen tools (kept unless AGENT_GENERIC_TOOLS=off).
 GENERIC_TOOLS = frozenset({"read_screen", "list_fields", "fill_field", "press_key"})
 
-_ERROR_RE = re.compile(r"^\[(?P<code>[a-z_]+)\]\s*(?P<msg>.*)$", re.DOTALL)
+_ERROR_RE = re.compile(r"\[(?P<code>[a-z_]+)\]\s*(?P<msg>.*)$", re.DOTALL)
 _DEFAULT_ERROR_CODE = "bridge_error"
 
 
@@ -221,9 +222,28 @@ class ToolBroker:
             return ToolOutcome(tool=name, kind=kind, status="error", error_code=code,
                                structured=None, summary=msg)
         structured = result.structured_content
+        if structured is None:
+            # Generated (business) tools return their envelope as JSON text, not
+            # structured content. Parse it, or a pending commit would read as ok.
+            structured = self._parse_text_json(result)
         status = self._status_of(name, kind, structured)
-        return ToolOutcome(tool=name, kind=kind, status=status, error_code=None,
+        code = None
+        if status == "error" and structured:
+            err = structured.get("error")
+            code = str(err.get("code")) if isinstance(err, dict) and err.get("code") else _DEFAULT_ERROR_CODE
+        return ToolOutcome(tool=name, kind=kind, status=status, error_code=code,
                            structured=structured, summary=self._summary(name, status, structured))
+
+    @staticmethod
+    def _parse_text_json(result: types.CallToolResult) -> dict[str, Any] | None:
+        for block in result.content:
+            if isinstance(block, types.TextContent):
+                try:
+                    obj = json.loads(block.text)
+                except ValueError:
+                    return None
+                return obj if isinstance(obj, dict) else None
+        return None
 
     @staticmethod
     def _status_of(name: str, kind: str, structured: dict[str, Any] | None) -> str:
@@ -254,7 +274,7 @@ class ToolBroker:
             if isinstance(block, types.TextContent):
                 text = block.text
                 break
-        m = _ERROR_RE.match(text.strip())
+        m = _ERROR_RE.search(text.strip())
         if m:
             return m.group("code"), m.group("msg").strip()
         return _DEFAULT_ERROR_CODE, text or "the tool reported an error"

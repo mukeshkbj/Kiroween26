@@ -32,9 +32,9 @@ Ordered so the safety properties are proven with scripted models before any real
 - [x] 4.4 Read-only (`SEANCE_ALLOW_COMMIT=0`) path: `blocked_read_only` shown, not silent.
 
 ## 5. Agent loop with scripted LLM (REQ-008, REQ-010, REQ-012, REQ-019, REQ-025) (by 12 Nov)
-- [ ] 5.1 `llm/base.py`, `llm/scripted.py` (`ScriptedLlm`, `GullibleLlm`).
-- [ ] 5.2 `prompts.py` (system prompt, untrusted wrapper) and `loop.py` (budgets, cancel, suspend on pending, no dangerous retries).
-- [ ] 5.3 Unit scenarios from REQ-025 over `FakeApp`; stub two-tool tool pack until spirit-map merges.
+- [x] 5.1 `llm/base.py`, `llm/scripted.py` (`ScriptedLlm`, `GullibleLlm`).
+- [x] 5.2 `prompts.py` (system prompt, untrusted wrapper) and `loop.py` (budgets, cancel, suspend on pending, no dangerous retries).
+- [x] 5.3 Unit scenarios from REQ-025 over `FakeApp`; stub two-tool tool pack until spirit-map merges.
 - [ ] 5.4 Injection tests (REQ-029a) with `GullibleLlm`; record in the journal that the defence holds with an obedient model.
 
 ## 6. API (REQ-001, REQ-002, REQ-022 to REQ-024) (by 16 Nov)
