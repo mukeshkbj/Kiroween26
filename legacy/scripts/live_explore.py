@@ -17,7 +17,6 @@ once the integrator ships the fix in bridge/.
 from __future__ import annotations
 
 import re
-import runpy
 import sys
 
 from seance_bridge import errors as _errors
@@ -41,6 +40,21 @@ def _press_key(self: _session.Session, key: str, timeout_s: float = 5.0) -> None
 
 _session.Session.press_key = _press_key  # type: ignore[method-assign]
 
+
+def _wire_host_port() -> None:
+    """Fix 3 (reported to B): ``seance_spirit explore`` builds its Explorer
+    without host/port, so it always connects to localhost:3270 whatever
+    TN3270_HOST/TN3270_PORT say. Pass the same Settings.from_env() the CLI
+    already uses for its port wiring. Changes the connect target only."""
+    import functools
+
+    from seance_mcp.config import Settings
+    import seance_spirit.__main__ as cli  # noqa: PLC0415
+
+    s = Settings.from_env()
+    cli.Explorer = functools.partial(cli.Explorer, host=s.host, tn_port=s.port)  # type: ignore[assignment]
+    print(f"[live_explore] explorer will connect to {s.host}:{s.port}", file=sys.stderr)
+
 if __name__ == "__main__":
     import faulthandler
     import os
@@ -49,4 +63,9 @@ if __name__ == "__main__":
     # dump every thread's stack to stderr and exit instead of hanging forever.
     faulthandler.dump_traceback_later(int(os.environ.get("LIVE_WATCHDOG_S", "240")), exit=True)
     sys.argv = ["seance_spirit", *sys.argv[1:]]
-    runpy.run_module("seance_spirit", run_name="__main__", alter_sys=True)
+    # Run the CLI's main() on the already-imported module so the host/port
+    # wiring applies (runpy would re-import __main__ fresh and drop it).
+    _wire_host_port()
+    import seance_spirit.__main__ as cli  # noqa: E402,PLC0415
+
+    sys.exit(cli.main())
