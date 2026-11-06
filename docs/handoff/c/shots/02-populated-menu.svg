@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" font-family="ui-monospace, Consolas, monospace">
+  <rect width="720" height="420" fill="#020a04"/>
+  <rect x="16" y="16" width="688" height="360" fill="#030f06" stroke="#52c47d" stroke-width="1"/>
+  <g fill="#3dff7a" font-size="14" style="filter: drop-shadow(0 0 2px #3dff7a66)">
+    <text x="28" y="44"> SEANCE INSURANCE - MAIN MENU</text>
+    <text x="28" y="92">   1  POLICY ENQUIRY</text>
+    <text x="28" y="110">   2  POLICY LIST</text>
+    <text x="28" y="128">   3  POLICY UPDATE</text>
+    <text x="28" y="176">   OPTION ===&gt;</text>
+    <text x="28" y="356" fill="#52c47d"> ENTER=SELECT  CLEAR=EXIT</text>
+  </g>
+  <!-- input field marker + cursor block -->
+  <rect x="140" y="164" width="14" height="18" fill="#3dff7a14" stroke="#3dff7a" stroke-width="0" />
+  <line x1="140" y1="180" x2="154" y2="180" stroke="#3dff7a" stroke-width="1.5"/>
+  <rect x="140" y="164" width="9" height="18" fill="#c9ffd9"/>
+  <!-- scanlines overlay -->
+  <g opacity="0.05">
+    <rect x="16" y="16" width="688" height="360" fill="url(#scan)"/>
+  </g>
+  <defs>
+    <pattern id="scan" width="4" height="3" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#000"/>
+    </pattern>
+  </defs>
+  <!-- OIA line -->
+  <text x="28" y="400" fill="#52c47d" font-size="11">connected   ready   screen ba02cc6364</text>
+</svg>

@@ -1,0 +1,72 @@
+/*
+ * CRT presentation layer (design.md). Effects live on a separate overlay element so turning them off can never
+ * change layout or text. Flicker and sweep are keyframes gated by the --flicker-play / --sweep-play variables,
+ * which the effects level and reduced-motion set; there is no animation under "off" or reduced motion.
+ */
+
+.term-screen {
+  position: relative;
+  background: var(--bg);
+  color: var(--phosphor);
+  font-family: var(--mono);
+  text-shadow: var(--glow);
+  isolation: isolate;
+}
+
+/* Scanlines + vignette overlay. pointer-events:none so it never swallows clicks; aria-hidden in markup. */
+.crt-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, var(--scanline-alpha)) 0,
+      rgba(0, 0, 0, var(--scanline-alpha)) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, var(--vignette-alpha)) 100%);
+}
+
+.crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(61, 255, 122, 0.06), transparent 40%);
+  animation: crt-sweep 7s linear infinite;
+  animation-play-state: var(--sweep-play);
+}
+
+.term-screen {
+  animation: crt-flicker var(--flicker-ms) steps(60) infinite;
+  animation-play-state: var(--flicker-play);
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  47% { opacity: 1; }
+  48% { opacity: 0.96; }
+  49% { opacity: 1; }
+  92% { opacity: 0.985; }
+}
+
+@keyframes crt-sweep {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+/* Belt and braces: never animate when the OS asks for reduced motion, whatever the play-state says. */
+@media (prefers-reduced-motion: reduce) {
+  .term-screen,
+  .crt-overlay::after {
+    animation: none !important;
+  }
+}
+
+/* The in-app Reduce motion toggle (data-motion="reduce" on <html>) does the same as the OS setting. */
+[data-motion="reduce"] .term-screen,
+[data-motion="reduce"] .crt-overlay::after {
+  animation: none !important;
+}
