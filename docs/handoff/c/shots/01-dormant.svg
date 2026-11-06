@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="420" viewBox="0 0 720 420" font-family="ui-monospace, Consolas, monospace">
+  <rect width="720" height="420" fill="#010603"/>
+  <rect x="16" y="16" width="688" height="360" fill="#020a04" stroke="#1d3a28" stroke-width="1"/>
+  <text x="360" y="200" fill="#29603f" font-size="15" text-anchor="middle">The screen is dormant. Choose a system to begin.</text>
+  <g opacity="0.04"><rect x="16" y="16" width="688" height="360" fill="url(#s2)"/></g>
+  <defs><pattern id="s2" width="4" height="3" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000"/></pattern></defs>
+  <text x="28" y="400" fill="#2f5540" font-size="11">disconnected   ready   screen --------</text>
+</svg>

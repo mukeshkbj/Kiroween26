@@ -1,0 +1,62 @@
+{
+  "decision": "deny",
+  "checks": [
+    {
+      "name": "connect simulated system",
+      "ok": true,
+      "ms": 396,
+      "evidence": {
+        "clicksNeeded": 1
+      }
+    },
+    {
+      "name": "proposal opens the modal: Deny focused, Approve delayed, gate facts, unverified agent text, screen drawn",
+      "ok": true,
+      "ms": 915,
+      "evidence": {
+        "focus": "Deny",
+        "approveDisabledAtOpen": true,
+        "miniScreenRows": 0,
+        "modal": "Confirm a change to the legacy systemKey to be pressed: Enter SEANCE INSURANCE - CONFIRM UPDATE POLNO: P0000001 HOLDER: J. MARLOWE OLD NEW STATUS: A A PREMIUM: 180.00 111.00 ENTER=CONFIRM PF3=CANCEL ENTER=CONFIRM AND SAVE PF3=CANCEL Fields on this screenNo editable fields on this screen. Review the screen above.Time left: 300 sThe agent says (unverified)This is the agent’s own description. It may be wrong. Check the "
+      }
+    },
+    {
+      "name": "a synthetic (untrusted) click does NOT approve",
+      "ok": true,
+      "ms": 1628,
+      "evidence": null
+    },
+    {
+      "name": "deny resolves as expected",
+      "ok": true,
+      "ms": 1036,
+      "evidence": {
+        "screenTitle": "SEANCE INSURANCE - CONFIRM UPDATE",
+        "messageLine": "ENTER=CONFIRM PF3=CANCEL",
+        "assistantTail": "icybusinessmay change datapolicy_numberP0000001premium111Result: error (denied_by_user)The person declined this changeThe person declined this change. Nothing was changed. This is final: do not retry or propose it again."
+      }
+    },
+    {
+      "name": "audit drawer lists the decision",
+      "ok": true,
+      "ms": 737,
+      "evidence": {
+        "chainBadge": "Chain: verified by the server"
+      }
+    },
+    {
+      "name": "server audit agrees and the hash chain verifies",
+      "ok": true,
+      "ms": 28,
+      "evidence": {
+        "entries": 10,
+        "confirmed": 0,
+        "denied": 1,
+        "by": "oob:web-ui:s_79dc"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "console": [],
+  "ok": true
+}
