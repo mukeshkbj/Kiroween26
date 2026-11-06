@@ -105,3 +105,37 @@ real COBOL (COBUCLG) fallback stands and the demo milestone is met. `src/kicks/`
 kept as a documented stretch (the SMENMAP BMS mapset does assemble+link).
 (Two JCL 72-column traps hit again on the way: a quoted PARM whose closing
 apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
+
+## 2026-11-06 Docker restart, health check, B's live tk4-builtins run
+
+- Docker Desktop had stopped overnight. After the integrator restarted it,
+  `gss-legacy` IPLed, and the health check passed first try (`P0000001 -> J.
+  MARLOWE` from COBOL). The policy data and the SEANCSVC load module survived
+  the restart. I restarted the stand-in.
+- Merged main (spirit-map, contracts with ScreenOut.volatile).
+- Surprise: my first tk4-builtins capture had grabbed the **Hercules device
+  banner**, not the VTAM welcome. TK4- paints the banner first, and the bridge's
+  "input field + stable" wait accepted it. The capture now waits for a row 0
+  starting with `Terminal`. Clock volatile is now TK4_CLOCK_REGIONS (0,64,16;1,64,16).
+- B's explorer, live (7.3), three attempts:
+  1. Bridge as shipped: halted `session_lost` on the first PA1. The cause is the
+     PF/PA key-form bug (bridge sends `PA1`, s3270 wants `PA(1)`; nothing is
+     sent).
+  2. `legacy/scripts/live_explore.py` (PF/PA form fix only): reaches 7 screens,
+     then **hangs forever** on the next AID after CLEAR on a blank VTAM screen.
+     A faulthandler watchdog showed `Session._exec` blocked in readline: the key
+     was sent and the host never answered, so this is an ambiguous ack with no
+     timeout. Filed `request-integrator-bridge-aid-blocks.md`.
+  3. Same, plus a bounded pre-press `Wait(Unlock)`: the same hang, which
+     confirmed the keyboard was unlocked and the AID itself was the problem.
+  Partial map (7 nodes, 12 edges, 17 frontier) handed to B in
+  `docs/handoff/a/live-runs/tk4-builtins/` with a response file.
+- Surprise: the welcome's `screen_id` changes per connection because row 0
+  shows the VTAM terminal `CUU0C0`/`CUU0C1`. Suggested to B: volatile `[0,11,6]`.
+- My mistake: the tool returned before a background explorer exited, and I
+  started a second one. For a short time two sessions overlapped on separate
+  VTAM terminals. I discarded those artefacts. I now check for a live explorer
+  process before starting one, and the runner has a watchdog.
+- Safety check of every audit: only read-only keys were sent (CLEAR, PA1-3,
+  PF13-14). ENTER stayed `denied_commit`, and `Logon ===>` stayed
+  `unsafe_field`. No password or real userid appears in any artefact.
