@@ -48,6 +48,24 @@ def _port(args: argparse.Namespace) -> BridgePort:
     return RealBridgePort(s.wait_timeout_ms, s.volatile_regions)
 
 
+def _target(args: argparse.Namespace, env: dict | None = None) -> tuple[str, int]:
+    """Where a non-fake run connects. TN3270_HOST/TN3270_PORT are ignored unless ``--from-env``
+    is given; otherwise the target is ``--host``/``--port`` or localhost:3270. An environment
+    variable left over from another task must never redirect an exploration."""
+    import os
+
+    host, port = "localhost", 3270
+    if getattr(args, "from_env", False):
+        e = os.environ if env is None else env
+        host = e.get("TN3270_HOST") or host
+        port = int(e.get("TN3270_PORT") or port)
+    if getattr(args, "host", None):
+        host = args.host
+    if getattr(args, "port", None):
+        port = args.port
+    return host, port
+
+
 def _paths(args: argparse.Namespace) -> tuple[Path, Path, Path, Path]:
     d = Path(args.dir) if args.dir else REPO_ROOT / "docs" / "spirit-map" / args.app
     return d, d / "explore.seed.json", d / "spirit-map.json", d / "key-policy.json"
@@ -61,8 +79,9 @@ def cmd_explore(args: argparse.Namespace) -> int:
     audit = REPO_ROOT / "docs" / "audit" / f"explore-{args.app}.audit.jsonl"
     stamp = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.000Z") if args.stamp else None
     fresh_path = map_p if not map_p.exists() else map_p.with_suffix(".new.json")
+    host, tn_port = _target(args)
     ex = Explorer(_port(args), seed, approved=load_approved_policy(policy_p), attach=args.attach,
-                  out_path=fresh_path, audit_path=audit, started_at=stamp)
+                  out_path=fresh_path, audit_path=audit, started_at=stamp, host=host, tn_port=tn_port)
     rep = anyio.run(ex.run)
     if fresh_path != map_p:
         merged, drift = merge(read_map(map_p), ex.map)
@@ -152,7 +171,7 @@ def cmd_replay(args: argparse.Namespace) -> int:
     audit = REPO_ROOT / "docs" / "audit" / f"replay-{args.app}.audit.jsonl"
     rep = anyio.run(lambda: replay_map(_port(args), read_map(map_p), load_seed(seed_p),
                                        approved=load_approved_policy(policy_p), attach=args.attach,
-                                       audit_path=audit))
+                                       audit_path=audit, host=_target(args)[0], tn_port=_target(args)[1]))
     print(f"{'ok' if rep.ok else 'DRIFT'}: replayed {len(rep.replayed)} edges, {len(rep.mismatches)} mismatches, "
           f"{len(rep.skipped)} skipped, halted={rep.halted}")
     for mm in rep.mismatches:
@@ -173,6 +192,10 @@ def main(argv: list[str] | None = None) -> int:
             s.add_argument("--fake", help="use a fake app from seance_mcp.fake")
             s.add_argument("--capture", help="use a recorded capture file")
             s.add_argument("--attach", action="store_true", help="start from the screen a human left the session on")
+            s.add_argument("--host", help="3270 host (default localhost)")
+            s.add_argument("--port", type=int, help="3270 port (default 3270)")
+            s.add_argument("--from-env", action="store_true",
+                           help="take host/port from TN3270_HOST/TN3270_PORT (ignored otherwise)")
         if name == "explore":
             s.add_argument("--stamp", action="store_true", help="record the start time in the map")
         if name == "review":

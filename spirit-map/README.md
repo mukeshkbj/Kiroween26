@@ -49,6 +49,10 @@ python -m seance_spirit review   --app fake-insurance --policy --by you  # promo
 python -m seance_spirit replay   --app fake-insurance --fake fake-insurance
 ```
 
+Live runs (Agent A / integrator only): `explore` and `replay` connect to `localhost:3270` unless you
+pass `--host H --port P`. The `TN3270_HOST` / `TN3270_PORT` variables are **ignored** unless you add
+`--from-env`, so a variable left over from another task cannot redirect an exploration.
+
 ## How to review
 
 `review` with no flags prints a diff-friendly summary: each tool's name, kind, `def_hash`, and

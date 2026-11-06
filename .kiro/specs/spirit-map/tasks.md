@@ -59,3 +59,9 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 8.1 `spirit-map/README.md`: pipeline, the human-in-the-loop widening cycle, how to review.
 - [x] 8.2 Journal entries to `docs/handoff/b/journal.md` (integrator merges into `docs/kiro-journal.md`): one surprise per stage.
 - [ ] 8.3 After KICKS lands (legacy-environment 4.6): rerun the pipeline on `seance-insurance`, review, approve, commit artefacts. Not a blocker for the 17 Nov milestone.
+
+## 9. Follow-ups after the first live runs (2026-11-06)
+- [x] 9.1 CLI: `explore`/`replay` ignore the TN3270 host and port environment variables unless `--from-env` (or `--host`/`--port`) is given; default localhost:3270. Tests in `tests/test_cli.py`.
+- [x] 9.2 `tk4-builtins` seed: add `(0,11,6)` (the `CUU0Cx` terminal name) to `volatile`, so the welcome screen_id no longer changes per connection.
+- [ ] 9.3 Promote A's live-run results into `docs/spirit-map/` (`seance-insurance` identical to fake; `tk4-builtins` partial map kept as evidence, not as the map).
+- [ ] 9.4 Second `tk4-builtins` live run by A after the bridge fixes (requested in `docs/handoff/b/request-a-tk4-second-live-run.md`).
