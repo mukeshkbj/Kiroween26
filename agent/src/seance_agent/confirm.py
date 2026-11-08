@@ -63,6 +63,7 @@ class _Pending:
     tool_call_id: str
     event: anyio.Event
     resolution: Resolution | None = None
+    scope: CallScope | None = None  # the call's own mapping state, so steps keep counting
 
 
 class ConfirmBroker:
@@ -81,7 +82,8 @@ class ConfirmBroker:
     # -- the loop suspends here -------------------------------------------
 
     def register_pending(
-        self, *, tool_call_id: str, turn_id: str | None, read_only: bool, agent_summary: str | None
+        self, *, tool_call_id: str, turn_id: str | None, read_only: bool, agent_summary: str | None,
+        scope: CallScope | None = None,
     ) -> str:
         """Emit ``confirmation_required`` from the gate's pending action and record
         the in-flight entry, without blocking. Returns the action_id.
@@ -99,7 +101,8 @@ class ConfirmBroker:
         if self._pending is not None and self._pending.action_id != aid:
             self._resolve(self._pending, Resolution("superseded"))
 
-        entry = _Pending(action_id=aid, turn_id=turn_id, tool_call_id=tool_call_id, event=anyio.Event())
+        entry = _Pending(action_id=aid, turn_id=turn_id, tool_call_id=tool_call_id, event=anyio.Event(),
+                         scope=scope)
         self._pending = entry
 
         self._session.emit(
@@ -240,7 +243,8 @@ class ConfirmBroker:
 
     def _flush_after(self, entry: _Pending) -> None:
         """Map any screen/audit events the confirm/deny produced onto this call."""
-        self._mapper.flush(CallScope(tool_call_id=entry.tool_call_id, before_sent=True))
+        # Continue the call's own scope: one ``before`` per call, and ``step`` keeps counting.
+        self._mapper.flush(entry.scope or CallScope(tool_call_id=entry.tool_call_id, before_sent=True))
 
     def _resolve(self, entry: _Pending, res: Resolution, *, confirmed_by: str | None = None) -> None:
         if entry.resolution is not None:

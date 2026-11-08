@@ -259,7 +259,7 @@ class AgentLoop:
             if gp is None:
                 finish("error", "unknown_action", "A pending action was reported but none exists.", None)
                 return prompts.agent_notice(use.name, "Nothing was proposed."), "error", "unknown_action"
-            return await self._await_human(use, tcid, key, agent_text, denied, finish)
+            return await self._await_human(use, tcid, key, agent_text, denied, finish, scope)
 
         if outcome.status == "error":
             extra = ""
@@ -296,13 +296,13 @@ class AgentLoop:
         return box["o"]
 
     async def _await_human(self, use: ToolUse, tcid: str, key: str, agent_text: str, denied: set[str],
-                           finish: Callable[..., None]) -> tuple[str, str, str | None]:
+                           finish: Callable[..., None], scope: CallScope) -> tuple[str, str, str | None]:
         gp = self.service.gate.pending
         assert gp is not None
         read_only = not self.service.gate.allow_commit
         summary = agent_text.strip()[:300] or None
         aid = self.confirm.register_pending(tool_call_id=tcid, turn_id=self.turn_id,
-                                            read_only=read_only, agent_summary=summary)
+                                            read_only=read_only, agent_summary=summary, scope=scope)
         t0 = time.monotonic()
         remaining = max(0.0, gp.expires_at - self.service.gate.clock())
         res: Resolution | None = None

@@ -130,6 +130,20 @@ async def test_d3_business_lookup_obeys_the_order_rules() -> None:
         await cm.__aexit__(None, None, None)
 
 
+async def test_d3_steps_keep_counting_through_the_confirmation() -> None:
+    """Found while fixing D-3: the committed key's focus restarted at step 0."""
+    cm, h = await _connected()
+    try:
+        loop = make_loop(h, ScriptedLlm([[ToolUse("u1", "update_policy", {"policy_number": "P0000003", "premium": "300"})],
+                                         ["Done."]]))
+        await run_with_decision(h, loop, "set premium", "approve")
+        cid = events(h, "tool_call")[0]["data"]["tool_call_id"]
+        steps = [e["data"]["step"] for e in events(h, "field_focus") if e["data"]["tool_call_id"] == cid]
+        assert steps == list(range(len(steps))) and len(steps) >= 2
+    finally:
+        await cm.__aexit__(None, None, None)
+
+
 def test_d3_the_checker_rejects_the_deviations_it_was_written_for() -> None:
     """The stricter rules must actually bite (both deviations from the finding)."""
     from ._stream import ContractError
