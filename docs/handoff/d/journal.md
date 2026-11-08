@@ -193,3 +193,20 @@ Doing it from a scratch worktree kept ownership intact.
 A process note: one "failure" was my own test racing a full replay, which contains old `connected` events.
 I read the agent's own event log (`AGENT_EVENT_LOG`) before changing any code. It showed the agent was right,
 so the fix went into the test (wait for the stream to settle).
+
+### 2026-11-07 — integrator e2e findings D-1 to D-5
+
+- D-1 and most of D-2 were already fixed on my branch (`1f60953`, `66be441`). The integrator's browser run used
+  `main` from before they landed. The rest is fixed in `b34e180` and `bfd5ecf`, tests first: 27 tests were red
+  before any code changed.
+
+Surprise (section 8 / protocol): the D-3 bug was invisible to every stream check I had, because my
+`check_stream` copy only checked what the contract examples needed (turns, call/result pairs). Adding the 4.3
+screen rules turned 12 previously green tests red at once. The root cause was a single assumption in the mapper:
+that every operation names its screen when it starts. Reads don't. Fixing it surfaced a second deviation the
+integrator had not listed (the step counter restarting at 0 after approval). The general lesson: a checker
+written to accept the examples cannot catch what the examples never exercise.
+
+Also: D-4 was more than a label. `seance-insurance` fell back to `TN3270_PORT` when `STANDIN_PORT` was unset, so
+it would have connected to TK4- under the stand-in's name. The test now pins `apps.json` to the JSON in
+`docs/contracts.md`.

@@ -47,7 +47,7 @@ Ordered so the safety properties are proven with scripted models before any real
 ## 7. Real providers (REQ-009, REQ-011, REQ-029b) (by 20 Nov)
 - [x] 7.1 `anthropic_provider.py` with recorded-payload tests; no key in logs (test greps log output).
 - [x] 7.2 `bedrock_provider.py` (Converse tool use); same tests.
-- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal. (Test written: `tests/test_llm_real.py`, skipped without credentials. OPEN, waiting on the user for an API key: then `python -m pytest -m llm tests/test_llm_real.py`.)
+- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal. PARKED until the user adds `LLM_PROVIDER`, `LLM_MODEL` and `ANTHROPIC_API_KEY` to `agent/.env` (the test reads it). A real-model transcript from 2026-11-07 is committed as evidence (`docs/handoff/d/llm-injection-transcript.jsonl`: no obedience, no confirmation, no secret), but D has not run it, so this stays open.
 - [x] 7.4 `llm_unavailable` path tested.
 
 ## 8. Integration (by 24 Nov)
