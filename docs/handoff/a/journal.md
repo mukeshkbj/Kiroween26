@@ -345,3 +345,21 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   merge. Nothing was mid-write on the mainframe: the last job was the 18:0x
   replay, and any interrupted SEANCSVC request would be a read (no update was in
   flight).
+
+## 2026-11-07 21:2x Docker back; recovered; stand-in hardened
+
+- Docker Desktop had stopped completely (engine pipe gone, WSL distro stopped).
+  The user asked me to continue, so I started Docker Desktop. The engine was up
+  in 5 s. `gss-legacy` auto-started on the named volumes; the rollback
+  container stayed stopped (restart=no). TSO was up after the IPL in 32 s.
+- After the crash: catalog 45/45 identical to the pre-down fingerprint, health
+  check OK, live parity OK, demo path 3x OK, data reset. The named volumes did
+  their job through an unclean engine stop.
+- Fix (the gap the stall exposed): the stand-in's Docker calls are now bounded
+  (20 s). A failed read gives a message on screen. A failed commit is reported
+  as ambiguous, with the pending change dropped and never resubmitted. The
+  server also always answers the terminal, even on a bug. 3 new tests, 24 pass.
+- Agent check: no branch moved since 2026-11-06 18:24 and there are no new
+  requests for A. B's second run is answered; C has no live request; D's live
+  e2e is answered, with its seance-insurance re-run waiting on D's wiring fix
+  (request-d-seance-insurance-wiring.md).
