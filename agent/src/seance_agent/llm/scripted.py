@@ -144,7 +144,7 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
         pol = _POLICY_RE.search(text)
         if "list" in low and "list_policies" in names:
             return ["Listing the policies.", ToolUse(f"demo_{n}", "list_policies", {})]
-        if pol and re.search(r"premium|status|update|change|set", low) and "update_policy" in names:
+        if pol and re.search(r"premium|status|update|change|set|mark", low) and "update_policy" in names:
             args: dict[str, Any] = {"policy_number": pol.group(0).upper()}
             if (pm := _PREMIUM_RE.search(text)):
                 args["premium"] = pm.group(1)
@@ -174,7 +174,8 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
             continue
         res = j.get("result") or {}
         if j.get("trust") == "agent-notice":
-            out.append(str(res.get("notice", "")))
+            # Say the person-facing sentence; the rest of the notice is guidance for the model (D-5).
+            out.append(str(res.get("user") or res.get("notice", "")))
         elif res.get("status") == "error":
             out.append("That did not work: " + str((res.get("error") or {}).get("message", "error")))
         elif j.get("tool") == "lookup_policy":

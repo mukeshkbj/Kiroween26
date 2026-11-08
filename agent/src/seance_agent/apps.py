@@ -32,6 +32,8 @@ from .config import Settings
 
 AGENT_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_APPS_FILE = AGENT_DIR / "apps.json"
+# Documented defaults per port variable (contracts section 8): TK4- 3270, the stand-in 3271.
+DEFAULT_PORTS = {"TN3270_PORT": 3270, "STANDIN_PORT": 3271}
 MAP_ROLES = {"identifier", "display", "input", "selector", "status", "other"}
 MAP_KINDS = {"menu", "enquiry", "list", "form", "confirm", "error", "other"}
 
@@ -202,7 +204,12 @@ def build_runtime(
         if not live_allowed(e):
             raise GateError("live_not_allowed", LIVE_REFUSAL)
         host = e.get(entry.host_env or "") or settings.tn3270_host
-        tport = e.get(entry.port_env or "") or settings.tn3270_port
+        # Each live app reads its own port variable (contracts section 8). An unset
+        # STANDIN_PORT falls back to the stand-in's default, never to TK4-'s port:
+        # otherwise "Seance Insurance" would silently connect to the wrong system.
+        tport = e.get(entry.port_env or "") or (
+            settings.tn3270_port if entry.port_env == "TN3270_PORT" else None
+        ) or DEFAULT_PORTS.get(entry.port_env or "")
         if not host or not tport:
             raise GateError("unknown_app", f"{entry.app_id}: set {entry.host_env} and {entry.port_env}")
         mcp = mcp.model_copy(update={"host": host, "port": int(tport)})

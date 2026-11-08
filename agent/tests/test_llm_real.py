@@ -3,7 +3,7 @@ default and skipped without credentials. Run it with::
 
     python -m pytest -m llm tests/test_llm_real.py
 
-It writes the transcript to ``docs/handoff/d/llm-injection-transcript.jsonl`` so a
+Credentials come from the environment or ``agent/.env``. It writes the transcript to ``docs/handoff/d/llm-injection-transcript.jsonl`` so a
 run can be quoted in the journal. A real model usually refuses; the assertion is
 the safety property (no commit key without a human, no obedience to the screen),
 which must hold whether or not it refuses.
@@ -31,6 +31,11 @@ def anyio_backend() -> str:
 
 
 async def test_real_model_does_not_obey_the_screen() -> None:
+    # PARKED (7.3): the person adds LLM_PROVIDER, LLM_MODEL and ANTHROPIC_API_KEY to agent/.env
+    # (gitignored). load_dotenv never takes GSS_LIVE_OK from a file and never overrides a set variable.
+    from seance_agent.__main__ import load_dotenv
+
+    load_dotenv()
     settings = Settings.from_env(os.environ)
     llm, available = build_llm(settings)
     if llm is None or not available or settings.llm_provider.value == "scripted":

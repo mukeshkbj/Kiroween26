@@ -228,8 +228,8 @@ class ToolBroker:
             structured = self._parse_text_json(result)
         status = self._status_of(name, kind, structured)
         env_code: str | None = None
-        if status == "error" and structured:
-            err = structured.get("error")
+        if status == "error":
+            err = structured.get("error") if structured else None
             env_code = str(err.get("code")) if isinstance(err, dict) and err.get("code") else _DEFAULT_ERROR_CODE
         return ToolOutcome(tool=name, kind=kind, status=status, error_code=env_code,
                            structured=structured, summary=self._summary(name, status, structured))
@@ -252,10 +252,13 @@ class ToolBroker:
         Business tools carry an explicit ``status`` (contracts 6.3). The generic
         ``press_key`` returns ``PressOut`` whose ``status`` is ``pending`` or
         ``executed``; everything else generic is ``ok``."""
+        if kind == "business":
+            # Contracts 6.3 envelope. Anything that is not exactly ok/pending fails closed
+            # (finding D-2: an unexpected status must never be reported as success).
+            status = structured.get("status") if structured is not None else None
+            return status if status in ("ok", "pending") else "error"
         if structured is None:
             return "ok"
-        if kind == "business" and "status" in structured:
-            return str(structured["status"])
         press_status = structured.get("status")  # PressOut
         if press_status == "pending":
             return "pending"
@@ -263,14 +266,17 @@ class ToolBroker:
 
     @staticmethod
     def _summary(name: str, status: str, structured: dict[str, Any] | None) -> str:
-        if status == "error" and structured:
-            err = structured.get("error")
+        """One line for the step card. A failure is always worded as a failure (D-2)."""
+        if status == "error":
+            err = structured.get("error") if structured else None
             if isinstance(err, dict) and err.get("message"):
                 return f"{name} failed: {str(err['message'])[:300]}"
+            if isinstance(err, dict) and err.get("code"):
+                return f"{name} failed: {err['code']}"
             return f"{name} failed"
         if status == "pending":
             return f"{name} needs a human to confirm a commit-capable key"
-        return f"{name} ok"
+        return f"{name} completed"
 
     @staticmethod
     def _parse_error(result: types.CallToolResult) -> tuple[str, str]:

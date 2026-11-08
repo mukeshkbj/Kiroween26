@@ -44,15 +44,26 @@ RESULT_CAP = 8 * 1024
 PUMP_INTERVAL_S = 0.02
 GENERIC_NO_COMMIT = {"read_screen", "list_fields", "fill_field"}
 
-# resolution outcome -> (error_code for tool_result, notice for the model)
-_FINAL = {
-    "denied": ("denied_by_user", "The person declined this change. Nothing was changed. This is final: do not retry or propose it again."),
-    "expired": ("action_expired", "The confirmation expired. Nothing was changed. Do not retry unless the person asks again."),
-    "blocked_read_only": ("read_only", "The system is read-only. Nothing was changed. This is final."),
-    "stale": ("stale_screen", "The screen changed before the person confirmed, so nothing was sent."),
-    "superseded": ("unknown_action", "A newer action replaced this one. Nothing was changed."),
-    "error": ("bridge_error", "The change could not be completed. Nothing was confirmed."),
+# resolution outcome -> (error_code, what the PERSON sees, what the MODEL is told on top of it).
+# The person's sentence is all the UI ever gets (finding D-5); instructions aimed at the model
+# ("do not retry") stay in the tool result sent to the model.
+_FINAL: dict[str, tuple[str, str, str]] = {
+    "denied": ("denied_by_user", "You declined this change. Nothing was changed.",
+               "This is final: do not retry or propose it again, and do not argue."),
+    "expired": ("action_expired", "The confirmation timed out. Nothing was changed.",
+                "Do not retry unless the person asks again."),
+    "blocked_read_only": ("read_only", "The system is read-only, so nothing was changed.",
+                          "This is final for this session."),
+    "stale": ("stale_screen", "The screen changed before you confirmed, so nothing was sent.",
+              "Read the screen before proposing anything else."),
+    "superseded": ("unknown_action", "A newer request replaced this one. Nothing was changed.", ""),
+    "error": ("bridge_error", "The change could not be completed. Nothing was confirmed.", ""),
 }
+
+
+def _model_notice(outcome: str) -> str:
+    _, user, model = _FINAL.get(outcome, _FINAL["error"])
+    return f"{user} {model}".strip()
 
 
 class AgentLoop:
@@ -229,9 +240,9 @@ class AgentLoop:
 
         # A denied action is final within the turn; an action already proposed is not repeated (REQ-019).
         if key in denied:
-            msg = _FINAL["denied"][1]
-            finish("error", "denied_by_user", "Already declined; not proposed again.", None)
-            return prompts.agent_notice(use.name, msg), "error", "denied_by_user"
+            finish("error", "denied_by_user", "You already declined this change, so it was not proposed again.", None)
+            return (prompts.agent_notice(use.name, _model_notice("denied"), user=_FINAL["denied"][1]),
+                    "error", "denied_by_user")
         if key in proposed:
             finish("error", "invalid_arguments", "That action was already proposed this turn; not repeated.", None)
             return (prompts.agent_notice(use.name, "This exact action was already proposed in this turn and is not repeated."),
@@ -321,12 +332,14 @@ class AgentLoop:
             finish("ok", None, "The change was confirmed by the person and sent.", result)
             body = dict(result, screen=screen.model_dump(mode="json") if screen is not None else None)
             return prompts.wrap_tool_result(use.name, body), "ok", None
-        code, notice = _FINAL.get(res.outcome, _FINAL["error"])
+        code, user_text, _ = _FINAL.get(res.outcome, _FINAL["error"])
+        notice = _model_notice(res.outcome)
         code = res.error_code if res.outcome == "error" and res.error_code else code
         if res.outcome == "denied":
             denied.add(key)
-        finish("error", code, notice.split(". ")[0], {"status": "error", "error": {"code": code, "message": notice}})
-        return prompts.agent_notice(use.name, notice), "error", code
+        # The UI gets the person's sentence only; the model gets the full notice (D-5).
+        finish("error", code, user_text, {"status": "error", "error": {"code": code, "message": user_text}})
+        return prompts.agent_notice(use.name, notice, user=user_text), "error", code
 
     async def _fresh_read_after_timeout(self, scope: CallScope) -> str:
         """REQ-019: after keyboard_timeout never resend; force a read for fresh data."""
