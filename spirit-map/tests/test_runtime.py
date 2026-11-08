@@ -121,19 +121,117 @@ def test_invalid_arguments_are_rejected_before_touching_the_session(tmp_path) ->
 # ---------------------------------------------------------------- abort codes
 
 
-def test_unknown_start_when_not_on_home(tmp_path) -> None:
+def _off_home(rs_service, option: str = "1"):
+    async def go():
+        screen = await rs_service.read_screen()
+        opt = next(f.index for f in screen.fields if not f.protected)
+        await rs_service.fill_field(opt, option)
+        await rs_service.press_key("ENTER")
+    return go
+
+
+def test_goto_navigates_home_from_a_known_screen(tmp_path) -> None:
+    """B-1: the session is on the enquiry screen, not home; the tool must route back itself."""
+    pack, app, rs, service = pack_and_app(tmp_path)
+    anyio.run(_off_home(service))
+    assert app.current == "enquiry"
+    app.calls.clear()
+    res = anyio.run(lambda: run_tool(rs, pack, tool(pack, "lookup_policy"), {"policy_number": "P0000005"}))
+    assert res["status"] == "ok", res
+    assert res["data"]["holder"] == "S. LINDQVIST"
+    routing = [s for s in res["trace"] if s["op"] == "goto" and s["key"]]
+    assert routing and routing[0]["key"] in ("CLEAR", "PF3")
+    assert res["trace"][0]["op"] == "goto" and res["trace"][0]["key"] == routing[0]["key"]  # starts with routing
+    assert app.dirty is False
+
+
+def test_two_business_tools_back_to_back_off_home(tmp_path) -> None:
+    """The conversation that failed in the browser: lookup, lookup, then update."""
     pack, app, rs, service = pack_and_app(tmp_path)
 
-    async def drive_off_home():
-        screen = await service.read_screen()
-        opt = next(f.index for f in screen.fields if not f.protected)
-        await service.fill_field(opt, "1")
-        await service.press_key("ENTER")  # now on enquiry, not menu/home
-        return await run_tool(rs, pack, tool(pack, "lookup_policy"), {"policy_number": "P1"})
+    async def conversation():
+        out = []
+        for name, args in (("lookup_policy", {"policy_number": "P0000003"}),   # starts on home
+                           ("lookup_policy", {"policy_number": "P0000005"}),   # starts on the enquiry result
+                           ("list_policies", {}),                              # starts on enquiry again
+                           ("update_policy", {"policy_number": "P0000003", "premium": "300"})):  # starts on list
+            out.append(await run_tool(rs, pack, tool(pack, name), args))
+        return out
 
-    res = anyio.run(drive_off_home)
-    assert res["status"] == "error" and res["error"]["code"] in ("unknown_start", "screen_mismatch")
+    first, second, third, fourth = anyio.run(conversation)
+    assert first["status"] == "ok" and first["data"]["holder"] == "A. ROSE"
+    assert first["trace"][0]["key"] is None                      # already home: nothing pressed to get there
+    assert second["status"] == "ok" and second["data"]["holder"] == "S. LINDQVIST"
+    assert second["trace"][0]["op"] == "goto" and second["trace"][0]["key"] in ("CLEAR", "PF3")
+    assert third["status"] == "ok" and len(third["data"]["rows"]) == 8
+    assert fourth["status"] == "pending" and fourth["pending"]["key"] == "Enter"
+    assert app.dirty is False and app.policies["P0000003"]["premium"] == "250.00"
 
+
+@pytest.mark.parametrize("start", ["menu", "enquiry", "list", "update", "confirm"])
+def test_goto_home_from_every_node_uses_only_read_only_keys(tmp_path, start) -> None:
+    pack, app, rs, service = pack_and_app(tmp_path)
+    app.current = start
+    home = pack["home"]
+    t = {"name": "go_home", "kind": "read", "input_schema": {"type": "object", "properties": {}},
+         "recipe": [{"op": "goto", "node": home}], "limits": {"max_steps": 5}}
+    res = anyio.run(lambda: run_tool(rs, pack, t, {}))
+    assert res["status"] == "ok", res
+    assert app.current == "menu"
+    # only keys the key policy / defaults treat as read-only were sent, nothing was typed, nothing changed
+    assert set(app.pressed) <= {"Clear", "PF3"} and len(app.pressed) <= 1
+    assert not [c for c in app.calls if c[0] == "fill"]
+    assert app.dirty is False
+
+
+def test_unknown_screen_refuses_and_presses_nothing(tmp_path) -> None:
+    from seance_mcp.fake import FakePort
+
+    pack, _, _, _ = pack_and_app(tmp_path)
+    other = FakePort()  # the default logon screen: not in this app's map
+    settings = Settings(allow_commit=False, audit_log_path=tmp_path / "b.jsonl", key_policy_path=None)
+    service = SeanceService(settings, other, AuditLog(tmp_path / "b.jsonl"),
+                            SafetyGate(allow_commit=False, ttl_s=300.0, policy=KeyPolicy()))
+    anyio.run(lambda: service.connect("localhost", 3270))
+    res = anyio.run(lambda: run_tool(RecipeService(service), pack, tool(pack, "lookup_policy"),
+                                     {"policy_number": "P0000003"}))
+    assert res["status"] == "error" and res["error"]["code"] == "unknown_start"
+    assert "not in the map" in res["error"]["message"]
+    assert other.pressed == [] and not [c for c in other.calls if c[0] == "fill"]
+
+
+def test_routing_presses_count_against_the_step_budget(tmp_path) -> None:
+    pack, app, rs, service = pack_and_app(tmp_path)
+    anyio.run(_off_home(service))
+    t = json.loads(json.dumps(tool(pack, "lookup_policy")))
+    t["limits"]["max_steps"] = len(t["recipe"])  # enough for the recipe alone, not for recipe + routing
+    res = anyio.run(lambda: run_tool(rs, pack, t, {"policy_number": "P0000003"}))
+    assert res["status"] == "error" and res["error"]["code"] == "step_budget"
+
+
+def test_a_pack_without_navigation_still_works_from_home_only(tmp_path) -> None:
+    """Older packs (no `navigation`) keep the previous behaviour: fine on home, refused elsewhere."""
+    pack, app, rs, service = pack_and_app(tmp_path)
+    old = {k: v for k, v in pack.items() if k != "navigation"}
+    ok = anyio.run(lambda: run_tool(rs, old, tool(old, "lookup_policy"), {"policy_number": "P0000003"}))
+    assert ok["status"] == "ok"
+    anyio.run(_off_home(service))
+    bad = anyio.run(lambda: run_tool(rs, old, tool(old, "lookup_policy"), {"policy_number": "P0000003"}))
+    assert bad["status"] == "error" and bad["error"]["code"] == "unknown_start"
+
+
+def test_mutation_old_assert_goto_fails_the_two_in_a_row_test(tmp_path, monkeypatch) -> None:
+    """Replace navigation with the old assert: the conversation breaks on its second tool."""
+    from seance_spirit import runtime
+
+    async def old_goto(service, nav, node_id, screen, trace, spend):
+        if runtime._nid(screen.screen_id) != node_id:
+            raise runtime.RunError("unknown_start", "expected to start on home")
+        return screen
+
+    monkeypatch.setattr(runtime, "_goto", old_goto)
+    with pytest.raises(AssertionError):
+        test_two_business_tools_back_to_back_off_home(tmp_path)
 
 def test_screen_mismatch_aborts(tmp_path) -> None:
     pack, app, rs, _ = pack_and_app(tmp_path)

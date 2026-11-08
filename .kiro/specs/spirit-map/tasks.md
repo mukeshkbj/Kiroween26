@@ -38,7 +38,7 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 5.2 `llm.py`: `LlmClient` protocol, `ScriptedLlm`, anthropic and bedrock adapters (env-driven, no keys logged), prompt-hash cache.
 - [x] 5.3 Prompt builder: screen text delimited as data; response validated; failures fall back and are recorded.
 - [x] 5.4 Tests: REQ-036 (label independence), REQ-038 (injection fixture), REQ-035 on prompts (sentinel never in a prompt), cache round-trip.
-- [ ] 5.5 Optional `llm`-marked test against a real provider; capture one real labelled run for the journal (screenshot + a surprise).
+- [ ] 5.5 Optional `llm`-marked test against a real provider; capture one real labelled run for the journal (screenshot + a surprise). *Test written (`tests/test_llm_real.py`, skips without credentials); the real run still needs an API key.*
 
 ## 6. Generator and runtime (REQ-019 to REQ-031) (by 15 Nov)
 - [x] 6.1 **Spike:** dynamic tool registration with `mcp` 2.x `MCPServer` (inputSchema from JSON Schema, kwargs handler). Record result in design.md; pick adapter or the single-tool fallback.
@@ -52,10 +52,17 @@ Ordered so the safety machinery and its property tests exist before the explorer
 ## 7. Live TK4- built-ins (REQ-040) (by 17 Nov)
 - [x] 7.1 Handoff request to **Agent A** for `legacy/captures/tk4-*.json` (recorded real screens, format in contracts section 2). FakeBridge replays them so B can test against real layouts without touching the container.
 - [x] 7.2 `tk4-builtins` seed (welcome screen, bogus-logon error; clock volatile regions). Explore against captures.
-- [ ] 7.3 Request A (or the integrator) to run the marked live exploration; commit the resulting map under `docs/spirit-map/tk4-builtins/`.
-- [ ] 7.4 Stretch: attach-mode run after a human logon (RFE/ISPF), map committed if clean.
+- [x] 7.3 Request A (or the integrator) to run the marked live exploration; commit the resulting map under `docs/spirit-map/tk4-builtins/`. *A ran it 2026-11-06: partial map (7 nodes) because of two bridge bugs; promoted as `spirit-map.partial.json`. Clean run: 9.4.*
+- [ ] 7.4 Stretch: attach-mode run after a human logon (RFE/ISPF), map committed if clean. *Needs a human to log on to the live system; attach mode itself is tested offline.*
 
 ## 8. Docs and journal
 - [x] 8.1 `spirit-map/README.md`: pipeline, the human-in-the-loop widening cycle, how to review.
 - [x] 8.2 Journal entries to `docs/handoff/b/journal.md` (integrator merges into `docs/kiro-journal.md`): one surprise per stage.
-- [ ] 8.3 After KICKS lands (legacy-environment 4.6): rerun the pipeline on `seance-insurance`, review, approve, commit artefacts. Not a blocker for the 17 Nov milestone.
+- [x] 8.3 After KICKS lands (legacy-environment 4.6): rerun the pipeline on `seance-insurance`, review, approve, commit artefacts. Not a blocker for the 17 Nov milestone.
+
+## 9. Follow-ups after the first live runs (2026-11-06)
+- [x] 9.1 CLI: `explore`/`replay` ignore the TN3270 host and port environment variables unless `--from-env` (or `--host`/`--port`) is given; default localhost:3270. Tests in `tests/test_cli.py`.
+- [x] 9.2 `tk4-builtins` seed: add `(0,11,6)` (the `CUU0Cx` terminal name) to `volatile`, so the welcome screen_id no longer changes per connection.
+- [x] 9.3 Promote A's live-run results into `docs/spirit-map/` (`seance-insurance` identical to fake; `tk4-builtins` partial map kept as evidence, not as the map).
+- [ ] 9.4 Second `tk4-builtins` live run by A after the bridge fixes (requested in `docs/handoff/b/request-a-tk4-second-live-run.md`).
+- [x] 9.5 B-1: `goto` navigates home from any known screen over the pack's `navigation` graph (read-only, fill-free edges), refuses with `unknown_start` on an unknown screen, counts routing presses against the budget and traces them. Tests in `tests/test_runtime.py`; request: `docs/handoff/integrator/request-b-runtime-goto-navigate.md`.

@@ -1,0 +1,22 @@
+{
+  "approved": [
+    {
+      "approved_at": "2026-11-05T15:12:22.000Z",
+      "approved_by": "agent-b-demo",
+      "def_hash": "sha256:6035fdf3eb18f061c022c9a050d11036c76b566b72b7f06bbe21696dc4b30498",
+      "name": "list_policies"
+    },
+    {
+      "approved_at": "2026-11-05T15:12:22.000Z",
+      "approved_by": "agent-b-demo",
+      "def_hash": "sha256:e453662cd13ca0dde22866a42c466059199be25d065050bf2cf7c0304dd024c5",
+      "name": "lookup_policy"
+    },
+    {
+      "approved_at": "2026-11-05T15:12:22.000Z",
+      "approved_by": "agent-b-demo",
+      "def_hash": "sha256:63a55004a5488203c23e194a72d084abc6cb73ba25c3766b6d2ca3cf4019f524",
+      "name": "update_policy"
+    }
+  ]
+}

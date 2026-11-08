@@ -1,0 +1,2035 @@
+{
+  "app_id": "seance-insurance",
+  "edges": [
+    {
+      "fills": [],
+      "from": "n_419888f22d",
+      "id": "e_0137d1321e",
+      "key": "PA3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_419888f22d",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_02b9e8e664",
+      "key": "PF3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_10e1d02821",
+      "key": "PF3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_16dba7bf62",
+      "key": "PF7",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_c5d11dedae",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_1c07f4498d",
+      "key": "PA2",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_483e5fe116",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_419888f22d",
+      "id": "e_1df2583bdd",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_419888f22d",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_25d5fa5645",
+      "key": "PA3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_483e5fe116",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [
+        {
+          "field": "option",
+          "probe": "menu_policy_enquiry"
+        }
+      ],
+      "from": "n_ba02cc6364",
+      "id": "e_2626603c5e",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_419888f22d",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_419888f22d",
+      "id": "e_33775d489c",
+      "key": "PA2",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_419888f22d",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [
+        {
+          "field": "polno",
+          "probe": "known_policy"
+        },
+        {
+          "field": "status",
+          "probe": "new_status"
+        },
+        {
+          "field": "premium",
+          "probe": "new_premium"
+        }
+      ],
+      "from": "n_96fa848aaa",
+      "id": "e_4111809cbb",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_483e5fe116",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_ba02cc6364",
+      "id": "e_4f761822b8",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_5ab9f96220",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_c5d11dedae",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_5ed7e16656",
+      "key": "PF8",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_c5d11dedae",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_6238d69b28",
+      "key": "PF13",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_483e5fe116",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [
+        {
+          "field": "option",
+          "probe": "menu_policy_list"
+        }
+      ],
+      "from": "n_ba02cc6364",
+      "id": "e_7ccc3ad448",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_c5d11dedae",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_96fa848aaa",
+      "id": "e_87ce05732b",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_96fa848aaa",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_8a9b539680",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_91c79b9a85",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_419888f22d",
+      "id": "e_a6eba031b8",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_96fa848aaa",
+      "id": "e_ab834f16ef",
+      "key": "PA3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_96fa848aaa",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [
+        {
+          "field": "option",
+          "probe": "menu_policy_update"
+        }
+      ],
+      "from": "n_ba02cc6364",
+      "id": "e_ae5a4d0216",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_96fa848aaa",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [
+        {
+          "field": "polno",
+          "probe": "known_policy"
+        }
+      ],
+      "from": "n_419888f22d",
+      "id": "e_c9281b046e",
+      "key": "ENTER",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_419888f22d",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_ba02cc6364",
+      "id": "e_d07e76ebd1",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_419888f22d",
+      "id": "e_d470475aec",
+      "key": "PF3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_96fa848aaa",
+      "id": "e_dd73a04b98",
+      "key": "PA2",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_96fa848aaa",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_96fa848aaa",
+      "id": "e_e1f72c58ee",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "id": "e_e2c79ec104",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_483e5fe116",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_c5d11dedae",
+      "id": "e_e410119d46",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_c5d11dedae",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_ba02cc6364",
+      "id": "e_e4ca73352c",
+      "key": "PF3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "declared"
+    },
+    {
+      "fills": [],
+      "from": "n_96fa848aaa",
+      "id": "e_e83a93d221",
+      "key": "PF3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ba02cc6364",
+      "why_read_only": "declared"
+    }
+  ],
+  "frontier": [
+    {
+      "fills": [],
+      "from": "n_483e5fe116",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    }
+  ],
+  "home": "n_ba02cc6364",
+  "nodes": [
+    {
+      "fields": [
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "polno",
+          "label": "POLNO ===>",
+          "length": 8,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 3
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 5
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 5,
+          "intensified": false,
+          "key": "status",
+          "label": "STATUS:",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 7,
+          "intensified": false,
+          "key": "premium",
+          "label": "PREMIUM:",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 9,
+          "intensified": false,
+          "key": "updated",
+          "label": "UPDATED:",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 8
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 11,
+          "intensified": false,
+          "key": "r22c1",
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 22
+        }
+      ],
+      "id": "n_419888f22d",
+      "rows": [
+        " SEANCE INSURANCE - POLICY ENQUIRY                                              ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO ===>                                                                     ",
+        "                                                                                ",
+        " HOLDER:                                                                        ",
+        " STATUS:                                                                        ",
+        " PREMIUM:                                                                       ",
+        " UPDATED:                                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=LOOK UP  PF3=BACK                                                        "
+      ],
+      "screen_id": "419888f22df6bc184e84af5f6a22ce8966b85e028e3919b6be7218de22dd5080",
+      "visits": 5,
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "polno",
+          "label": "POLNO:",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 3
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 4
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 5,
+          "intensified": false,
+          "key": "status",
+          "label": "STATUS:",
+          "length": 1,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 25,
+          "hidden": false,
+          "index": 7,
+          "intensified": false,
+          "key": "status_2",
+          "label": "STATUS:",
+          "length": 1,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 9,
+          "intensified": false,
+          "key": "premium",
+          "label": "PREMIUM:",
+          "length": 7,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 25,
+          "hidden": false,
+          "index": 11,
+          "intensified": false,
+          "key": "premium_2",
+          "label": "PREMIUM:",
+          "length": 7,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 13,
+          "intensified": false,
+          "key": "r22c1",
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 22
+        }
+      ],
+      "id": "n_483e5fe116",
+      "rows": [
+        " SEANCE INSURANCE - CONFIRM UPDATE                                              ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO:                                                                         ",
+        " HOLDER:                                                                        ",
+        "             OLD         NEW                                                    ",
+        " STATUS:                                                                        ",
+        " PREMIUM:                                                                       ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=CONFIRM AND SAVE  PF3=CANCEL                                             "
+      ],
+      "screen_id": "483e5fe116720467970335b85d492910428e62124ad3ed27a6b9ad7f61e61313",
+      "visits": 5,
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "polno",
+          "label": "POLNO ===>",
+          "length": 8,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 3
+        },
+        {
+          "col": 22,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "status",
+          "label": "STATUS (A/L/C) ===>",
+          "length": 1,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 5
+        },
+        {
+          "col": 22,
+          "hidden": false,
+          "index": 5,
+          "intensified": false,
+          "key": "premium",
+          "label": "PREMIUM ===>",
+          "length": 7,
+          "numeric": true,
+          "output": false,
+          "protected": false,
+          "row": 6
+        },
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 7,
+          "intensified": false,
+          "key": "holder",
+          "label": "HOLDER:",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 8
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 9,
+          "intensified": false,
+          "key": "r22c1",
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 22
+        }
+      ],
+      "id": "n_96fa848aaa",
+      "rows": [
+        " SEANCE INSURANCE - POLICY UPDATE                                               ",
+        "                                                                                ",
+        "                                                                                ",
+        " POLNO ===>                                                                     ",
+        "                                                                                ",
+        " STATUS (A/L/C) ===>                                                            ",
+        " PREMIUM ===>                                                                   ",
+        "                                                                                ",
+        " HOLDER:                                                                        ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=REVIEW CHANGE  PF3=BACK                                                  "
+      ],
+      "screen_id": "96fa848aaad3422cd9ef63551414a5d858cc8fa73f12ebc56953b2bfe78db16a",
+      "visits": 4,
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 15,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "option",
+          "label": "OPTION ===>",
+          "length": 1,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 7
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "r22c1",
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 22
+        }
+      ],
+      "id": "n_ba02cc6364",
+      "rows": [
+        " SEANCE INSURANCE - MAIN MENU                                                   ",
+        "                                                                                ",
+        "                                                                                ",
+        "   1  POLICY ENQUIRY                                                            ",
+        "   2  POLICY LIST                                                               ",
+        "   3  POLICY UPDATE                                                             ",
+        "                                                                                ",
+        "   OPTION ===>                                                                  ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " ENTER=SELECT  CLEAR=EXIT                                                       "
+      ],
+      "screen_id": "ba02cc6364b6cd8728535a7085dc51abac5bd83c32a02163d91634aa6bb97271",
+      "visits": 12,
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 13,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "select",
+          "label": "SELECT ===>",
+          "length": 2,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 3
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "r6c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 5,
+          "intensified": false,
+          "key": "r6c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 7,
+          "intensified": false,
+          "key": "r6c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 6
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 9,
+          "intensified": false,
+          "key": "r7c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 11,
+          "intensified": false,
+          "key": "r7c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 13,
+          "intensified": false,
+          "key": "r7c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 7
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 15,
+          "intensified": false,
+          "key": "r8c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 8
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 17,
+          "intensified": false,
+          "key": "r8c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 8
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 19,
+          "intensified": false,
+          "key": "r8c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 8
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 21,
+          "intensified": false,
+          "key": "r9c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 9
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 23,
+          "intensified": false,
+          "key": "r9c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 9
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 25,
+          "intensified": false,
+          "key": "r9c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 9
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 27,
+          "intensified": false,
+          "key": "r10c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 10
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 29,
+          "intensified": false,
+          "key": "r10c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 10
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 31,
+          "intensified": false,
+          "key": "r10c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 10
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 33,
+          "intensified": false,
+          "key": "r11c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 11
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 35,
+          "intensified": false,
+          "key": "r11c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 11
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 37,
+          "intensified": false,
+          "key": "r11c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 11
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 39,
+          "intensified": false,
+          "key": "r12c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 12
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 41,
+          "intensified": false,
+          "key": "r12c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 12
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 43,
+          "intensified": false,
+          "key": "r12c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 12
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 45,
+          "intensified": false,
+          "key": "r13c1",
+          "label": "",
+          "length": 8,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 13
+        },
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 47,
+          "intensified": false,
+          "key": "r13c11",
+          "label": "",
+          "length": 20,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 13
+        },
+        {
+          "col": 33,
+          "hidden": false,
+          "index": 49,
+          "intensified": false,
+          "key": "r13c33",
+          "label": "",
+          "length": 10,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 13
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 51,
+          "intensified": false,
+          "key": "r22c1",
+          "label": "",
+          "length": 70,
+          "numeric": false,
+          "output": true,
+          "protected": true,
+          "row": 22
+        }
+      ],
+      "id": "n_c5d11dedae",
+      "rows": [
+        " SEANCE INSURANCE - POLICY LIST                                                 ",
+        "                                                                                ",
+        "                                                                                ",
+        " SELECT ===>                                                                    ",
+        "                                                                                ",
+        " POLNO     HOLDER               STATUS                                          ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        " PF7=UP  PF8=DOWN  PF3=BACK                                                     "
+      ],
+      "screen_id": "c5d11dedae4b254bcc8445bae6b8999511ab387b77d28bc70b0f561ab91af952",
+      "visits": 5,
+      "volatile": [
+        [
+          22,
+          1,
+          70
+        ],
+        [
+          5,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          10
+        ],
+        [
+          7,
+          13,
+          10
+        ],
+        [
+          8,
+          13,
+          10
+        ],
+        [
+          6,
+          1,
+          8
+        ],
+        [
+          7,
+          1,
+          8
+        ],
+        [
+          8,
+          1,
+          8
+        ],
+        [
+          9,
+          1,
+          8
+        ],
+        [
+          10,
+          1,
+          8
+        ],
+        [
+          11,
+          1,
+          8
+        ],
+        [
+          12,
+          1,
+          8
+        ],
+        [
+          13,
+          1,
+          8
+        ],
+        [
+          6,
+          11,
+          20
+        ],
+        [
+          7,
+          11,
+          20
+        ],
+        [
+          8,
+          11,
+          20
+        ],
+        [
+          9,
+          11,
+          20
+        ],
+        [
+          10,
+          11,
+          20
+        ],
+        [
+          11,
+          11,
+          20
+        ],
+        [
+          12,
+          11,
+          20
+        ],
+        [
+          13,
+          11,
+          20
+        ],
+        [
+          6,
+          33,
+          10
+        ],
+        [
+          7,
+          33,
+          10
+        ],
+        [
+          8,
+          33,
+          10
+        ],
+        [
+          9,
+          33,
+          10
+        ],
+        [
+          10,
+          33,
+          10
+        ],
+        [
+          11,
+          33,
+          10
+        ],
+        [
+          12,
+          33,
+          10
+        ],
+        [
+          13,
+          33,
+          10
+        ],
+        [
+          8,
+          13,
+          20
+        ],
+        [
+          3,
+          13,
+          8
+        ],
+        [
+          4,
+          13,
+          20
+        ],
+        [
+          6,
+          13,
+          1
+        ],
+        [
+          6,
+          25,
+          1
+        ],
+        [
+          7,
+          13,
+          7
+        ],
+        [
+          7,
+          25,
+          7
+        ]
+      ]
+    }
+  ],
+  "run": {
+    "budgets": {
+      "max_depth": 8,
+      "max_screens": 50,
+      "max_steps": 300
+    },
+    "id": "r_1",
+    "reason": null,
+    "started_at": "2026-11-06T04:55:09.000Z",
+    "status": "completed",
+    "steps": 64
+  },
+  "schema": "gss.spiritmap/1"
+}

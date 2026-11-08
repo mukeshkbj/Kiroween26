@@ -1,12 +1,63 @@
 {
   "app_id": "fake-insurance",
-  "generated_at": "2026-11-05T15:12:21.000Z",
+  "generated_at": "2026-11-08T10:01:19.000Z",
   "generator": {
     "name": "seance_spirit",
     "version": "0.1.0"
   },
   "home": "n_ba02cc6364",
   "map_hash": "sha256:005e6532e305b36930a17fc35def29e81d403b0195de20a3a92b77abc0ece431",
+  "navigation": {
+    "edges": [
+      {
+        "from": "n_419888f22d",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_419888f22d",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      }
+    ],
+    "nodes": [
+      "n_419888f22d",
+      "n_483e5fe116",
+      "n_96fa848aaa",
+      "n_ba02cc6364",
+      "n_c5d11dedae"
+    ]
+  },
   "schema": "gss.toolpack/1",
   "tools": [
     {
