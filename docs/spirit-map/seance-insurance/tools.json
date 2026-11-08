@@ -1,12 +1,63 @@
 {
   "app_id": "seance-insurance",
-  "generated_at": "2026-11-06T13:44:15.000Z",
+  "generated_at": "2026-11-08T10:01:20.000Z",
   "generator": {
     "name": "seance_spirit",
     "version": "0.1.0"
   },
   "home": "n_ba02cc6364",
   "map_hash": "sha256:33e261f5e100e0fa7a79da4d9e04ff476e2cf6cf6de6967d3505429e43599170",
+  "navigation": {
+    "edges": [
+      {
+        "from": "n_419888f22d",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_419888f22d",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      }
+    ],
+    "nodes": [
+      "n_419888f22d",
+      "n_483e5fe116",
+      "n_96fa848aaa",
+      "n_ba02cc6364",
+      "n_c5d11dedae"
+    ]
+  },
   "schema": "gss.toolpack/1",
   "tools": [
     {

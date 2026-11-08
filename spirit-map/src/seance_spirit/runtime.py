@@ -60,16 +60,26 @@ def _validate_args(tool: dict, args: dict) -> None:
 async def _execute(service: RecipeService, pack: dict, tool: dict, args: dict, trace: list[dict]):
     budget = int(tool.get("limits", {}).get("max_steps", DEFAULT_BUDGET))
     volatile = _parse_regions(pack.get("volatile_regions"))
+    nav = _Nav.from_pack(pack)
     screen = await _read(service)
     data: dict[str, Any] = {}
     pending = None
-    for step_no, step in enumerate(tool["recipe"]):
-        if step_no >= budget:
+    used = 0  # recipe steps plus routing presses count against the budget
+
+    def spend() -> None:
+        nonlocal used
+        if used >= budget:
             raise RunError("step_budget", f"recipe exceeded {budget} steps")
+        used += 1
+
+    for step in tool["recipe"]:
         op = step["op"]
         if op == "goto":
-            screen = await _goto(service, step["node"], screen)
-        elif op == "fill":
+            spend()
+            screen = await _goto(service, nav, step["node"], screen, trace, spend)
+            continue
+        spend()
+        if op == "fill":
             screen = await _fill(service, step, args, screen, volatile)
         elif op == "press":
             screen = await _press(service, step, screen)
@@ -81,7 +91,7 @@ async def _execute(service: RecipeService, pack: dict, tool: dict, args: dict, t
             pending = await _propose(service, step, screen)
         else:
             raise RunError("invalid_arguments", f"unknown op {op!r}")
-        trace.append({"step": step_no, "op": op, "node": step.get("node") or step.get("on"),
+        trace.append({"step": len(trace), "op": op, "node": step.get("node") or step.get("on"),
                       "screen_id": screen.screen_id, "key": step.get("key"), "field": step.get("field")})
     return data, pending
 
@@ -93,14 +103,71 @@ async def _read(service: RecipeService):
         raise RunError(_code(exc), str(exc)) from None
 
 
-async def _goto(service: RecipeService, node_id: str, screen):
-    # The map's recipe is linear from home; goto asserts we are at the expected start node by
-    # node id (n_ + first 10 hex of screen_id). An unknown start is a hard, safe failure.
-    if _nid(screen.screen_id) != node_id:
-        # Try reading once more in case a previous op changed the screen (it should equal node_id).
-        raise RunError("unknown_start", f"expected to start on {node_id}, on {_nid(screen.screen_id)}")
-    return screen
+class _Nav:
+    """The navigation graph carried in the pack: nodes the map knows and the read-only,
+    fill-free key edges between them. Built by the generator from the map; never from labels."""
 
+    def __init__(self, nodes: set[str], edges: list[tuple[str, str, str]]):
+        self.nodes = nodes
+        self.edges = edges
+
+    @classmethod
+    def from_pack(cls, pack: dict) -> "_Nav":
+        nav = pack.get("navigation") or {}
+        return cls(set(nav.get("nodes", [])),
+                   [(e["from"], e["key"], e["to"]) for e in nav.get("edges", [])])
+
+    def route(self, src: str, dst: str) -> list[tuple[str, str]] | None:
+        """Shortest list of (key, expected node) from src to dst, deterministic."""
+        if src == dst:
+            return []
+        from collections import deque
+
+        out: dict[str, list[tuple[str, str]]] = {}
+        for frm, key, to in sorted(self.edges):
+            out.setdefault(frm, []).append((key, to))
+        prev: dict[str, tuple[str, str]] = {}
+        seen, q = {src}, deque([src])
+        while q:
+            cur = q.popleft()
+            for key, to in out.get(cur, []):
+                if to in seen:
+                    continue
+                seen.add(to)
+                prev[to] = (cur, key)
+                if to == dst:
+                    path, at = [], dst
+                    while at != src:
+                        p, k = prev[at]
+                        path.append((k, at))
+                        at = p
+                    return path[::-1]
+                q.append(to)
+        return None
+
+
+async def _goto(service: RecipeService, nav: _Nav, node_id: str, screen, trace: list[dict], spend):
+    """Move to ``node_id`` over the pack's read-only, fill-free edges (contracts 6.2).
+
+    Already there: nothing is pressed. On a screen the map does not know: ``unknown_start``,
+    nothing pressed. Each routing press is audited by the service, counted against the step
+    budget, verified by landing node, and added to the trace. Nothing is ever typed."""
+    here = _nid(screen.screen_id)
+    if here == node_id:
+        trace.append({"step": len(trace), "op": "goto", "node": node_id, "screen_id": screen.screen_id,
+                      "key": None, "field": None})
+        return screen
+    if here not in nav.nodes:
+        raise RunError("unknown_start", f"the current screen ({here}) is not in the map; nothing was pressed")
+    route = nav.route(here, node_id)
+    if route is None:
+        raise RunError("unknown_start", f"no read-only route from {here} to {node_id}; nothing was pressed")
+    for key, expect in route:
+        spend()
+        screen = await _press(service, {"key": key, "expect": expect}, screen)
+        trace.append({"step": len(trace), "op": "goto", "node": expect, "screen_id": screen.screen_id,
+                      "key": key, "field": None})
+    return screen
 
 async def _fill(service: RecipeService, step: dict, args: dict, screen, volatile):
     if _nid(screen.screen_id) != step["node"]:

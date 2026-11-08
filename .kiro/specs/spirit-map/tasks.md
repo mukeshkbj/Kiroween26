@@ -65,3 +65,4 @@ Ordered so the safety machinery and its property tests exist before the explorer
 - [x] 9.2 `tk4-builtins` seed: add `(0,11,6)` (the `CUU0Cx` terminal name) to `volatile`, so the welcome screen_id no longer changes per connection.
 - [x] 9.3 Promote A's live-run results into `docs/spirit-map/` (`seance-insurance` identical to fake; `tk4-builtins` partial map kept as evidence, not as the map).
 - [ ] 9.4 Second `tk4-builtins` live run by A after the bridge fixes (requested in `docs/handoff/b/request-a-tk4-second-live-run.md`).
+- [x] 9.5 B-1: `goto` navigates home from any known screen over the pack's `navigation` graph (read-only, fill-free edges), refuses with `unknown_start` on an unknown screen, counts routing presses against the budget and traces them. Tests in `tests/test_runtime.py`; request: `docs/handoff/integrator/request-b-runtime-goto-navigate.md`.

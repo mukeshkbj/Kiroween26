@@ -163,6 +163,7 @@ class Generator:
             "home": self.m.home,
             "tools": tools,
             "volatile_regions": _volatile_string(self.m, self.seed),
+            "navigation": _navigation(self.m),
         }
         return pack
 
@@ -422,3 +423,14 @@ def _map_hash(m: SpiritMap) -> str:
 def _volatile_string(m: SpiritMap, seed: ExploreSeed) -> str:
     regions = seed.volatile
     return ";".join(f"{r},{c},{n}" for r, c, n in regions)
+
+
+def _navigation(m: SpiritMap) -> dict:
+    """The graph `goto` routes over: every node, and each read-only edge that fills nothing and
+    leaves the node. Pure graph data; labels play no part. Safe to route over by construction:
+    the explorer only recorded these under its read-only policy."""
+    edges = sorted(
+        ({"from": e.from_, "key": e.key, "to": e.to} for e in m.edges
+         if e.read_only and not e.fills and e.from_ != e.to),
+        key=lambda e: (e["from"], e["key"], e["to"]))
+    return {"nodes": sorted(n.id for n in m.nodes), "edges": edges}
