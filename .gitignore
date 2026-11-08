@@ -36,3 +36,6 @@ web/.env.local
 agent/events.jsonl
 *.audit.jsonl
 coverage/
+
+# DASD backups from legacy/scripts/migrate-volumes.ps1: huge, and hold the whole mainframe (incl. RAKF user data). Agent A's request.
+legacy/backup/
