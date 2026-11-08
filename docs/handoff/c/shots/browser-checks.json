@@ -1,0 +1,31 @@
+{
+  "base": "http://localhost:5173",
+  "browser": "158.0.8127.18",
+  "axe": {
+    "dormant": [],
+    "populated": [],
+    "answer-with-step-cards": [],
+    "spirit-map": [],
+    "audit-drawer": [],
+    "confirmation-modal": [],
+    "session-lost": [],
+    "narrow": []
+  },
+  "checks": {
+    "planchetteLabel": "filling OPTION",
+    "planchetteAriaHidden": "true",
+    "planchettePointerEvents": "none",
+    "modalInitialFocus": "Deny",
+    "modalRole": "true",
+    "appInertWhileOpen": true,
+    "scriptClickDidNotApprove": true,
+    "realClickApproved": true,
+    "approveDisabledAtOpen": true,
+    "escDenied": true,
+    "narrowHorizontalOverflowPx": 0,
+    "reducedMotionAnimateCalls": 0,
+    "reducedMotionHtmlAttr": "reduce",
+    "reducedMotionRunningAnimations": 0,
+    "reflow320HorizontalOverflowPx": 0
+  }
+}

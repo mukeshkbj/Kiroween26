@@ -1,0 +1,62 @@
+{
+  "decision": "approve",
+  "checks": [
+    {
+      "name": "connect simulated system",
+      "ok": true,
+      "ms": 391,
+      "evidence": {
+        "clicksNeeded": 1
+      }
+    },
+    {
+      "name": "proposal opens the modal: Deny focused, Approve delayed, gate facts, unverified agent text, screen drawn",
+      "ok": true,
+      "ms": 901,
+      "evidence": {
+        "focus": "Deny",
+        "approveDisabledAtOpen": true,
+        "miniScreenRows": 0,
+        "modal": "Confirm a change to the legacy systemKey to be pressed: Enter SEANCE INSURANCE - CONFIRM UPDATE POLNO: P0000003 HOLDER: A. ROSE OLD NEW STATUS: A A PREMIUM: 250.00 300.00 ENTER=CONFIRM PF3=CANCEL ENTER=CONFIRM AND SAVE PF3=CANCEL Fields on this screenNo editable fields on this screen. Review the screen above.Time left: 300 sThe agent says (unverified)This is the agent’s own description. It may be wrong. Check the scr"
+      }
+    },
+    {
+      "name": "a synthetic (untrusted) click does NOT approve",
+      "ok": true,
+      "ms": 1618,
+      "evidence": null
+    },
+    {
+      "name": "approve resolves as expected",
+      "ok": true,
+      "ms": 1061,
+      "evidence": {
+        "screenTitle": "SEANCE INSURANCE - MAIN MENU",
+        "messageLine": "POLICY UPDATED",
+        "assistantTail": "SéanceThinkingUsing update policy.update_policybusinessmay change datapolicy_numberP0000003premium300Result: okThe change was confirmed by the person and sent.Done. The change was confirmed by you and sent to the system."
+      }
+    },
+    {
+      "name": "audit drawer lists the decision",
+      "ok": true,
+      "ms": 772,
+      "evidence": {
+        "chainBadge": "Chain: verified by the server"
+      }
+    },
+    {
+      "name": "server audit agrees and the hash chain verifies",
+      "ok": true,
+      "ms": 27,
+      "evidence": {
+        "entries": 10,
+        "confirmed": 1,
+        "denied": 0,
+        "by": "oob:web-ui:s_2630"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "console": [],
+  "ok": true
+}

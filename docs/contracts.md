@@ -366,13 +366,13 @@ Built by the agent from `spirit-map.json` + `labels.json` + `tools.json` + `tool
     { "app_id": "tk4-builtins", "name": "TK4- built-in screens", "kind": "live",
       "host_env": "TN3270_HOST", "port_env": "TN3270_PORT",
       "description": "Real MVS 3.8j screens that need no logon." },
-    { "app_id": "seance-insurance", "name": "Seance Insurance (KICKS)", "kind": "live",
-      "host_env": "TN3270_HOST", "port_env": "TN3270_PORT",
-      "description": "The demo business app on the legacy system." }
+    { "app_id": "seance-insurance", "name": "Seance Insurance (COBOL on TK4-)", "kind": "live",
+      "host_env": "TN3270_HOST", "port_env": "STANDIN_PORT",
+      "description": "Real COBOL on TK4-; the five screens are served by a labelled Python TN3270 stand-in." }
   ]
 }
 ```
-No hosts, ports or credentials in the file, only environment variable names. Artefacts for an app are at `docs/spirit-map/<app_id>/`. Others add apps by request to D.
+No hosts, ports or credentials in the file, only environment variable names. Two live apps can be configured at once only if they use different port variables: ``tk4-builtins`` uses ``TN3270_PORT`` (TK4-, default 3270) and ``seance-insurance`` uses ``STANDIN_PORT`` (the stand-in, default 3271). Artefacts for an app are at `docs/spirit-map/<app_id>/`. Others add apps by request to D.
 
 ---
 
@@ -461,6 +461,7 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
 Change log:
+- 2026-11-06 (section 8): ``seance-insurance`` is named honestly (COBOL on TK4- behind the stand-in, not KICKS) and reads its port from ``STANDIN_PORT`` so it and ``tk4-builtins`` can both be configured. D aligns ``agent/apps.json``.
 - 2026-11-06 (additive): error code ``ambiguous_ack`` (section 3.5). The bridge bounds every s3270 command; silence raises ``AmbiguousAckError`` (session killed, nothing resent), surfaced as ``ambiguous_ack`` with audit outcome ``ambiguous_ack``. From Agent A's live finding on TK4-.
 - 2026-11-05 (additive, B request `screenout-volatile`): `ScreenOut` gains `volatile` ((row, col, length) runs). Regenerated schemas/examples. Consumers ignore unknown fields, so this is a v1 addition.
 - 2026-11-04 (P0.7, additive): schemas and examples generated into `docs/contracts/` (`seance_mcp.contracts`); section 3 timestamp note; `denied_by_user` error code; section 4.3 screen/focus/confirmation rules; `Fill.skip_if_absent`; `extract_list.row_fields` pattern.

@@ -78,7 +78,7 @@ def test_hidden_field_with_a_value_is_rejected():
 
 
 @pytest.mark.parametrize("name", ["lookup", "commit-deny", "commit-expire", "injection", "session-lost", "read-only",
-                                  "commit-approve"])
+                                  "commit-approve", "ambiguous-ack"])
 def test_no_commit_key_executes_without_a_human_approval_in_any_transcript(name):
     """In every recorded conversation, a confirm_action that succeeded follows an approve decision."""
     lines = events_of(name)
@@ -92,7 +92,7 @@ def test_no_commit_key_executes_without_a_human_approval_in_any_transcript(name)
                 assert approved and en["confirmed_by"].startswith("oob:web-ui:")
                 approved = False
     resolved = [l["event"]["data"]["outcome"] for l in lines if l["dir"] == "server" and l["event"]["type"] == "confirmation_resolved"]
-    expected = {"lookup": [], "injection": [], "session-lost": [], "commit-approve": ["approved"],
+    expected = {"lookup": [], "injection": [], "session-lost": [], "ambiguous-ack": [], "commit-approve": ["approved"],
                 "commit-deny": ["denied"], "commit-expire": ["expired"], "read-only": ["blocked_read_only"]}[name]
     assert resolved == expected
 
@@ -215,3 +215,22 @@ def test_example_capture_replays_through_fakeapp():
 
     menu, enq, back = anyio.run(go)
     assert len({menu, enq}) == 2 and back == menu
+
+
+def test_ambiguous_ack_transcript_sends_the_key_once_and_ends_in_session_lost():
+    lines = events_of("ambiguous-ack")
+    ev = [x["event"] for x in lines if x["dir"] == "server"]
+    result = next(e for e in ev if e["type"] == "tool_result")
+    assert result["data"]["status"] == "error" and result["data"]["error_code"] == "ambiguous_ack"
+    audit = [e["data"]["entry"] for e in ev if e["type"] == "audit_entry"]
+    amb = [a for a in audit if a["outcome"] == "ambiguous_ack"]
+    assert len(amb) == 1 and amb[0]["tool"] == "press_key" and amb[0]["key"] == "Enter"
+    i = ev.index(result)
+    # after the unanswered key nothing is pressed until a reconnect; the next press-like audit entry is
+    # a connect, never a second Enter
+    later = [a for a in audit if a["seq"] > amb[0]["seq"]]
+    assert all(a["tool"] in ("connect", "read_screen") for a in later)
+    states = [e["data"]["state"] for e in ev[i:] if e["type"] == "session_state"]
+    assert states[0] == "session_lost" and states[-1] == "connected"
+    assert ev[-1]["type"] == "screen" and ev[-1]["data"]["phase"] == "snapshot"
+    check_stream(ev)

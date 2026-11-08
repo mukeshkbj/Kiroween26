@@ -35,6 +35,7 @@ Looked up on npm on 2026-11-04 and approved by the user. Pin **exactly** (no `^`
 | `@vitejs/plugin-react` | 6.2.1 |
 | `vitest` | 5.1.0 |
 | `typescript` | 7.0.2 |
+| `playwright` | 1.65.0 (dev only, approved by the user 2026-11-06; real-browser axe/contrast, `isTrusted`, reduced-motion and reflow checks against mock mode; never in the bundle) |
 
 Known risk: `vitest-axe` 0.1.0 is old relative to `vitest` 5. If it does not work, C falls back to calling `axe-core` directly from a small test helper (same checks) and records that.
 - Integration tests that touch the live 3270 session are marked and **skipped if the TK4- container isn't running**, so CI/clone checks stay green.
