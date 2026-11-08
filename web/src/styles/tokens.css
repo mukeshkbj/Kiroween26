@@ -1,0 +1,98 @@
+/*
+ * Design tokens (seance-ui design.md "CRT styling"). Colours are the single source for the contrast test in
+ * src/terminal/contrast.test.ts, which recomputes WCAG ratios for every text/background pair at every effects
+ * level. Keep hex values in sync with src/terminal/palette.ts.
+ */
+:root {
+  /* phosphor palette */
+  --bg: #020a04;
+  --bg-raised: #06180d;
+  --phosphor: #3dff7a;
+  --phosphor-dim: #52c47d;
+  --phosphor-bright: #c9ffd9;
+  --field-fill: rgba(61, 255, 122, 0.1);
+  --field-line: #3dff7a;
+  --danger: #ff8f6b;
+  --warn: #ffd166;
+  --focus: #ffffff;
+  --cursor: #c9ffd9;
+
+  /* type and grid */
+  --mono: ui-monospace, "Cascadia Mono", "SF Mono", "Consolas", "Liberation Mono", monospace;
+  --cell-w: 1ch;
+  --line: 1.3em;
+  --font: 1rem;
+
+  /* motion (overridden to 0 under reduced motion) */
+  --glide-ms: 500ms;
+  --reveal-ms: 300ms;
+  --flicker-ms: 5s;
+
+  /* effects: overridden by [data-effects] below. Default level is "low". */
+  --glow: 0 0 2px rgba(61, 255, 122, 0.45);
+  --scanline-alpha: 0.05;
+  --vignette-alpha: 0.35;
+  --flicker-play: paused;
+  --sweep-play: paused;
+}
+
+[data-effects="off"] {
+  --glow: none;
+  --scanline-alpha: 0;
+  --vignette-alpha: 0;
+  --flicker-play: paused;
+  --sweep-play: paused;
+}
+
+[data-effects="low"] {
+  --glow: 0 0 2px rgba(61, 255, 122, 0.45);
+  --scanline-alpha: 0.05;
+  --vignette-alpha: 0.35;
+  --flicker-play: paused;
+  --sweep-play: paused;
+}
+
+[data-effects="full"] {
+  --glow: 0 0 6px rgba(61, 255, 122, 0.65);
+  --scanline-alpha: 0.08;
+  --vignette-alpha: 0.45;
+  --flicker-play: running;
+  --sweep-play: running;
+}
+
+/* The in-app reduce-motion toggle sets data-motion="reduce" on <html>; the OS query is honoured below. */
+[data-motion="reduce"] {
+  --glide-ms: 0ms;
+  --reveal-ms: 0ms;
+  --flicker-play: paused;
+  --sweep-play: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --glide-ms: 0ms;
+    --reveal-ms: 0ms;
+    --flicker-play: paused;
+    --sweep-play: paused;
+  }
+}
+
+/* High-contrast users get the brightest phosphor and no translucency. */
+@media (prefers-contrast: more) {
+  :root {
+    --phosphor: #c9ffd9;
+    --phosphor-dim: #9effbc;
+    --field-fill: transparent;
+    --scanline-alpha: 0;
+    --vignette-alpha: 0;
+    --glow: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --glow: none;
+    --scanline-alpha: 0;
+    --vignette-alpha: 0;
+  }
+}

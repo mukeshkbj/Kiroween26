@@ -43,7 +43,7 @@ One JSON object per line:
   playing the following server lines; the first `hello` is played immediately.
 
 The transcripts: `lookup`, `commit-approve`, `commit-deny`, `commit-expire`, `injection`
-(hostile text in the screen data), `session-lost` (ends with a reconnect), `read-only`
+(hostile text in the screen data), `session-lost` (ends with a reconnect), `ambiguous-ack` (a key goes out, the host never answers: nothing resent, session closed, reconnect), `read-only`
 (`SEANCE_ALLOW_COMMIT=0`: approval ends `blocked_read_only`).
 
 ## Use

@@ -1,0 +1,116 @@
+{
+  "web": "http://127.0.0.1:5173",
+  "agent": "http://127.0.0.1:8000",
+  "workaroundGoto": false,
+  "started": "2026-11-06T18:03:03.056Z",
+  "checks": [
+    {
+      "name": "web loads, connect screen, no REPLAY badge in live mode",
+      "ok": true,
+      "ms": 528,
+      "evidence": {
+        "cards": [
+          "Seance Insurance (simulated)simulatedFive simulated screens. No mainframe.simulatedspirit-",
+          "TK4- built-in screensliveReal MVS 3.8j screens that need no logon.reachability unknownno m",
+          "Seance Insurance (KICKS)liveThe demo business app on the legacy system.reachability unknow"
+        ]
+      }
+    },
+    {
+      "name": "connect: 24x80 green screen rendered",
+      "ok": true,
+      "ms": 96,
+      "evidence": {
+        "rows": 24
+      }
+    },
+    {
+      "name": "lookup via chat: business tool, real screen data, planchette moved",
+      "ok": true,
+      "ms": 1189,
+      "evidence": {
+        "distinctPositions": 3,
+        "labels": [
+          "reading the screen",
+          "filling OPTION"
+        ],
+        "planchetteAriaHidden": "true"
+      }
+    },
+    {
+      "name": "second business tool in the same session (spirit-map goto must navigate home)",
+      "ok": false,
+      "ms": 156,
+      "error": "second lookup failed: That did not work: lookup_policy ok",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-3.png"
+    },
+    {
+      "name": "commit proposal -> confirmation modal (Deny focused, Approve delayed, gate facts + unverified agent text)",
+      "ok": false,
+      "ms": 30134,
+      "error": "locator.waitFor: Timeout 30000ms exceeded.",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-4.png"
+    },
+    {
+      "name": "approve: real click sends the key; same session shows premium 300.00",
+      "ok": false,
+      "ms": 30926,
+      "error": "locator.click: Timeout 30000ms exceeded.",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-5.png"
+    },
+    {
+      "name": "deny via Escape: nothing changes",
+      "ok": false,
+      "ms": 30161,
+      "error": "locator.waitFor: Timeout 30000ms exceeded.",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-6.png"
+    },
+    {
+      "name": "audit drawer shows proposed, confirmed (oob:web-ui) and rejected",
+      "ok": false,
+      "ms": 829,
+      "error": "audit drawer missing: proposed, confirm_action, rejected | sample: Audit log×Chain: verified by the serverRefreshShow outcomes AllOKPendingBlockedRejectedExport JSON10 entriesTimeSeqToolScreenFieldValueKeyOutcomeConfirmed by18:03:03.9891toolpackloadedn/a18:03:04.0602",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-7.png"
+    },
+    {
+      "name": "spirit-map view renders and marks the current screen",
+      "ok": true,
+      "ms": 308,
+      "evidence": {
+        "nodes": 21,
+        "youAreHere": 2
+      }
+    },
+    {
+      "name": "server audit: chain verifies; exactly one commit, confirmed via oob:web-ui; denial recorded",
+      "ok": false,
+      "ms": 133,
+      "error": "expected 1 confirmed commit, got 0",
+      "shot": "C:\\Users\\mukes\\AppData\\Local\\Temp\\gss-e2e-asfound\\FAIL-9.png"
+    }
+  ],
+  "console": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "wsFrames": {
+    "in": 78,
+    "out": 9,
+    "types": {
+      "connected": 1,
+      "session_state": 3,
+      "ack": 5,
+      "audit_entry": 9,
+      "screen": 10,
+      "turn_started": 4,
+      "thinking": 4,
+      "tool_call": 4,
+      "field_focus": 8,
+      "tool_result": 4,
+      "assistant_delta": 16,
+      "assistant_message": 6,
+      "turn_finished": 4
+    }
+  },
+  "finished": "2026-11-06T18:04:37.792Z",
+  "ok": false
+}

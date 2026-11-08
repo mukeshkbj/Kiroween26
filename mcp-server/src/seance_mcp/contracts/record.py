@@ -20,7 +20,7 @@ from typing import Any
 
 import anyio
 
-from seance_bridge import SessionError
+from seance_bridge import AmbiguousAckError, SessionError
 
 from ..config import ConfirmMode, Settings
 from ..factory import build_service
@@ -403,6 +403,32 @@ async def _session_lost(sc: Scenario) -> None:
     await sc.connect_system()
 
 
+async def _ambiguous_ack(sc: Scenario) -> None:
+    """The host stops answering a key. The key went out once and was NOT resent; the session was
+    closed; the user must reconnect and re-read the screen (contracts 3.5, `ambiguous_ack`)."""
+    await sc.preamble()
+    sc.begin_turn("Look up policy P0000001")
+    sc.server("thinking", {"summary": "Looking up policy P0000001 with the policy lookup tool."}, 200)
+    call = sc.tool_call("lookup_policy", "business", {"policy_number": "P0000001"}, False)
+    s = sc.svc
+    await s.press_key("CLEAR")
+    await s.fill_field(sc.ref("menu", "option"), "1")
+    await s.press_key("ENTER")
+    await s.fill_field(sc.ref("enquiry", "polno"), "P0000001")
+    sc.app.fail_next_press = AmbiguousAckError("no answer from s3270 to Enter")
+    try:
+        await s.press_key("ENTER")
+    except GateError as exc:
+        assert exc.code == "ambiguous_ack"
+    sc.flush(call)
+    sc.tool_result(call, "error", "The mainframe stopped answering. Nothing was resent.", code="ambiguous_ack")
+    sc.state("session_lost")
+    sc.say("The mainframe did not answer after I pressed a key, so I closed the session and sent nothing else. "
+           "Reconnect, and I will check the screen before doing anything.")
+    sc.finish("error")
+    await sc.connect_system()
+
+
 SCENARIOS: dict[str, Runner] = {
     "lookup": _lookup,
     "commit-approve": lambda sc: _commit(sc, "approve"),
@@ -410,6 +436,7 @@ SCENARIOS: dict[str, Runner] = {
     "commit-expire": lambda sc: _commit(sc, "expire"),
     "injection": _injection,
     "session-lost": _session_lost,
+    "ambiguous-ack": _ambiguous_ack,
     "read-only": lambda sc: _commit(sc, "approve"),
 }
 
