@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .cobol_client import CobolClient, Policy
+from .cobol_client import CobolClient, CobolError, Policy
 from .screens import Screen, all_screens
 
 _STATUS = {"A": "ACTIVE", "L": "LAPSED", "C": "CANCELLED"}
@@ -67,8 +67,21 @@ class InsuranceApp:
             self._goto("menu")
             return
         handler = getattr(self, f"_on_{self.current}", None)
-        if handler is not None:
+        if handler is None:
+            return
+        committing = self.current == "confirm" and aid == "Enter" and self.pending is not None
+        try:
             handler(aid, typed)
+        except CobolError:
+            if committing:
+                # The update job may already have run: ambiguous, so never
+                # resubmit (mainframe-safety "no dangerous retries"). Drop the
+                # pending change so a second ENTER cannot send it again.
+                self.pending = None
+                self._goto("menu")
+                self.values["msg"] = "UPDATE OUTCOME UNKNOWN - CHECK THE POLICY, DO NOT RETRY"
+            else:
+                self.values["msg"] = "MAINFRAME NOT AVAILABLE - TRY AGAIN LATER"
 
     # -- per-screen handlers ---------------------------------------------
 

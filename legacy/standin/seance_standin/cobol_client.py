@@ -37,13 +37,22 @@ class CobolError(RuntimeError):
     pass
 
 
+DOCKER_TIMEOUT_S = float(os.environ.get("STANDIN_DOCKER_TIMEOUT_S", "20"))
+
+
 def _docker_exec(container: str, cmd: str) -> str:
+    """Run a command in the container, bounded: a stalled Docker engine (seen
+    2026-11-06) must surface as a CobolError, never as a 3270 terminal that
+    waits forever."""
     import subprocess
 
-    return subprocess.run(
-        ["docker", "exec", container, "sh", "-c", cmd],
-        capture_output=True, text=True, check=False,
-    ).stdout
+    try:
+        return subprocess.run(
+            ["docker", "exec", container, "sh", "-c", cmd],
+            capture_output=True, text=True, check=False, timeout=DOCKER_TIMEOUT_S,
+        ).stdout
+    except subprocess.TimeoutExpired:
+        raise CobolError("mainframe backend (docker exec) did not answer") from None
 
 
 def _console(cmd: str) -> None:
@@ -173,7 +182,10 @@ class CobolClient:
             local = fh.name
         try:
             subprocess.run(["docker", "cp", local, f"{self.container}:{remote}"],
-                           check=True, capture_output=True)
+                           check=True, capture_output=True, timeout=DOCKER_TIMEOUT_S)
+        except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
+            # Nothing was submitted yet (the job file never reached the reader).
+            raise CobolError("mainframe backend (docker cp) unavailable") from None
         finally:
             os.unlink(local)
 

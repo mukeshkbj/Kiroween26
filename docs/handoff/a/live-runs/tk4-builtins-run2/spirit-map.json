@@ -1,0 +1,935 @@
+{
+  "app_id": "tk4-builtins",
+  "edges": [
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "id": "e_0d6b06afc6",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "id": "e_0f31b29ca6",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_9d4927e982",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "id": "e_11175c28f8",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_81927ecdb6",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "id": "e_2ff524c2fc",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_2495368218",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_3a9f766ab4",
+      "key": "PF13",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ee4cd45277",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_6ab5009a8d",
+      "key": "PA3",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ee4cd45277",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "id": "e_6b190d9209",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_73e8368bbf",
+      "key": "PA1",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_176e286cbf",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "id": "e_76bac5f223",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "id": "e_a7998f3063",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_b03d92b46c",
+      "key": "PF14",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_ee4cd45277",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_b3589f5c61",
+      "key": "PA2",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_dde92c5af7",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "id": "e_c2042eb18e",
+      "key": "CLEAR",
+      "observed": 8,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "id": "e_e7a58fa42d",
+      "key": "CLEAR",
+      "observed": 1,
+      "read_only": true,
+      "to": "n_be4412fa93",
+      "why_read_only": "not_commit_capable"
+    }
+  ],
+  "frontier": [
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_176e286cbf",
+      "key": "PF14",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "PA1",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_2495368218",
+      "key": "PF14",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [
+        {
+          "field": "logon",
+          "probe": "-"
+        }
+      ],
+      "from": "n_81927ecdb6",
+      "key": "ENTER",
+      "reason": "unsafe_field"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_81927ecdb6",
+      "key": "PF14",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "PA1",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_9d4927e982",
+      "key": "PF14",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_be4412fa93",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "PA1",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_dde92c5af7",
+      "key": "PF14",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "key": "ENTER",
+      "reason": "denied_commit"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "key": "PA2",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "key": "PA3",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "key": "PF13",
+      "reason": "unvisited"
+    },
+    {
+      "fills": [],
+      "from": "n_ee4cd45277",
+      "key": "PF14",
+      "reason": "unvisited"
+    }
+  ],
+  "home": "n_81927ecdb6",
+  "nodes": [
+    {
+      "fields": [
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 0,
+          "intensified": true,
+          "key": "r0c1",
+          "label": "",
+          "length": 1,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 0
+        },
+        {
+          "col": 3,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "r0c3",
+          "label": "",
+          "length": 77,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 0
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 2,
+          "intensified": true,
+          "key": "r1c1",
+          "label": "",
+          "length": 5,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        },
+        {
+          "col": 7,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "r1c7",
+          "label": "",
+          "length": 1833,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        }
+      ],
+      "id": "n_176e286cbf",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "176e286cbf7072b6f5b54ed269501d7c17888fcbfce23685b6ad014c1d3bde40",
+      "visits": 1,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 0,
+          "intensified": true,
+          "key": "r1c1",
+          "label": "",
+          "length": 24,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        },
+        {
+          "col": 26,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "r1c26",
+          "label": "",
+          "length": 54,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 2,
+          "intensified": true,
+          "key": "r2c1",
+          "label": "",
+          "length": 1,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 2
+        },
+        {
+          "col": 3,
+          "hidden": false,
+          "index": 3,
+          "intensified": false,
+          "key": "r2c3",
+          "label": "",
+          "length": 77,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 2
+        },
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 4,
+          "intensified": true,
+          "key": "r3c1",
+          "label": "",
+          "length": 5,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 3
+        },
+        {
+          "col": 7,
+          "hidden": false,
+          "index": 5,
+          "intensified": false,
+          "key": "r3c7",
+          "label": "",
+          "length": 1673,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 3
+        }
+      ],
+      "id": "n_2495368218",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "2495368218b9160977fcf23508d817adfe600b532a8c24975f53bf37c473e9ac",
+      "visits": 1,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 11,
+          "hidden": false,
+          "index": 143,
+          "intensified": true,
+          "key": "logon",
+          "label": "Logon ===>",
+          "length": 128,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 22
+        }
+      ],
+      "id": "n_81927ecdb6",
+      "rows": [
+        "Terminal   CUU0C1                                                 Date  06.11.26",
+        "                                                                  Time  18:57:42",
+        "                                                                                ",
+        "                           ************   ****  *****          ||               ",
+        "                           **   **   **    **    **           |||               ",
+        "                           **   **   **    **   **           ||||               ",
+        "                                **         **  **           || ||               ",
+        "        |l      _,,,---,,_      **         ** **           ||  ||               ",
+        " ZZZzz /,'.-'`'    -.  ;-;;,    **         ****           ||   ||               ",
+        "      |,4-  ) )-,_. ,( (  ''-'  **         *****         ||    ||               ",
+        "     '---''(_/--'  `-')_)       **         **  **       ||     ||    |||||||||| ",
+        "                                **         **   **      |||||||||||             ",
+        "       The MVS 3.8j             **         **    **            ||               ",
+        "     Tur(n)key System           **         **     **           ||               ",
+        "                              ******      ****     ***       ||||||             ",
+        "                                                                                ",
+        "            TK3 created by Volker Bandke       vbandke@bsp-gmbh.com             ",
+        "            TK4- update by Juergen Winkelmann  winkelmann@id.ethz.ch            ",
+        "                     see TK4-.CREDITS for complete credits                      ",
+        "                                                                                ",
+        "                              MVS 3.8j Level 8505                               ",
+        "                                                                                ",
+        "Logon ===>                                                                      ",
+        "                                                            RUNNING  TK4-       "
+      ],
+      "screen_id": "81927ecdb63491fa090964699f4e42217d9622c624cb715403c2a2fd7674df49",
+      "visits": 2,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 0,
+          "intensified": true,
+          "key": "r0c1",
+          "label": "",
+          "length": 24,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 0
+        },
+        {
+          "col": 26,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "r0c26",
+          "label": "",
+          "length": 1894,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 0
+        }
+      ],
+      "id": "n_9d4927e982",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "9d4927e98279654fc8e7829eda78884e58661ae18d30699062f9491015fc03e1",
+      "visits": 1,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [],
+      "id": "n_be4412fa93",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "be4412fa9318c72cae123213a7cac5fd11ef8f774f18d7505596f8ccf51b484f",
+      "visits": 13,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 0,
+          "hidden": false,
+          "index": 0,
+          "intensified": false,
+          "key": "r1c0",
+          "label": "",
+          "length": 1840,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        }
+      ],
+      "id": "n_dde92c5af7",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "dde92c5af72d488b8a0f4d2c1e6bafa6a81d574a30ee5e32b35fd85e5d8d9cd1",
+      "visits": 1,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    },
+    {
+      "fields": [
+        {
+          "col": 1,
+          "hidden": false,
+          "index": 0,
+          "intensified": true,
+          "key": "r1c1",
+          "label": "",
+          "length": 24,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        },
+        {
+          "col": 26,
+          "hidden": false,
+          "index": 1,
+          "intensified": false,
+          "key": "r1c26",
+          "label": "",
+          "length": 1814,
+          "numeric": false,
+          "output": false,
+          "protected": false,
+          "row": 1
+        }
+      ],
+      "id": "n_ee4cd45277",
+      "rows": [
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                ",
+        "                                                                                "
+      ],
+      "screen_id": "ee4cd4527722b7f1da3cec42bb7701960f9b4b3e9b4e450370a1de01c4930096",
+      "visits": 3,
+      "volatile": [
+        [
+          0,
+          11,
+          6
+        ],
+        [
+          0,
+          64,
+          16
+        ],
+        [
+          1,
+          64,
+          16
+        ]
+      ]
+    }
+  ],
+  "run": {
+    "budgets": {
+      "max_depth": 5,
+      "max_screens": 20,
+      "max_steps": 80
+    },
+    "id": "r_1",
+    "reason": "ambiguous_ack",
+    "started_at": "2026-11-06T17:57:42.000Z",
+    "status": "halted",
+    "steps": 24
+  },
+  "schema": "gss.spiritmap/1"
+}

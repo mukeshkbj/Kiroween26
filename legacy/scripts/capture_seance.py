@@ -27,18 +27,8 @@ from seance_standin.screens import VOLATILE_REGIONS  # noqa: E402
 
 
 def press(bridge: Bridge, key: Key) -> None:
-    """Press a key and re-read. ENTER/CLEAR go through the bridge; PF/PA use the
-    s3270 ``PF(n)``/``PA(n)`` action form, which the current bridge build does
-    not emit (it sends the literal name ``PF3`` which s3270 rejects -- filed to
-    the integrator in docs/handoff/a/request-integrator-bridge-pf-keys.md)."""
-    name = key.value
-    if name.startswith(("PF", "PA")):
-        sess = bridge.session
-        sess._exec(f"{name[:2]}({name[2:]})")  # noqa: SLF001 - capture tool only
-        sess.wait_unlock(5.0)
-        bridge.read_screen()
-    else:
-        bridge.press(key)
+    """Press a key through the bridge (PF/PA form fixed in bridge/ on 2026-11-06)."""
+    bridge.press(key)
 
 APP_ID = "seance-insurance"
 PORT = int(os.environ.get("STANDIN_PORT", "3271"))

@@ -20,13 +20,8 @@ from seance_bridge import Bridge, Key
 
 
 def press(bridge: Bridge, key: Key) -> None:
-    name = key.value
-    if name.startswith(("PF", "PA")):
-        bridge.session._exec(f"{name[:2]}({name[2:]})")  # noqa: SLF001
-        bridge.session.wait_unlock(5.0)
-        bridge.read_screen()
-    else:
-        bridge.press(key)
+    # The bridge now sends PF/PA keys correctly (and bounded); use it as-is.
+    bridge.press(key)
 
 
 def rows(bridge: Bridge) -> str:

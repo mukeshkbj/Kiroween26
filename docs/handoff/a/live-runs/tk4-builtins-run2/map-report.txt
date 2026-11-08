@@ -1,0 +1,26 @@
+run: status=halted reason=ambiguous_ack steps=24
+nodes=7 edges=14 frontier=35 home=n_81927ecdb6
+  n_176e286cbf  blank                                            inputs=4 largest_input=1833
+  n_2495368218  blank                                            inputs=6 largest_input=1673
+  n_81927ecdb6  'Terminal   CUU0C1                           '   inputs=1 largest_input=128
+  n_9d4927e982  blank                                            inputs=2 largest_input=1894
+  n_be4412fa93  blank                                            inputs=0 largest_input=0
+  n_dde92c5af7  blank                                            inputs=1 largest_input=1840
+  n_ee4cd45277  blank                                            inputs=2 largest_input=1814
+edges:
+  n_2495368218 --CLEAR--> n_be4412fa93
+  n_81927ecdb6 --PA1--> n_9d4927e982
+  n_81927ecdb6 --CLEAR--> n_81927ecdb6
+  n_ee4cd45277 --PA1--> n_2495368218
+  n_be4412fa93 --PF13--> n_ee4cd45277
+  n_be4412fa93 --PA3--> n_ee4cd45277
+  n_176e286cbf --CLEAR--> n_be4412fa93
+  n_be4412fa93 --PA1--> n_176e286cbf
+  n_9d4927e982 --CLEAR--> n_be4412fa93
+  n_ee4cd45277 --CLEAR--> n_be4412fa93
+  n_be4412fa93 --PF14--> n_ee4cd45277
+  n_be4412fa93 --PA2--> n_dde92c5af7
+  n_be4412fa93 --CLEAR--> n_be4412fa93
+  n_dde92c5af7 --CLEAR--> n_be4412fa93
+frontier by reason: {'denied_commit': 7, 'unvisited': 27, 'unsafe_field': 1}
+stop: seq 25 press_key key=PA1 -> ambiguous_ack on screen n_be4412fa93; before it: press_key(PA1) on n_ee4cd45277, press_key(Clear) on n_2495368218

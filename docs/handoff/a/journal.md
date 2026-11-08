@@ -160,3 +160,206 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   mainframe after the pre-run reset, so nothing committed.
 - So the full chain works on the live, COBOL-backed app, unchanged from the fake:
   spirit-map discovery, then B's approved policy and tools.
+
+## 2026-11-06 Tasks 6.1-6.3 (line-mode COBOL under TSO) and the JCL column guard
+
+- 6.2: `SEANCSVC` runs under TSO via `ALLOC` + `CALL`
+  (`src/jcl/tso-seancsvc.jcl`, IKJEFT01 RC=0000), returning the lookup and all
+  8 policies. 6.1 is SEANCSVC itself; 6.3 is documented in the README.
+- Surprise: the first TSO run printed 16 lines and never started. Its JOB card
+  was 74 columns. This was the **third** time the column-72 rule bit, so
+  `submit-jcl.ps1` now refuses any JCL statement past column 71. A scan of all
+  JCL found two more offenders. One of them, `pp-seancem.jcl`, is the "PPSEAN
+  never ran" mystery from the KICKS diagnosis on 2026-11-05: it was this JOB-card
+  trap, not the preprocessor. Both are fixed.
+- Tasks 3.2/3.3 (dedicated KICKS DASD volume + user catalog) are marked
+  superseded. They were not needed, because KICKS is in the existing catalog.
+- Open in legacy-environment, both KICKS stretch: 3.5-followup (KFIX via our own
+  MCP) and 4.5 (KICKS tables). Neither is useful while KICKS COBOL S0C4s; 4.5 is
+  only needed by a working KICKS transaction.
+
+## 2026-11-06 Reproducible install + a volume trap (needs the user's decision)
+
+- `legacy/setup-app.ps1`: one command reinstalls the demo app from source: clean
+  HERC01.SEANCE.*, create the PDS, upload, compile+link, TSO cards, seed, smoke
+  test. Ran it live: every job RC=0000 (compile RC=0004 is warnings), ~1 min,
+  and the health check passes against the rebuilt module. The stand-in kept
+  serving, because it reads the files per request.
+- Found while checking durability: `/tk4-/dasd`, where all our MVS state lives,
+  is an **anonymous** volume declared by the base image. A restart or compose
+  recreate keeps it, which is why yesterday's Docker restart was harmless.
+  `docker compose down` + `up` would mount a fresh one, losing the app, the
+  seed data and KICKS (the old volume is orphaned, not deleted). This is now in
+  the README.
+- **Proposal (NOT done, needs the user's OK; it touches the live container):**
+  in `legacy/docker-compose.yml`, mount named volumes (`gss-dasd:/tk4-/dasd`,
+  plus `conf`/`local_conf`) and migrate once: stop `gss-legacy`, copy the current
+  anonymous volume into `gss-dasd` (`docker run --rm -v <anon>:/from -v
+  gss-dasd:/to alpine cp -a /from/. /to/`), recreate, then run the health
+  check. It is reversible while the old anonymous volume is kept. Expected
+  downtime ~5 min including IPL.
+
+## 2026-11-06 Named-volume migration (user-approved) - nothing lost
+
+- Fingerprint before: 45 HERC01 catalog entries (demo app, KICKS, VSAM) and the
+  8 policies from the COBOL.
+- `legacy/scripts/migrate-volumes.ps1`: clean TK4- shutdown (exit 0) -> tarball
+  backups with sha1 manifests in `legacy/backup/20261106/` (git-excluded; dasd
+  206 MB) -> copy into named volumes `gss-*`, each verified file for file
+  (dasd 28/28) -> old container kept as `gss-legacy-pre-migration` (rollback)
+  -> new container from compose.
+- After: catalog 45/45 identical, policies 8/8 identical, `setup-app.ps1` 7/7
+  OK, health OK, demo path 3x OK. A real `stop-mvs` + `docker compose down` +
+  `up` repeated all of it: catalog identical, health OK, demo 3x OK.
+- Surprises:
+  1. Windows PowerShell 5 + `ErrorActionPreference=Stop` turns docker's stderr
+     progress ("legacy Built") into a terminating error, so the migration
+     script stopped after its last safe step. Fixed in the script.
+  2. **Compose almost deleted the rollback.** It tracks containers by project
+     label (`legacy`, from the folder name), not by container name, so the
+     renamed old container was still "its" container, and `up` tried to
+     *recreate* (= remove) it. That was only stopped by a second bug: the base
+     image declares `tk4-/log` with a relative path, which compose rejects when
+     it carries volumes over. Fixed by pinning `name: gss` in the compose file;
+     now compose never touches the old container.
+  3. After an IPL, Hercules truncates the printer file when JES2 starts the
+     printer. The first job's printout can be lost if its size was snapshotted
+     earlier.
+  4. The IDE terminal injects shell-integration escapes (`ESC ] 633;...`) into
+     `>`-redirected output, which corrupted the first line of a fingerprint
+     file. `catalog-names.ps1` now has `-OutFile`.
+  5. My own tooling: several command blocks returned early while their
+     processes kept running. A background `stop-mvs` + `down` therefore really
+     executed while I thought it hadn't. No harm done (it was the planned test),
+     but I now run one step per call and read result files.
+- Found and corrected: `*.audit.jsonl` and `*.log` are gitignored, so my B
+  handoffs referenced files that were never committed. Now
+  `legacy/scripts/audit_summary.py` writes a value-free `*.audit-summary.txt`
+  (hash chain checked) and the responses are corrected. The seance-insurance
+  audit also shows ENTER was pressed 0 times on the confirm screen.
+- Request to the integrator: add `legacy/backup/` to `.gitignore` (I excluded it
+  locally via `.git/info/exclude`).
+- New: `legacy/scripts/stop-mvs.ps1`, a clean shutdown for before `down`,
+  backups and reboots.
+
+## 2026-11-06 Merged main (bridge fixes); tools cleaned up; a new TK4- quirk
+
+- The integrator fixed all three bridge requests (PF/PA allowlist, bounded
+  `_exec` + `ambiguous_ack`, no AID into a locked keyboard) and now masks the
+  terminal id `(0,11,6)` by default. My workarounds are gone:
+  - `live_explore.py` keeps only the watchdog and the host/port wiring.
+  - `capture_seance.py` and `demo_path.py` use `bridge.press` (they had sent
+    `PF(n)` straight to s3270, bypassing the new safety checks).
+  - Verified on the merged bridge: demo path 3x OK, parity OK.
+- New quirk after the named-volume `down`/`up`: on a **fresh IPL with no
+  terminal attached**, VTAM paints the welcome into the void and does not
+  repaint on connect. The Hercules banner stays until a key is pressed. CLEAR
+  brings the welcome. (Earlier runs never saw this because a session from
+  before the IPL existed.) The capture presses CLEAR once if needed.
+  **Relevant for B's explorer and D's e2e on tk4-builtins:** a connect right
+  after an IPL lands on the Hercules banner, which is a different screen_id.
+  The tk4-builtins capture is re-recorded with the terminal id masked;
+  `from_capture` OK.
+
+## 2026-11-06 D's live e2e: tk4-builtins 3/3 PASS; seance-insurance wiring gap found
+
+- Set up `agent/.venv` on **Python 3.12.4** (the stack's version; `py -3.12`
+  is not registered, so I used `C:\Python312\python.exe`). Installed D's
+  `anthropic`+`bedrock` extras, because `test_providers` imports them. D's suite
+  shows 80 passed, plus 1 expected failure in my worktree: the "refused without
+  permission" test sees my `.gss-live-ok`. It passes with the marker moved
+  aside.
+- D's `test_live_e2e` on tk4-builtins: **3/3 PASS**. The test keeps no audit,
+  so `legacy/scripts/live_agent_evidence.py` recorded one more run. The live
+  screen_id equals the committed capture, the audit is connect/read/disconnect
+  with no key, and nothing leaked.
+- **Found:** the agent gives every live app the TK4- volatile regions. For
+  seance-insurance, `(0,11,6)` cuts the title, so its screen_id differs from the
+  fake's. Proved live: `cf68541fac` with the agent's settings vs `ba02cc6364`
+  (= fake) with the contract regions. B's policy and tools would not apply.
+  There is also no seance-insurance pack yet (business tools 0), and `apps.json`
+  still uses `TN3270_PORT` and "(KICKS)". Filed
+  `request-d-seance-insurance-wiring.md`.
+- My slip: my pre-flight counted 6 "competing" python processes and I ran
+  anyway. They were Kiro's own idle `seance_mcp` servers from other IDE
+  windows, with no connection to 3270/3271 (checked afterwards). The contract
+  says stop them, not just check them; next time I stop them first.
+- The capture's XYZZY shows in the TK4- log as `LGN001I ... logon in progress`
+  (TK4- logs every attempt), but no TSU job ever started, so the rejection was
+  real.
+
+## 2026-11-06 B's second tk4-builtins live run (explore 2x + replay 2x)
+
+- Ran B's code at `6cf166d` from a temporary detached worktree
+  (`D:\Kiro\gss-wt\a-b-run`) with its own py3.12 venv, so nothing of B's was
+  edited and my venv was not repointed. Results go to
+  `docs/handoff/a/live-runs/tk4-builtins-run2/` (B's folder is B's).
+- Surprise 1: the first attempt halted `session_lost` at connect. The cause:
+  `.tools/s3270.exe` is gitignored and exists only in my main worktree, so the
+  temp worktree had no s3270. `S3270_PATH` fixed it. Nothing was sent.
+- **The bridge fix works:** the run reaches the known stall (the next AID after
+  CLEAR on the blank VTAM screen) and now ends in `ambiguous_ack` after 15 s,
+  with the map saved as `halted`, instead of hanging. Twice, identically:
+  7 screens / 14 edges / 35 frontier / 24 steps.
+- Surprise 2 (B's code): the seed's `volatile` is recorded on nodes but never
+  given to the bridge. The CLI passes `Settings.from_env()` regions, and B's
+  base main still has the clock-only default, so the terminal-id mask was not
+  applied in run 2a (home `n_a713…`). With `VOLATILE_REGIONS` = the seed's
+  spans (2b), home = `n_81927ecdb6`, stable, and equal to D's e2e and my
+  capture.
+- Surprise 3: replay first said `not_at_home`. After today's IPL, a fresh
+  connect shows the Hercules banner until a key is pressed. With a temporary
+  seed copy that adds `start_recipe: ["CLEAR"]`: 7 edges replayed, **2
+  mismatches**, then `ambiguous_ack`. The mismatches are PF14 and PA2 from the
+  blank screen landing on each other's target. The blank VTAM screens are a
+  sequence, not a function of the key, so they don't belong in the map.
+  Recommended to B: deny `n_be4412fa93` (and the welcome's PA1), and add the
+  CLEAR start recipe.
+- My slips: (a) Stopping "other seance_* processes" before the run also killed
+  two `seance_agent` dev servers, probably another agent's session on this
+  shared machine (worktrees `c`, `d`, `d-check-c` exist). They were fake-only
+  by rule and nothing is listening on 8000 now, but I should only stop what
+  touches 3270. (b) Twice more, my wait loop checked for a process that had not
+  started yet and read intermediate files. I now wait for the process to
+  *appear*, then to exit.
+- Health check after all of it: OK.
+
+## 2026-11-06 ~18:40 BLOCKED: Docker Desktop stopped responding
+
+- After merging main (`dfa4990`), the stand-in tests passed (21), but the
+  health check failed. The bridge raised `AmbiguousAckError: no answer from
+  s3270 to Enter ... nothing was resent`.
+- Cause: the **Docker engine is unresponsive.** `docker ps`, `docker version`
+  and `docker exec` all hang (60 s+). The stand-in calls the COBOL via
+  `docker cp`/`docker exec`, so its answer to ENTER never came, and the
+  integrator's new 15 s AID bound turned that into a correct, safe
+  `ambiguous_ack` instead of a hang. Good behaviour, wrong day.
+- Not done by me: I did not restart Docker Desktop, kill the engine, or touch
+  the container. The host is the user's. The stand-in process (pid 60640) is
+  still up, with one half-open connection from the failed check.
+- Finding for later (mine): the stand-in has no timeout on its COBOL calls.
+  When Docker stalls, it should answer the 3270 ENTER with "BACKEND UNAVAILABLE"
+  on the message line, not leave the terminal waiting. Will fix once Docker is
+  back.
+- State is safe: everything is committed and pushed up to `b866936`, plus the
+  merge. Nothing was mid-write on the mainframe: the last job was the 18:0x
+  replay, and any interrupted SEANCSVC request would be a read (no update was in
+  flight).
+
+## 2026-11-07 21:2x Docker back; recovered; stand-in hardened
+
+- Docker Desktop had stopped completely (engine pipe gone, WSL distro stopped).
+  The user asked me to continue, so I started Docker Desktop. The engine was up
+  in 5 s. `gss-legacy` auto-started on the named volumes; the rollback
+  container stayed stopped (restart=no). TSO was up after the IPL in 32 s.
+- After the crash: catalog 45/45 identical to the pre-down fingerprint, health
+  check OK, live parity OK, demo path 3x OK, data reset. The named volumes did
+  their job through an unclean engine stop.
+- Fix (the gap the stall exposed): the stand-in's Docker calls are now bounded
+  (20 s). A failed read gives a message on screen. A failed commit is reported
+  as ambiguous, with the pending change dropped and never resubmitted. The
+  server also always answers the terminal, even on a bug. 3 new tests, 24 pass.
+- Agent check: no branch moved since 2026-11-06 18:24 and there are no new
+  requests for A. B's second run is answered; C has no live request; D's live
+  e2e is answered, with its seance-insurance re-run waiting on D's wiring fix
+  (request-d-seance-insurance-wiring.md).

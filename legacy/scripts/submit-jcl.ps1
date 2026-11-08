@@ -34,6 +34,31 @@ if ($Mode -eq "ascii") {
     if ($first -match '^//(\S+)\s+JOB') { $jobName = $Matches[1] }
 }
 $remote = "/tk4-/jcl/$name"
+# Guard: a JCL statement may only use columns 1-71. Column 72 is the
+# continuation column and 73-80 the sequence field, so anything there is
+# silently mangled (we hit IEF618I, IEF629I and a broken JOB card this way).
+# Comments (//*) and in-stream data are not checked.
+function Test-JclColumns([string]$path) {
+    # Returns the offending lines: JCL statements (// but not //*) over 71
+    # columns. In-stream data after "DD *" / "DD DATA" is skipped until "/*"
+    # (or, for DD *, the next // statement).
+    $bad = @(); $n = 0; $data = $null
+    foreach ($line in (Get-Content -LiteralPath $path)) {
+        $n++
+        if ($data) {
+            if ($line -match '^/\*') { $data = $null; continue }
+            if ($data -eq '*' -and $line -match '^//') { $data = $null } else { continue }
+        }
+        if ($line -match '^//[^*]' -and $line.Length -gt 71) { $bad += "line ${n} ($($line.Length) cols): $line" }
+        if ($line -match '^//\S*\s+DD\s+DATA\b') { $data = 'DATA' }
+        elseif ($line -match '^//\S*\s+DD\s+\*') { $data = '*' }
+    }
+    return $bad
+}
+if ($Mode -eq "ascii") {
+    $bad = Test-JclColumns $Jcl
+    if ($bad) { throw "$name has JCL statements past column 71 (col 72 = continuation, 73-80 = sequence):`n$($bad -join "`n")" }
+}
 
 # TK4- runs unauthenticated batch jobs as user PROD (RAKF), which may not create
 # HERC01.* datasets. JCL carries @MVS_USER@ / @MVS_PASSWORD@ placeholders; we fill

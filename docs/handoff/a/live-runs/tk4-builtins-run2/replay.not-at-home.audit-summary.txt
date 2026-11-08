@@ -1,0 +1,2 @@
+   1 17:59:26 connect     ok              key=-      field=-   screen=ed086b0075
+# 1 entries; outcomes={'ok': 1}; keys={}; hash chain linked: True

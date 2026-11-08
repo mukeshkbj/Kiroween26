@@ -1,3 +1,10 @@
+# Fixed project name (not the folder name): the pre-2026-11-06 container was
+# created under project "legacy". A separate project means compose never
+# "recreates" (= removes) that rollback container, and never tries to carry
+# over the base image's anonymous volumes. One of those, "tk4-/log", is
+# declared with a relative path, which compose rejects on recreate.
+name: gss
+
 services:
   legacy:
     # TK4- (MVS 3.8j on Hercules). Auto-IPLs on start; 3270 becomes reachable
@@ -12,3 +19,29 @@ services:
     tty: true
     stdin_open: true
     restart: unless-stopped
+    # Named volumes: all MVS state (the DASD with every dataset, the demo app,
+    # the policy file, KICKS) survives `docker compose down` + `up`. The base
+    # image declares these paths as anonymous volumes, which a recreate would
+    # replace with empty ones. `docker compose down -v` WOULD delete them: never
+    # use -v here. Migrated 2026-11-06 by legacy/scripts/migrate-volumes.ps1.
+    volumes:
+      - gss-dasd:/tk4-/dasd
+      - gss-conf:/tk4-/conf
+      - gss-local_conf:/tk4-/local_conf
+      - gss-local_scripts:/tk4-/local_scripts
+      - gss-jcl:/tk4-/jcl
+      - gss-prt:/tk4-/prt
+      - gss-pch:/tk4-/pch
+
+volumes:
+  # external: compose never creates or removes them; migrate-volumes.ps1 created
+  # them (copied from the original anonymous volumes). A fresh machine creates
+  # them once with `docker volume create gss-<name>` and gets a pristine TK4-
+  # from the image on first start, then runs legacy/setup-app.ps1.
+  gss-dasd: { external: true }
+  gss-conf: { external: true }
+  gss-local_conf: { external: true }
+  gss-local_scripts: { external: true }
+  gss-jcl: { external: true }
+  gss-prt: { external: true }
+  gss-pch: { external: true }

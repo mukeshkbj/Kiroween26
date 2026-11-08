@@ -119,3 +119,50 @@ def test_update_invalid_status_message() -> None:
     app.handle("Enter", {"polno": "P0000003", "status": "X", "premium": ""})
     assert app.current == "update"
     assert app.values["msg"] == "STATUS MUST BE A, L OR C"
+
+
+# --- backend failure (Docker stalled on 2026-11-06) --------------------------
+
+from seance_standin.cobol_client import CobolError  # noqa: E402
+
+
+class DeadCobol(FakeCobol):
+    def lookup(self, polno):
+        raise CobolError("backend down")
+
+    def list_all(self):
+        raise CobolError("backend down")
+
+
+class CommitTimesOut(FakeCobol):
+    def update(self, polno, status_code, premium):
+        self.updates.append((polno, status_code, premium))
+        raise CobolError("job did not end in time")
+
+
+def test_read_failure_shows_message_and_stays() -> None:
+    app = InsuranceApp(DeadCobol())
+    app._goto("enquiry")
+    app.handle("Enter", {"polno": "P0000003"})
+    assert app.current == "enquiry"
+    assert app.values["msg"] == "MAINFRAME NOT AVAILABLE - TRY AGAIN LATER"
+
+
+def test_ambiguous_commit_is_never_resent() -> None:
+    app = InsuranceApp(CommitTimesOut())
+    app._goto("update")
+    app.handle("Enter", {"polno": "P0000003", "status": "L", "premium": ""})
+    app.handle("Enter", {})                       # commit: the job times out
+    assert app.current == "menu"
+    assert "OUTCOME UNKNOWN" in app.values["msg"]
+    assert app.pending is None
+    app.handle("Enter", {"option": "3"})          # carry on: no hidden resend
+    app.handle("Enter", {})
+    assert app.cobol.updates == [("P0000003", "L", "")]   # exactly once
+
+
+def test_messages_fit_the_message_line() -> None:
+    for m in ("MAINFRAME NOT AVAILABLE - TRY AGAIN LATER",
+              "UPDATE OUTCOME UNKNOWN - CHECK THE POLICY, DO NOT RETRY",
+              "STAND-IN ERROR - SEE SERVER LOG"):
+        assert len(m) <= 70
