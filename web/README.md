@@ -26,8 +26,21 @@ Pick a scenario in the header or with `/?scenario=<name>`: `lookup`, `commit-app
 `read-only`, `injection`, `session-lost`. The page tells you what the recording is waiting for ("press Deny", "send a
 message"). Systems, audit log and spirit-map come from the committed REST examples.
 
-**Live mode** needs the agent service (`agent/`, Agent D). It has not been run against the UI yet; that is the
-integration step.
+**Live mode** talks to the agent service (`agent/`, Agent D). To check the whole UI against it in a real browser
+(scripted provider, fake-insurance, nothing live):
+
+```
+# terminal 1, repo root (see agent/README.md for the venv)
+$env:LLM_PROVIDER='scripted'; $env:SEANCE_ALLOW_COMMIT='1'; agent\.venv\Scripts\python.exe -m seance_agent
+# terminal 2
+$env:VITE_MODE='live'; npx vite --port 5173
+# terminal 3
+node e2e/live.mjs        # 9 checks; report and live-*.png in docs/handoff/c/shots/
+```
+
+The agent keeps the controller seat for 60 s after a tab closes, so a new tab inside that window is an observer
+(controls disabled, reason shown). `live.mjs` waits that out. Once connected, the header has **Change system** and
+**Reconnect**.
 
 ## Test
 
