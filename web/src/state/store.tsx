@@ -12,7 +12,8 @@ import type { ClientMessage } from '../protocol/types';
 
 export interface StoreApi {
   state: AppState;
-  connectSystem: (appId: string) => boolean;
+  /** Sends connect_system; returns its message id, or null when the transport refused it (nothing is retried). */
+  connectSystem: (appId: string) => string | null;
   sendMessage: (text: string) => boolean;
   decide: (actionId: string, decision: 'approve' | 'deny') => boolean;
   cancelTurn: (turnId: string) => boolean;
@@ -35,6 +36,9 @@ export interface StoreProviderProps {
   now?: () => number;
   newId?: () => string;
 }
+
+/** Resume requests allowed at one seq before the store stops asking and reports `stream_stuck`. */
+export const MAX_RESUMES_WITHOUT_PROGRESS = 3;
 
 let counter = 0;
 const defaultId = () => `c${Date.now().toString(36)}_${++counter}`;
@@ -65,20 +69,33 @@ export function StoreProvider({ transport, children, uiPrefs, now, newId = defau
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transport]);
 
-  // Honour a resume request the reducer raised after a sequence gap.
+  // Honour a resume request the reducer raised after a sequence gap. Defence in depth against a reconnect storm
+  // (found live on 2026-11-06): resuming with nothing applied is pointless (resume_from would be null, the same as a
+  // fresh hello), and resumes that make no progress stop after MAX_RESUMES_WITHOUT_PROGRESS with a visible error.
+  const resumeRef = useRef({ atSeq: -1, attempts: 0 });
   useEffect(() => {
-    if (state.needsResume) {
-      transport.requestResume();
-      dispatch({ type: 'resume_requested' });
+    if (!state.needsResume) return;
+    const r = resumeRef.current;
+    const at = state.session.lastSeq;
+    if (r.atSeq === at) r.attempts += 1;
+    else resumeRef.current = { atSeq: at, attempts: 1 };
+    if (at === 0 || resumeRef.current.attempts > MAX_RESUMES_WITHOUT_PROGRESS) {
+      dispatch({ type: 'stream_stuck' });
+      return;
     }
-  }, [state.needsResume, transport]);
+    transport.requestResume();
+    dispatch({ type: 'resume_requested' });
+  }, [state.needsResume, state.session.lastSeq, transport]);
 
   const api = useMemo<StoreApi>(() => {
     const send = (msg: ClientMessage): boolean => transport.send(msg);
     return {
       state,
       dispatch,
-      connectSystem: (appId) => send({ id: newId(), type: 'connect_system', app_id: appId }),
+      connectSystem: (appId) => {
+        const id = newId();
+        return send({ id, type: 'connect_system', app_id: appId }) ? id : null;
+      },
       sendMessage: (text) => {
         const id = newId();
         dispatch({ type: 'user_sent', id, text });

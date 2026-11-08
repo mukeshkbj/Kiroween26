@@ -106,10 +106,16 @@ describe('reducer invariants (property-based)', () => {
     );
   });
 
+  // Model: one websocket is TCP-ordered and its first event is the server's reply to hello (a session_state), which
+  // is the client's baseline. Reordering is what replays across connections can do AFTER that baseline. (Until
+  // 2026-11-06 this property also shuffled the first event; that encoded "a fresh client always sees seq 1", which a
+  // running agent disproved: it answers a fresh hello with the current state at the current seq.)
   it('reordering inside the resume window converges once the server replays: state equals the clean run', () => {
     fc.assert(
       fc.property(
-        cleanStreamArb('s_01').chain((clean) => withReordering(clean).map((shuffled) => ({ clean, shuffled }))),
+        cleanStreamArb('s_01').chain((clean) =>
+          withReordering(clean.slice(1)).map((rest) => ({ clean, shuffled: [clean[0] as ServerEvent, ...rest] })),
+        ),
         ({ clean, shuffled }) => {
           let s = initialState();
           for (const e of shuffled) {
@@ -123,6 +129,44 @@ describe('reducer invariants (property-based)', () => {
         },
       ),
       { numRuns: 200 },
+    );
+  });
+
+  it('attaching mid-session: a fresh client takes the server\'s session_state at ANY seq as its baseline, never asks to resume, and then follows the stream exactly', () => {
+    fc.assert(
+      fc.property(
+        cleanStreamArb('s_01'),
+        fc.integer({ min: 0, max: 100_000 }),
+        (clean, offset) => {
+          // The server has history: renumber the stream so it starts deep into the session (as the live agent does).
+          const late = clean.map((e) => ({ ...e, seq: e.seq + offset }) as ServerEvent);
+          const states = late.map((e, i) => (e.type === 'session_state' ? i : -1)).filter((i) => i >= 0);
+          for (const start of states) {
+            const suffix = late.slice(start);
+            let s = initialState();
+            for (const e of suffix) {
+              s = reduce(s, act(e));
+              expect(s.needsResume, `asked to resume at seq ${e.seq} after attaching at ${suffix[0]?.seq}`).toBe(false);
+              invariants(s);
+            }
+            expect(s.session.lastSeq).toBe(late[late.length - 1]?.seq);
+          }
+        },
+      ),
+      { numRuns: 150 },
+    );
+  });
+
+  it('a fresh client whose first event is NOT a session_state (and not seq 1) still asks to resume rather than guess', () => {
+    fc.assert(
+      fc.property(cleanStreamArb('s_01'), fc.integer({ min: 1, max: 100_000 }), (clean, offset) => {
+        const first = clean.find((e) => e.type !== 'session_state');
+        fc.pre(first !== undefined);
+        const s = reduce(initialState(), act({ ...first, seq: (first as ServerEvent).seq + offset } as ServerEvent));
+        expect(s.needsResume).toBe(true);
+        expect(s.session.lastSeq).toBe(0);
+      }),
+      { numRuns: 100 },
     );
   });
 

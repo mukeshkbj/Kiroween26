@@ -10,8 +10,9 @@ $muts = @(
   @('M2 remove supersede rule', 'return { ...next, confirmation: c };', 'return { ...next, confirmation: old ?? c };'),
   @('M3 store hidden value', 'fields: s.fields.map((f) => (f.hidden && f.value !== null ? { ...f, value: null } : f)),', 'fields: s.fields,'),
   @('M4 drop gap check', 'if (s.session.lastSeq > 0 && ev.seq > s.session.lastSeq + 1 && !isResync) {', 'if (false) {'),
-  @('M5 accept unmatched tool_result', "if (!call || call.status !== 'running') return s;", "if (call && call.status !== 'running') return s;"),
-  @('M6 skip new-session reset', 'if (s.session.id !== null && s.session.id !== ev.session_id) s = resetForNewSession(s);', '/* mutated */')
+  @('M5 accept unmatched tool_result', "if (!call || call.status !== 'running') return s0;", "if (call && call.status !== 'running') return s0;"),
+  @('M6 skip new-session reset', 'if (s.session.id !== null && s.session.id !== ev.session_id) s = resetForNewSession(s);', '/* mutated */'),
+  @('M7 fresh client demands seq 1 (the reconnect-storm bug)', 'ev.seq === 1 || isResync || ev.type === ''session_state''', 'ev.seq === 1 || isResync')
 )
 $out = Join-Path ([IO.Path]::GetTempPath()) ("mut-" + [guid]::NewGuid().ToString('N') + '.txt')
 $bad = 0

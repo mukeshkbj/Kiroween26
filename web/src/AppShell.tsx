@@ -13,7 +13,7 @@ import { useReducedMotion } from './a11y/useReducedMotion';
 import { useMedia } from './a11y/useMedia';
 import { SPLIT_DEFAULT, WIDE_BREAKPOINT_PX, resizeSplit, splitFromPointer } from './layout/splitter';
 import { SHORTCUTS, matchShortcut, nextEffects } from './layout/shortcuts';
-import { currentNodeId, isBusy, isUncharted, trailNodeIds } from './state/selectors';
+import { currentNodeId, hasOpenConfirmation, isBusy, isUncharted, trailNodeIds } from './state/selectors';
 import type { RestApi } from './protocol/mock';
 import type { FieldFocus } from './protocol/types';
 import { strings } from './strings';
@@ -201,6 +201,44 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
     dragging.current = false;
   };
 
+  // ---- connecting, changing and reconnecting the system (C-2, C-3) ----
+  // One path for the cards, the header controls and the banners. Each user action sends at most ONE connect_system;
+  // a send the transport refuses is reported, never retried; a second click while one is on its way does nothing.
+  const ready = state.connection === 'open' && state.helloAcked && !state.observerOnly;
+  const [connectNotice, setConnectNotice] = useState<string | null>(null);
+  // The id of the connect_system on its way. Cleared by the server's ack/error for THAT id (contracts 4.4), or by a
+  // change of socket (no answer can come on a dead one). Not by state values: a fast agent answers connecting ->
+  // connected in one batch, so the final value equals the old one and a value-based reset never fires.
+  const [pendingConnectId, setPendingConnectId] = useState<string | null>(null);
+  const connectPending = pendingConnectId !== null;
+  useEffect(() => {
+    if (pendingConnectId && state.answered.includes(pendingConnectId)) setPendingConnectId(null);
+  }, [state.answered, pendingConnectId]);
+  useEffect(() => {
+    setPendingConnectId(null);
+  }, [state.connection]);
+  const doConnect = (appId: string) => {
+    if (connectPending) return;
+    const id = connectSystem(appId);
+    if (id) {
+      setPendingConnectId(id);
+      setConnectNotice(null);
+      if (state.ui.choosingSystem) dispatch({ type: 'ui', patch: { choosingSystem: false } });
+    } else {
+      setConnectNotice(strings.states.notSent);
+    }
+  };
+  const sysCtlReason: string | null = !ready
+    ? state.observerOnly
+      ? strings.shell.sysCtl.observer
+      : strings.shell.sysCtl.waiting
+    : connectPending
+      ? strings.shell.sysCtl.pending
+      : isBusy(state)
+        ? strings.shell.sysCtl.busy
+        : hasOpenConfirmation(state)
+          ? strings.shell.sysCtl.confirm
+          : null;
   // Reconnect = a fresh connect_system for the system we had, never a re-send of anything that was in flight.
   // If the agent itself is unreachable there is nothing to talk to, so reload.
   const reconnect = () => {
@@ -208,7 +246,7 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
       window.location.reload();
       return;
     }
-    if (state.session.appId) connectSystem(state.session.appId);
+    if (state.session.appId) doConnect(state.session.appId);
     else document.querySelector<HTMLButtonElement>('.system-card button:not(:disabled)')?.focus();
   };
 
@@ -216,7 +254,7 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
   const screenName = state.map?.nodes.find((n) => n.id === node)?.name ?? null;
   const busy = isBusy(state);
   const replayHint = replay && getReplayHint ? getReplayHint() : null;
-  const showConnect = state.session.state !== 'connected' && state.session.state !== 'connecting';
+  const showConnect = (state.session.state !== 'connected' && state.session.state !== 'connecting') || state.ui.choosingSystem;
 
   const screenPanel = (
     <main id="screen-region" className="pane pane-screen" aria-label={strings.shell.mainLabel} tabIndex={-1}>
@@ -270,7 +308,17 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
         />
       )}
       {showConnect && (
-        <ConnectScreen load={apps} onConnect={(id) => connectSystem(id)} onRetry={loadApps} connecting={state.session.state === 'connecting'} />
+        <ConnectScreen
+          load={apps}
+          onConnect={doConnect}
+          onRetry={loadApps}
+          connecting={state.session.state === 'connecting' || connectPending}
+          ready={ready}
+          blockedReason={state.observerOnly ? strings.shell.sysCtl.observer : null}
+          notice={connectNotice}
+          currentAppId={state.session.state === 'connected' ? state.session.appId : null}
+          onBack={state.ui.choosingSystem ? () => dispatch({ type: 'ui', patch: { choosingSystem: false } }) : undefined}
+        />
       )}
       <Chat state={state} onSend={sendMessage} onCancel={cancelTurn} />
     </aside>
@@ -316,6 +364,37 @@ export function AppShell({ rest, replay, getReplayHint, now, isTrusted, scenario
             >
               {strings.shell.auditToggle}
             </button>
+            {/* Shown whenever the session is past "disconnected", even with no app (an agent stuck in 'connecting' with
+                app_id null was found live): there must always be a way back that is not a page reload (C-2). */}
+            {(state.session.appId || (state.helloAcked && state.session.state !== 'disconnected')) && (
+              <div className="system-controls" role="group" aria-label={strings.shell.changeSystem}>
+                <button
+                  type="button"
+                  aria-expanded={state.ui.choosingSystem}
+                  aria-controls="chat-region"
+                  disabled={sysCtlReason !== null && !state.ui.choosingSystem}
+                  aria-describedby={sysCtlReason ? 'sys-ctl-reason' : undefined}
+                  onClick={() => dispatch({ type: 'ui', patch: { choosingSystem: !state.ui.choosingSystem } })}
+                >
+                  {strings.shell.changeSystem}
+                </button>
+                {state.session.appId && (
+                  <button
+                    type="button"
+                    disabled={sysCtlReason !== null}
+                    aria-describedby={sysCtlReason ? 'sys-ctl-reason' : undefined}
+                    onClick={() => state.session.appId && doConnect(state.session.appId)}
+                  >
+                    {strings.shell.reconnectSystem}
+                  </button>
+                )}
+                {sysCtlReason && (
+                  <span id="sys-ctl-reason" className="sr-only">
+                    {sysCtlReason}
+                  </span>
+                )}
+              </div>
+            )}
             <details className="shortcuts">
               <summary>{strings.shell.shortcuts}</summary>
               <dl>
