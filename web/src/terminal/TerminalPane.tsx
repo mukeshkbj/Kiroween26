@@ -44,7 +44,13 @@ export function TerminalPane(p: TerminalPaneProps) {
     <div className="term-screen" data-effects={p.effects} data-dormant={dormant ? 'true' : 'false'}>
       <div className="term-stage">
         <Grid rows={rows} fields={fields} cursor={cursor} screenName={p.screenName} />
-        <Planchette queue={p.focusQueue} reduceMotion={p.reduceMotion} onConsumed={p.onFocusConsumed} />
+        <Planchette
+          queue={p.focusQueue}
+          reduceMotion={p.reduceMotion}
+          onConsumed={p.onFocusConsumed}
+          currentScreenId={p.screen?.screenId ?? null}
+          turnActive={p.busy}
+        />
         <div className="crt-overlay" aria-hidden="true" />
       </div>
       {dormant && <p className="term-dormant">{strings.dormant}</p>}
