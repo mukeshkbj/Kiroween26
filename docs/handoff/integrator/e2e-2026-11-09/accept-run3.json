@@ -1,0 +1,74 @@
+{
+  "started": "2026-11-09T17:53:28.788Z",
+  "steps": [
+    {
+      "name": "connect the simulated system",
+      "ok": true,
+      "ms": 470,
+      "evidence": null
+    },
+    {
+      "name": "1 lookup_policy P0000003 -> A. ROSE, 250.00",
+      "ok": true,
+      "ms": 341,
+      "evidence": {
+        "answer": "emiumlegacy screen250.00statuslegacy screenACTIVEPolicy P0000003 belongs to A. ROSE, status ACTIVE, premium 250.00, last updated 2026-10-21."
+      }
+    },
+    {
+      "name": "2 list_policies -> 8 policies (P0000001..P0000008)",
+      "ok": true,
+      "ms": 326,
+      "evidence": {
+        "policies": 8,
+        "answer": "object Object],[object Object],[object Object]There are 8 policies on this page: P0000001, P0000002, P0000003, P0000004, P0000005, P0000006, P0000007, P0000008."
+      }
+    },
+    {
+      "name": "3 update_policy P0000003 premium 300 -> modal -> Approve -> POLICY UPDATED, 1 commit",
+      "ok": true,
+      "ms": 2055,
+      "evidence": {
+        "messageLine": "POLICY UPDATED",
+        "confirmedBy": "oob:web-ui:s_61eb"
+      }
+    },
+    {
+      "name": "4 lookup_policy P0000003 again -> premium 300.00 (the change is real)",
+      "ok": true,
+      "ms": 379,
+      "evidence": {
+        "answer": "emiumlegacy screen300.00statuslegacy screenACTIVEPolicy P0000003 belongs to A. ROSE, status ACTIVE, premium 300.00, last updated 2026-11-24."
+      }
+    },
+    {
+      "name": "5 update_policy P0000001 premium 111 -> modal -> Escape (Deny) -> nothing sent",
+      "ok": true,
+      "ms": 1075,
+      "evidence": {
+        "commits": 1,
+        "denials": 1
+      }
+    },
+    {
+      "name": "6 lookup_policy P0000001 -> still 180.00",
+      "ok": true,
+      "ms": 343,
+      "evidence": {
+        "answer": "umlegacy screen180.00statuslegacy screenACTIVEPolicy P0000001 belongs to J. MARLOWE, status ACTIVE, premium 180.00, last updated 2026-09-14."
+      }
+    },
+    {
+      "name": "server audit chain verifies; totals 1 commit, 1 denial",
+      "ok": true,
+      "ms": 15,
+      "evidence": {
+        "entries": 41
+      }
+    }
+  ],
+  "pageErrors": [],
+  "console": [],
+  "ok": true,
+  "finished": "2026-11-09T17:53:34.032Z"
+}
