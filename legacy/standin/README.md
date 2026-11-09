@@ -27,5 +27,11 @@ treat the stand-in and a future real KICKS app the same way.
 ```
 python -m seance_standin            # serves TN3270 on STANDIN_PORT (default 3271)
 ```
-The bridge / s3270 connects to it exactly as to a real host. See
+The bridge / s3270 connects to it exactly as to a real host.
+
+Backend failures never leave the terminal waiting. Every Docker call is bounded
+(`STANDIN_DOCKER_TIMEOUT_S`, default 20 s). A failed read shows `MAINFRAME NOT
+AVAILABLE - TRY AGAIN LATER`. A failed commit is ambiguous (the update job may
+have run), so it shows `UPDATE OUTCOME UNKNOWN - CHECK THE POLICY, DO NOT
+RETRY`, drops the pending change and never resubmits it. See
 `legacy/README.md` for the full demo run, reset and health check.

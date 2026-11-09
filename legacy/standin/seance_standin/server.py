@@ -143,7 +143,15 @@ class _Handler(socketserver.BaseRequestHandler):
                 continue
             inbound = ds.parse_inbound(record)
             typed = _typed_from_inbound(app.screen(), inbound)
-            app.handle(inbound.aid, typed)
+            try:
+                app.handle(inbound.aid, typed)
+            except Exception:  # noqa: BLE001 - always answer the terminal
+                # A bug must not leave the 3270 keyboard locked forever; the
+                # client would see an ambiguous ack. Answer with a message.
+                app.values["msg"] = "STAND-IN ERROR - SEE SERVER LOG"
+                import traceback
+
+                traceback.print_exc()
             self._send_screen(conn, app)
 
     def _send_screen(self, conn: _Conn, app: InsuranceApp) -> None:

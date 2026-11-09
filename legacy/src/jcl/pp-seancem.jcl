@@ -1,5 +1,5 @@
-//PPSEAN  JOB (ACCT),'PP SEANCEM TO DS',CLASS=A,MSGCLASS=A,REGION=4096K,
-//         USER=@MVS_USER@,PASSWORD=@MVS_PASSWORD@
+//PPSEAN  JOB (ACCT),'PP SEANCEM TO DS',CLASS=A,MSGCLASS=A,
+//         REGION=4096K,USER=@MVS_USER@,PASSWORD=@MVS_PASSWORD@
 //* Run the KICKS preprocessor (KIKPPCOB) on SEANCEM and keep the generated
 //* COBOL as HERC01.SEANCE.PPOUT(SEANCEM), so we can read exactly what the
 //* COBOL compiler (IKFCBL00) abends on.

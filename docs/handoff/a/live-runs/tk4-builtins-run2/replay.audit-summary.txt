@@ -1,0 +1,20 @@
+   1 18:00:57 connect     ok              key=-      field=-   screen=ed086b0075
+   2 18:00:58 press_key   ok              key=Clear  field=-   screen=ed086b0075
+   3 18:00:58 press_key   ok              key=PA1    field=-   screen=81927ecdb6
+   4 18:00:59 press_key   ok              key=Clear  field=-   screen=9d4927e982
+   5 18:01:00 press_key   ok              key=PF13   field=-   screen=be4412fa93
+   6 18:01:01 press_key   ok              key=Clear  field=-   screen=ee4cd45277
+   7 18:01:01 press_key   ok              key=PA3    field=-   screen=be4412fa93
+   8 18:01:02 press_key   ok              key=Clear  field=-   screen=ee4cd45277
+   9 18:01:03 press_key   ok              key=PA1    field=-   screen=be4412fa93
+  10 18:01:04 press_key   ok              key=Clear  field=-   screen=176e286cbf
+  11 18:01:05 press_key   ok              key=PF14   field=-   screen=be4412fa93
+  12 18:01:05 press_key   ok              key=Clear  field=-   screen=dde92c5af7
+  13 18:01:06 press_key   ok              key=PA2    field=-   screen=be4412fa93
+  14 18:01:07 press_key   ok              key=Clear  field=-   screen=ee4cd45277
+  15 18:01:08 press_key   ok              key=Clear  field=-   screen=be4412fa93
+  16 18:01:09 press_key   ok              key=PF13   field=-   screen=be4412fa93
+  17 18:01:09 press_key   ok              key=PA1    field=-   screen=ee4cd45277
+  18 18:01:10 press_key   ok              key=Clear  field=-   screen=2495368218
+  19 18:01:25 press_key   ambiguous_ack   key=PA1    field=-   screen=be4412fa93
+# 19 entries; outcomes={'ok': 18, 'ambiguous_ack': 1}; keys={'Clear': 9, 'PA1': 4, 'PF13': 2, 'PA3': 1, 'PF14': 1, 'PA2': 1}; hash chain linked: True

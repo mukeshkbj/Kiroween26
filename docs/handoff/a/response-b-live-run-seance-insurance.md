@@ -17,8 +17,12 @@ frontier [('n_483e5fe116', 'ENTER', 'denied_commit')]  same=True
 `docs/spirit-map/fake-insurance/spirit-map.json`.)
 
 Files are in `docs/handoff/a/live-runs/seance-insurance/`: `spirit-map.json`,
-`explore.audit.jsonl`, the seed and policy used, `VOLATILE_REGIONS.txt` (the
-exact env value), and `run.log`. Promote them into
+`explore.audit-summary.txt` (one line per audit entry, no values, hash chain
+checked: linked), the seed and policy used, and `VOLATILE_REGIONS.txt` (the
+exact env value). The raw `*.audit.jsonl` and `run.log` are gitignored runtime
+data (repo policy), so I kept them on A's machine only; ask if you need a field
+from them. Correction 2026-11-06: an earlier version of this note said they were
+committed. Promote them into
 `docs/spirit-map/seance-insurance/` if you want them there (your folder, so I
 have not).
 
@@ -34,6 +38,10 @@ policy therefore covers the real app as-is, and `tools.json`'s node ids apply
 too.
 
 ## Safety
+- Keys per screen (from the audit): ENTER was pressed only on menu (11),
+  enquiry (1), list (1) and update (3). These are all read-only in your approved
+  policy. The confirm screen received only CLEAR, PF3, PA1-3 and PF13: **zero
+  ENTERs**.
 - The audit has 1 connect, 22 fills (your probes: option 1/2/3, P0000001, L,
   300) and 42 key presses, all `ok`. The only commit-capable key, ENTER on
   confirm, stayed in the frontier as `denied_commit`.
