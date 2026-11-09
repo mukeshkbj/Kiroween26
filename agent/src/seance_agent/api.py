@@ -36,7 +36,8 @@ HELLO_TIMEOUT_S = 10.0
 def create_app(settings: Settings | None = None, registry: AppRegistry | None = None,
                hub: SeanceHub | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
-    registry = registry or AppRegistry.load()
+    # REST and the websocket must see one registry: take the hub's when one is given.
+    registry = registry or (hub.registry if hub is not None else AppRegistry.load())
     hub = hub or SeanceHub(settings, registry)
     allowed = set(settings.allowed_origins)
 

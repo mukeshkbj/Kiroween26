@@ -131,3 +131,22 @@ def assert_stream_ok(h: Harness) -> None:
     check_stream(evs)
     check_summaries(evs)
     check_user_facing_text(evs)
+
+
+def park_off_map(h: Harness) -> str:
+    """Put the fake app on a screen the spirit map does not know.
+
+    Business tools must then fail closed with ``unknown_start`` (contracts 6.2: an
+    unknown current screen), whatever ``goto`` can or cannot navigate. This is the
+    way to provoke a business-tool failure that does not depend on B's routing. The
+    app's ``CLEAR`` rule (any screen -> menu) still applies, so recovery is possible.
+    Returns the new screen's id."""
+    from seance_mcp.fake import F, build_screen
+
+    if "off_map" not in h.app.screens:
+        h.app.screens["off_map"] = build_screen(
+            {(0, 1): "SEANCE INSURANCE - SESSION NOTICE", (3, 1): "SCHEDULED MAINTENANCE TONIGHT",
+             (23, 1): "CLEAR=MAIN MENU"},
+            [F("msg", 22, 1, 70)])
+    h.app.current = "off_map"
+    return h.app.screens["off_map"].model().screen_id

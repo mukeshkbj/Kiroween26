@@ -8,7 +8,7 @@ import pytest
 from seance_agent.llm.base import ToolUse
 from seance_agent.llm.scripted import ScriptedLlm
 
-from ._harness import agent_harness, assert_stream_ok, events, make_loop, run_with_decision
+from ._harness import agent_harness, assert_stream_ok, events, make_loop, park_off_map, run_with_decision
 
 pytestmark = pytest.mark.anyio
 
@@ -220,27 +220,46 @@ def test_demo_reads_the_new_value_not_the_policy_digits(text, args) -> None:
     assert use.input == args
 
 
-async def test_update_after_a_lookup_recovers_from_unknown_start_and_still_needs_a_human() -> None:
+async def test_lookup_then_update_in_one_session_still_needs_a_human() -> None:
+    """Lookup, then update, in one session: the update reaches the modal and commits once on
+    approval. (Before B-1 the update failed unknown_start and the demo recovered; with B-1's
+    navigating goto it just works. Either way the commit still needs a human.)"""
     cm, h = await _connected()
     try:
         loop = make_loop(h, DemoLlm())
         assert await loop.run_turn("Look up policy P0000003") == "completed"
-        assert h.app.current == "enquiry"  # B's update_policy refuses to start here (unknown_start)
         await run_with_decision(h, loop, "Set the premium of policy P0000003 to 300", "approve")
         assert_stream_ok(h)
-        codes = [e["data"]["error_code"] for e in events(h, "tool_result")]
-        assert "unknown_start" in codes
         assert [e["data"]["outcome"] for e in events(h, "confirmation_resolved")] == ["approved"]
         assert h.app.policies["P0000003"]["premium"] == "300.00" and len(h.app.mutations) == 1
     finally:
         await cm.__aexit__(None, None, None)
 
 
+async def test_off_map_failure_is_recovered_with_a_read_only_key() -> None:
+    """The recovery path the old test covered, now provoked without goto: the update fails
+    unknown_start off the map, the demo presses CLEAR (not commit-capable) and retries once,
+    and the commit still stops at the modal."""
+    cm, h = await _connected()
+    try:
+        park_off_map(h)
+        loop = make_loop(h, DemoLlm())
+        await run_with_decision(h, loop, "Set the premium of policy P0000003 to 300", "approve")
+        assert_stream_ok(h)
+        calls = [(e["data"]["tool"], e["data"]["arguments"]) for e in events(h, "tool_call")]
+        codes = [e["data"]["error_code"] for e in events(h, "tool_result")]
+        assert codes[0] == "unknown_start" and calls[1] == ("press_key", {"key": "CLEAR"})
+        assert [e["data"]["outcome"] for e in events(h, "confirmation_resolved")] == ["approved"]
+        assert len(h.app.mutations) == 1
+    finally:
+        await cm.__aexit__(None, None, None)
+
 async def test_business_error_summary_carries_the_real_message() -> None:
     cm, h = await _connected()
     try:
-        await h.broker.call("lookup_policy", {"policy_number": "P0000003"})
+        park_off_map(h)
         out = await h.broker.call("update_policy", {"policy_number": "P0000003", "premium": "300"})
-        assert out.error_code == "unknown_start" and "expected to start" in out.summary
+        assert out.status == "error" and out.error_code == "unknown_start"
+        assert out.summary.startswith("update_policy failed:") and "expected to start" in out.summary
     finally:
         await cm.__aexit__(None, None, None)
