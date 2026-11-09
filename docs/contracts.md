@@ -147,6 +147,8 @@ Endpoint: `ws://127.0.0.1:8000/ws/seance`. Text frames, one JSON object each, UT
 ```
 `seq` is gap-free and strictly increasing per `session_id`, starting at 1. `turn_id` is `null` for session-level events. The client MUST ignore `seq <= last_seq`.
 
+`turn_id`, `message_id` (in `assistant_delta`/`assistant_message`), `user_message_id` and `tool_call_id` are **unique within a `session_id` for its whole life**, across `connect_system` calls (including reconnects). A consumer may treat a repeated id as the same object. `action_id` stays a uuid4 from the gate. `seance_mcp.contracts.check.check_stream` enforces this.
+
 ### 4.3 Server -> client event types
 
 | `type` | `data` |
@@ -461,6 +463,7 @@ Conformance tests: B and D validate their JSON output against schemas generated 
 Version: **contracts-v1**, approved by the user 2026-11-04 (git tag `contracts-v1`). Later changes follow section 12 and are listed below.
 
 Change log:
+- 2026-11-09 (section 4.2, clarification, C's `request-integrator-unique-ids`): turn, message, user-message and tool-call ids are unique per session across `connect_system`; `check_stream` rejects reuse. D's current code already complies (`Session.next_id`).
 - 2026-11-06 (section 8): ``seance-insurance`` is named honestly (COBOL on TK4- behind the stand-in, not KICKS) and reads its port from ``STANDIN_PORT`` so it and ``tk4-builtins`` can both be configured. D aligns ``agent/apps.json``.
 - 2026-11-06 (additive): error code ``ambiguous_ack`` (section 3.5). The bridge bounds every s3270 command; silence raises ``AmbiguousAckError`` (session killed, nothing resent), surfaced as ``ambiguous_ack`` with audit outcome ``ambiguous_ack``. From Agent A's live finding on TK4-.
 - 2026-11-05 (additive, B request `screenout-volatile`): `ScreenOut` gains `volatile` ((row, col, length) runs). Regenerated schemas/examples. Consumers ignore unknown fields, so this is a v1 addition.

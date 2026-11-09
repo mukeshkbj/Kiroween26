@@ -85,6 +85,11 @@ async function settled(n, re, timeout = 30000) {
   }
   throw new Error(`timeout waiting for ${re} in turn ${n}: "${(await turnText(n)).slice(-200)}"`);
 }
+// The confirm screen drawn in the modal has "PREMIUM: <old> <new>" (contracts 10.1).
+function premiumRow(text) {
+  const m = /PREMIUM:\s+(\d+\.\d\d)\s+(\d+\.\d\d)/.exec(text);
+  return m ? { old: m[1], new: m[2] } : null;
+}
 const serverAudit = async () => (await fetch(`${AGENT}/api/audit?limit=2000`, { headers: { Origin: WEB } })).json();
 const commits = (a) => a.entries.filter((e) => e.tool === 'confirm_action' && e.outcome === 'ok');
 const denials = (a) => a.entries.filter((e) => e.tool === 'deny_action' && e.outcome === 'rejected');
@@ -127,12 +132,17 @@ await step('3 update_policy P0000003 premium 300 -> modal -> Approve -> POLICY U
   const dlg = page.getByRole('alertdialog');
   await dlg.waitFor({ timeout: 30000 });
   const m = norm(await dlg.textContent());
+  await page.screenshot({ path: path.join(SHOTS, '3-modal.png') });
+  // Act like a careful human: read the OLD/NEW premium off the drawn screen, approve only if right.
+  const prem = premiumRow(m);
   const problems = [];
-  if (!/250\.00/.test(m) || !/300(\.00)?/.test(m)) problems.push('modal does not show OLD 250.00 and NEW 300');
+  if (!prem || prem.old !== '250.00' || prem.new !== '300.00') problems.push(`modal shows PREMIUM ${prem ? `${prem.old} -> ${prem.new}` : '(row not found)'}, expected 250.00 -> 300.00`);
   if (!/unverified/i.test(m)) problems.push('no unverified label');
   if (!(await page.getByRole('button', { name: /^Approve/ }).isDisabled())) problems.push('Approve enabled at open');
-  if (problems.length) throw new Error(problems.join('; '));
-  await page.screenshot({ path: path.join(SHOTS, '3-modal.png') });
+  if (problems.length) {
+    await page.keyboard.press('Escape'); // never approve a change we did not ask for
+    throw new Error(`refused to approve: ${problems.join('; ')}`);
+  }
   await page.waitForTimeout(900);
   await page.getByRole('button', { name: /^Approve/ }).click();
   await page.getByText(/Approved\. The key was sent/).first().waitFor({ timeout: 20000 });
@@ -161,8 +171,9 @@ await step('5 update_policy P0000001 premium 111 -> modal -> Escape (Deny) -> no
   const n = await ask('Set the premium of policy P0000001 to 111');
   const dlg = page.getByRole('alertdialog');
   await dlg.waitFor({ timeout: 30000 });
-  if (!/111/.test(norm(await dlg.textContent()))) throw new Error('modal does not show NEW 111');
+  const prem = premiumRow(norm(await dlg.textContent()));
   await page.keyboard.press('Escape');
+  if (!prem || prem.old !== '180.00' || prem.new !== '111.00') throw new Error(`modal showed PREMIUM ${prem ? `${prem.old} -> ${prem.new}` : '(row not found)'}, expected 180.00 -> 111.00 (denied anyway)`);
   await page.getByText(/Denied\. Nothing was changed/).first().waitFor({ timeout: 20000 });
   const dismiss = dlg.getByRole('button', { name: /dismiss|close/i });
   if (await dismiss.isVisible().catch(() => false)) await dismiss.click();

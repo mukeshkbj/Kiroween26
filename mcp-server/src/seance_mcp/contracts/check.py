@@ -45,6 +45,7 @@ def check_stream(events: list[dict[str, Any]]) -> None:
     calls: dict[str, int] = {}      # tool_call_id -> results so far
     pending: dict[str, int] = {}    # action_id -> resolutions so far
     finished_turns: set[str] = set()
+    message_turn: dict[str, str | None] = {}  # message_id -> the turn it belongs to
     for e in events:
         if e["seq"] != last_seq + 1:
             raise ContractError(f"seq gap or repeat: {last_seq} -> {e['seq']}")
@@ -53,6 +54,8 @@ def check_stream(events: list[dict[str, Any]]) -> None:
         if t == "turn_started":
             if open_turn is not None:
                 raise ContractError(f"turn {turn} started inside {open_turn}")
+            if turn in finished_turns:
+                raise ContractError(f"turn_id {turn} reused within the session (contracts 4.2)")
             open_turn = turn
         elif t == "turn_finished":
             if open_turn != turn or turn in finished_turns:
@@ -65,6 +68,8 @@ def check_stream(events: list[dict[str, Any]]) -> None:
             if any(n == 0 for n in pending.values()):
                 raise ContractError("turn ended with an unresolved confirmation")
         elif t == "tool_call":
+            if d["tool_call_id"] in calls:
+                raise ContractError(f"tool_call_id {d['tool_call_id']} reused within the session (contracts 4.2)")
             calls[d["tool_call_id"]] = 0
         elif t == "tool_result":
             if d["tool_call_id"] not in calls or calls[d["tool_call_id"]] != 0:
@@ -76,6 +81,11 @@ def check_stream(events: list[dict[str, Any]]) -> None:
             if pending.get(d["action_id"]) != 0:
                 raise ContractError(f"confirmation_resolved without a single confirmation_required: {d['action_id']}")
             pending[d["action_id"]] = 1
+        if t in ("assistant_delta", "assistant_message"):
+            # Many deltas share one message_id within one turn; the same id in a later turn is reuse.
+            owner = message_turn.setdefault(d["message_id"], turn)
+            if owner != turn:
+                raise ContractError(f"message_id {d['message_id']} reused in turn {turn} (first in {owner}; contracts 4.2)")
         if t in ("tool_call", "tool_result", "thinking", "assistant_delta", "assistant_message") and turn is None:
             raise ContractError(f"{t} outside a turn")
     if open_turn is not None:

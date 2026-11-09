@@ -234,3 +234,46 @@ def test_ambiguous_ack_transcript_sends_the_key_once_and_ends_in_session_lost():
     assert states[0] == "session_lost" and states[-1] == "connected"
     assert ev[-1]["type"] == "screen" and ev[-1]["data"]["phase"] == "snapshot"
     check_stream(ev)
+
+
+def _renumber(ev):
+    for i, e in enumerate(ev, 1):
+        e["seq"] = i
+    return ev
+
+
+def test_check_stream_rejects_ids_reused_within_a_session():
+    """contracts 4.2: turn, message and tool-call ids are unique for the session's whole life
+    (C's request-integrator-unique-ids: D used to restart its counters per connect_system)."""
+    base = [x["event"] for x in events_of("lookup") if x["dir"] == "server"]
+    first_turn = [e for e in base if e.get("turn_id")]
+    check_stream(base)
+    # a second turn that reuses every id of the first one
+    again = copy.deepcopy(first_turn)
+    with pytest.raises(ContractError, match="reused"):
+        check_stream(_renumber(copy.deepcopy(base) + again))
+    # only the tool_call_id reused, under a fresh turn id
+    again2 = copy.deepcopy(first_turn)
+    for e in again2:
+        e["turn_id"] = "t_99"
+        if "message_id" in e["data"]:
+            e["data"]["message_id"] = e["data"]["message_id"] + "_b"
+        if e["type"] == "turn_started":
+            e["data"]["user_message_id"] = "m_99"
+    with pytest.raises(ContractError, match="tool_call_id .* reused"):
+        check_stream(_renumber(copy.deepcopy(base) + again2))
+    # only a message_id reused in another turn
+    again3 = copy.deepcopy(again2)
+    for e in again3:
+        if e["type"] in ("tool_call", "tool_result"):
+            e["data"]["tool_call_id"] = e["data"]["tool_call_id"] + "_b"
+        if "message_id" in e["data"]:
+            e["data"]["message_id"] = e["data"]["message_id"][:-2]
+    with pytest.raises(ContractError, match="message_id .* reused"):
+        check_stream(_renumber(copy.deepcopy(base) + again3))
+    # fully fresh ids: fine
+    fresh = copy.deepcopy(again3)
+    for e in fresh:
+        if "message_id" in e["data"]:
+            e["data"]["message_id"] += "_c"
+    check_stream(_renumber(copy.deepcopy(base) + fresh))
