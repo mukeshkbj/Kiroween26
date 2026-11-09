@@ -210,3 +210,16 @@ written to accept the examples cannot catch what the examples never exercise.
 Also: D-4 was more than a label. `seance-insurance` fell back to `TN3270_PORT` when `STANDIN_PORT` was unset, so
 it would have connected to TK4- under the stand-in's name. The test now pins `apps.json` to the JSON in
 `docs/contracts.md`.
+
+### 2026-11-09 — four tests after B-1
+
+- B-1 (a navigating `goto`) made four of my tests fail. The tests were right about what they protected, but they
+  used a bug in someone else's code, or the repo's current data, as the way to provoke a failure. They now provoke
+  it with a screen the map does not know, which is `unknown_start` by contract on any runtime.
+- Surprise: my first rewrite still failed on `integration`, because I had pinned B's error *wording*
+  ("expected to start"), and B-1 reworded it. The test now compares the summary with whatever message the
+  envelope carries. Same lesson as last time, one level down: assert on your own behaviour, not on the
+  neighbour's text.
+- Product decision: an open confirmation is resolved before any other tool runs (already true because the loop
+  suspends on the human), plus a `session_busy` guard as defence in depth. I rejected "route away and supersede":
+  safe, but the person's modal would vanish because of something the model did.
