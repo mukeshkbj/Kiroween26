@@ -10,6 +10,8 @@ export interface SystemCardProps {
   app: AppInfo;
   onConnect: (appId: string) => void;
   disabled?: boolean;
+  /** This is the system the session is connected to now. */
+  current?: boolean;
 }
 
 function reachText(app: AppInfo): string {
@@ -19,10 +21,10 @@ function reachText(app: AppInfo): string {
   return strings.connect.reachUnknown;
 }
 
-export function SystemCard({ app, onConnect, disabled }: SystemCardProps) {
+export function SystemCard({ app, onConnect, disabled, current }: SystemCardProps) {
   const cannotReach = app.kind === 'live' && app.reachable === false;
   return (
-    <li className="system-card" data-kind={app.kind}>
+    <li className="system-card" data-kind={app.kind} data-current={current ? 'true' : undefined}>
       <div className="system-head">
         <h3 className="system-name">{app.name}</h3>
         <span className={`system-kind system-kind-${app.kind}`}>{app.kind === 'fake' ? strings.connect.simulated : strings.connect.live}</span>
@@ -33,6 +35,7 @@ export function SystemCard({ app, onConnect, disabled }: SystemCardProps) {
         <li>{app.has_map ? strings.connect.hasMap : strings.connect.noMap}</li>
         <li>{strings.connect.toolsLabel(app.tools.business, app.tools.approved)}</li>
         {app.read_only && <li className="system-readonly">{strings.readOnly}</li>}
+        {current && <li className="system-current">{strings.connect.current}</li>}
       </ul>
       <button
         type="button"

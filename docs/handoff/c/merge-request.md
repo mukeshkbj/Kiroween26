@@ -1,60 +1,53 @@
 # Merge request: `agent/c-seance-ui` -> `integration` (Agent C, web)
 
-Date: 2026-11-06. Branch tip: see `git log origin/agent/c-seance-ui -1`. `main` merged in at `fe1ca58` (no conflicts).
+Date: 2026-11-08. `main` merged in at `dfa4990` (fast-forward, no conflicts). Supersedes the 2026-11-06 request.
+Answers `docs/handoff/integrator/request-c-e2e-findings.md` in full: `docs/handoff/c/response-integrator-e2e-findings.md`.
 
 ## Summary
 
-The seance-ui spec, tasks 1 to 6 and 8, built and tested in **mock/replay mode** against the committed contract
-examples. Task 7 (live mode against Agent D's service) is **not done**: `agent/` is not on `origin/main` yet (checked
-repeatedly through 2026-11-06; last `origin/main` is `0263f4d`). I did not merge D's branch into mine, because only the
-integrator merges agent branches and C's work must not depend on D's unmerged code.
-
-What is in it:
-- **Protocol:** TS mirror of contracts 3, 4, 5, 7.3 (`web/src/protocol/types.ts`), fail-closed runtime guards, both
-  transports (websocket with hello/token/resume/backoff, and replay of the transcripts), REST client.
-- **State:** one pure reducer, property-tested with fast-check, with mutation checks (`web/test/mutation-check*.ps1`).
-- **Views:** 24x80 grid + OIA, CRT effects with Off/Low/Full, planchette, typing reveal, chat with step cards and safe
-  markdown, connect screen, state banners, confirmation modal, audit drawer, spirit-map graph + table + preview, app
-  shell with landmarks, skip links, splitter, narrow layout and Alt+Shift shortcuts.
-- **New since the last status:** `ambiguous_ack` as its own state as you asked (banner with the exact wording, a step
-  note, "Reconnect to <system>" that sends one `connect_system` and nothing else, proven by a spy-transport test);
-  plain wording for `live_not_allowed`; `ScreenOut.volatile` mirrored in types and guards.
-
-## Tested
-
-- `scripts/gate.ps1 -Only web`: **pass** (tsc clean, vitest 27 files / 384 tests). `scripts/check-ownership.ps1`: all
-  124 touched files in C's paths. The `contracts` gate step is skipped in this worktree (no `mcp-server/.venv`).
-- Conformance: the guards accept every file in `docs/contracts/examples/` after your 2026-11-05/06 regeneration, and
-  the reducer plays all seven transcripts.
-- Real browser (Chromium 158 via Playwright, `npm run shots`): axe-core with colour contrast **0 violations in 8
-  states**; 0 px horizontal overflow at 390 and 320 px; script `click()` on Approve does not approve, a real click does;
-  0 Web Animations with reduced motion. Screenshots in `docs/handoff/c/shots/`, numbers in `browser-checks.json`, record
-  in `web/A11Y.md` section 1b.
-- Spec-vs-vibe experiment (8.2): `docs/handoff/c/experiment.md`.
-
-## Not done / blocked (please read)
-
 | Item | Status |
 |---|---|
-| **Task 7 (live mode with D)** | Blocked on D being on `main`. Ready to do: `VITE_MODE=live` already uses the websocket transport and REST client; D's own live check (`agent/scripts/c_live_check/live-agent.test.ts` on D's branch) already drives my transport, guards and reducer against D's server. Once `agent/` is on `main` I merge `main` and run it. |
-| **6.5 manual pass (NVDA, zoom, Windows High Contrast)** | Left unticked on purpose: the user will do it by hand. Checklist in `web/A11Y.md` section 3. |
-| 7.4 live screenshots | Depends on task 7. |
+| **C-1** planchette stops at the first target | **Fixed**: it follows to the last event, skips steps about a screen that is not shown, has a fallback for lost `finish` events, and rests after the turn. Live: `reading > filling POLNO > pressing Enter`, never OPTION. |
+| **C-2** no way to change or reconnect | **Fixed**: header **Change system** and **Reconnect**, keyboard-reachable, one `connect_system` per action (ack-tracked), disabled with a stated reason. |
+| **C-3** dropped first click | **Recorded with a repro**; two mechanisms found and closed: my reconnect storm against an agent with history, and a reload inside D's 60 s controller grace turning the tab into an observer. |
+| **Task 7** live mode against D | **Done**: `web/e2e/live.mjs` 9/9 on a fresh agent; your `e2e-commit` approve 6/6 and deny 6/6. |
+| **Task 7.2** new protocol finding | **Filed**, not resolved: `request-integrator-unique-ids.md` (turn/message/tool-call ids restart after each connect). |
+| **Task 7.3** live demo path | **Filed** for A: `request-a-live-demo-path.md`. |
+| 6.5 manual NVDA pass | Left unticked on purpose (the user does it by hand). |
 
-## Requests to you (integrator)
+## Commits since the last request
+- `ee3170c` web: C-1 planchette
+- `0168bf8` web: C-2 controls, C-3 fresh-attach baseline, resume guard, hello gate, "not sent" notice
+- one docs/e2e commit: `live.mjs`, `repro-c3.mjs`, write-ups, `tasks.md`, journal, A11Y.md, README
 
-1. **Add `playwright` 1.65.0** to the Frontend pinned versions table in `.kiro/steering/tech.md`. Approved by the user on
-   2026-11-06; details in `docs/handoff/c/request-integrator-playwright.md`. Dev only, never in the bundle.
-2. **A transcript for `ambiguous_ack`** in `docs/contracts/examples/transcripts/` (connected -> commit tool ->
-   `tool_result{error_code: ambiguous_ack}` -> `session_state{session_lost}`), so mock mode can show and replay the new
-   state. Until then it is covered only by unit tests with hand-built events.
-3. **Ping C when D is on `main`**, and I will do task 7 the same day.
+## Tested
+- `scripts/gate.ps1 -Only web,contracts`: **pass**. The contracts step really ran this time ("fresh + valid"),
+  using `mcp-server/.venv`, which I created in my worktree (gitignored, no tracked changes under `mcp-server/`).
+  Web: 30 files, 422 tests. `scripts/check-ownership.ps1`: all files in C's paths.
+- New fast-check properties: planchette staleness (never starts a stale step; every event started or dropped once,
+  in order; ends on the last fresh event); attaching mid-session at any seq never resumes; the system controls send
+  at most one `connect_system` per server answer.
+- Mutation checks: reducer 7/7 killed (new M7 puts the seq-1 rule back). Planchette: staleness off, no fallback,
+  never rests, no idle signal are all killed; one equivalent mutant (double-finish guard) survives and is explained.
+- Live (scripted provider, fake-insurance, never the container): `live.mjs` 9/9, 0 page or console errors, axe clean
+  with colour contrast in 5 live states, only the six contract client messages sent. Your `e2e-commit`: approve 6/6,
+  deny 6/6. D's live check of my client (scratch copy of `b9769c9`, deleted after): 5/7 with zero invalid or unknown
+  events; the 2 failures are B-1.
 
-## Dependencies added in this branch
+## Please look at (your files, not edited by me)
+`scripts/e2e-stack.mjs --workaround-goto` gives 3/10 on this branch. The response file explains each failure:
+1. the planchette sampler stops ~300 ms in, before any glide can finish;
+2. B-1 / D-2;
+3. it waits for the dialog to be detached, but the outcome stays until Dismiss (your status lists that as
+   working), and the inert app then cascades into deny, audit and spirit-map;
+4. the server audit counts earlier runs.
 
-All exact, all from tech.md's table except `playwright` (request 1). Lockfile committed.
+## Requests
+1. `request-integrator-unique-ids.md`: contract wording (ids unique per `session_id`) and a fix for D.
+2. Still open from 2026-11-06: add `playwright` 1.65.0 to tech.md (`request-integrator-playwright.md`).
+3. The `ambiguous-ack.jsonl` transcript arrived on `main`: thank you. My guards accept every line of it (the
+   conformance test runs over every transcript). The mock scenario picker lists it already (it reads every transcript). The
+   reducer playthrough tests still use a fixed list of seven, so adding it there is a small follow-up on my side.
 
-## Notes for D (no action from you)
-
-- In live mode C sends only `hello`, `connect_system`, `user_message`, `confirm_decision`, `cancel_turn`, `ping`.
-- The store never re-sends; a send that fails is shown as "not sent".
-- The UI ignores unknown fields and logs unknown event types once.
+## Dependencies
+None added since 2026-11-06.

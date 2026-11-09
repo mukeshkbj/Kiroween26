@@ -49,13 +49,13 @@ Ordered so the pure, testable core (protocol, reducer, geometry, scheduler) exis
 - [ ] 6.5 Manual pass recorded in `web/A11Y.md`: NVDA, keyboard-only, zoom, contrast values, reduced motion. Note anything not done. No conformance claim beyond "designed to meet". **Partly done:** A11Y.md exists with the automated evidence, computed contrast values and known limits; the manual checklist (section 3) needs a person with a real browser and NVDA, and is not ticked.
 
 ## 7. Integration with the agent (by 24 Nov)
-- [ ] 7.1 Switch to `VITE_MODE=live` on the integration branch against Agent D's service with the scripted provider and `fake-insurance`.
-- [ ] 7.2 Fix protocol mismatches by amending the **contract through the integrator**, not by patching one side.
-- [ ] 7.3 Handoff request to Agent A for the live demo path (A runs the container; C and D run nothing live).
-- [ ] 7.4 Screenshots for the journal: connect, lookup with planchette, confirmation modal, graph, audit drawer, session lost.
+- [x] 7.1 Switch to `VITE_MODE=live` on the integration branch against Agent D's service with the scripted provider and `fake-insurance`. Done 2026-11-08 on `agent/c-seance-ui` with `main` merged (D is on `main`): `web/e2e/live.mjs` 9/9; integrator `e2e-commit` approve 6/6 and deny 6/6. Findings C-1, C-2 and C-3 fixed (`docs/handoff/c/response-integrator-e2e-findings.md`).
+- [x] 7.2 Fix protocol mismatches by amending the **contract through the integrator**, not by patching one side. Filed `docs/handoff/c/request-integrator-unique-ids.md` (D reuses turn/message/tool-call ids after each connect); **not yet resolved**. The fresh-attach baseline was my bug, not a contract gap, so it was fixed on my side.
+- [x] 7.3 Handoff request to Agent A for the live demo path (A runs the container; C and D run nothing live). Filed `docs/handoff/c/request-a-live-demo-path.md`; the run itself is A's.
+- [x] 7.4 Screenshots for the journal: connect, lookup with planchette, confirmation modal, graph, audit drawer, session lost. Live: `docs/handoff/c/shots/live-01..07`. Session lost cannot be triggered on the fake app, so that one is the mock-mode `08-session-lost.png`.
 
 ## 8. Polish (25 Nov to 1 Dec)
 - [x] 8.1 Visual polish pass: motion timing, glow levels, copy; re-run a11y suite after each change.
 - [x] 8.2 Spec-versus-vibe experiment (judges ask for it): build the audit drawer a second time by vibe coding in a throwaway branch, record time, bugs, rework against the spec-built one in `docs/handoff/c/experiment.md`.
 - [x] 8.3 `web/README.md`: run (live, mock), keyboard shortcuts, accessibility statement linking `A11Y.md`.
-- [ ] 8.4 Journal entries to `docs/handoff/c/journal.md`: one surprise per section 3, 5 and 6.
+- [x] 8.4 Journal entries to `docs/handoff/c/journal.md`: one surprise per section 3, 5 and 6. (Section 3: rows are the display truth, not field values. Section 5: jsdom marks every event untrusted; frontier items have no target node. Section 6: axe found four landmark/list/heading defects; `css ?raw` is empty in vitest by default.)

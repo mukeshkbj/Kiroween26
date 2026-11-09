@@ -57,9 +57,14 @@ describe('TerminalPane (3.5 composition)', () => {
     expect(b.container.querySelector('.term-grid')?.textContent).toBe(textOff);
   });
 
-  it('planchette mid-glide: a fill focus event renders the lens over the field', () => {
-    const q = [{ seq: 1, tool_call_id: 'c', step: 0, mode: 'fill' as const, screen_id: 'x', field_index: 1, row: 7, col: 15, length: 1, label: 'OPTION ===>', key: null }];
-    const { container } = render(<TerminalPane {...base} screen={menu()} focusQueue={q} />);
+  it('planchette mid-glide: a fill focus event on the screen shown renders the lens; one for another screen does not', () => {
+    const shown = menu();
+    const other = [{ seq: 2, tool_call_id: 'c', step: 0, mode: 'fill' as const, screen_id: 'not-this-screen', field_index: 1, row: 7, col: 15, length: 1, label: 'OPTION ===>', key: null }];
+    const r0 = render(<TerminalPane {...base} screen={shown} focusQueue={other} />);
+    expect(r0.container.querySelector('.planchette')).toBeNull();
+    r0.unmount();
+    const q = [{ seq: 1, tool_call_id: 'c', step: 0, mode: 'fill' as const, screen_id: shown.screenId, field_index: 1, row: 7, col: 15, length: 1, label: 'OPTION ===>', key: null }];
+    const { container } = render(<TerminalPane {...base} screen={shown} focusQueue={q} />);
     expect(container.querySelector('.planchette')).not.toBeNull();
   });
 

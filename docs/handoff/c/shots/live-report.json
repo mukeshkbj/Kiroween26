@@ -1,0 +1,231 @@
+{
+  "web": "http://localhost:5173",
+  "started": "2026-11-08T11:04:31.170Z",
+  "browser": "158.0.8127.18",
+  "checks": [
+    {
+      "name": "7.1 live mode: no REPLAY badge, websocket up, this tab is the controller",
+      "ok": true,
+      "ms": 1140,
+      "evidence": {
+        "state": "disconnected",
+        "sockets": 1
+      }
+    },
+    {
+      "name": "7.1 connect: Begin séance (fresh agent) or Reconnect (agent has history) -> connected, one connect_system",
+      "ok": true,
+      "ms": 513,
+      "evidence": {
+        "via": "Begin séance",
+        "connectSent": 1
+      }
+    },
+    {
+      "name": "7.1 lookup: real screen data in the answer; planchette follows to POLNO and never shows OPTION over the enquiry screen (C-1)",
+      "ok": true,
+      "ms": 4258,
+      "evidence": {
+        "labels": [
+          "reading the screen",
+          "filling POLNO",
+          "pressing Enter"
+        ],
+        "rested": true,
+        "answer": "SéanceThinkingUsing lookup policy.lookup_policybusinesspolicy_numberP0000003Result: oklookup_policy okholderle"
+      }
+    },
+    {
+      "name": "7.1 spirit-map view: the current screen is highlighted",
+      "ok": true,
+      "ms": 870,
+      "evidence": {
+        "nodes": 5,
+        "here": 1
+      }
+    },
+    {
+      "name": "7.1 C-2: Reconnect sends exactly one connect_system and lands on the menu",
+      "ok": true,
+      "ms": 334,
+      "evidence": {
+        "connectSent": 1
+      }
+    },
+    {
+      "name": "7.1 commit + Approve: modal shows the gate facts and the confirm screen; a script click is refused; a real click approves once",
+      "ok": true,
+      "ms": 2598,
+      "evidence": {
+        "focus": "Deny",
+        "disabledAtOpen": true,
+        "scriptRefused": true,
+        "decisions": 1,
+        "screen": "POLICY UPDATED"
+      }
+    },
+    {
+      "name": "7.1 commit + Deny (Esc): denied, and nothing approved",
+      "ok": true,
+      "ms": 1069,
+      "evidence": "denied"
+    },
+    {
+      "name": "7.1 audit drawer: live entries incl. the oob confirmation, honest chain badge",
+      "ok": true,
+      "ms": 622,
+      "evidence": {
+        "rows": 24,
+        "chain": "verified by the server",
+        "hasOob": true,
+        "hasRejected": true
+      }
+    },
+    {
+      "name": "7.2 protocol: only the six contract client messages were sent; no page or console errors",
+      "ok": true,
+      "ms": 0,
+      "evidence": {
+        "sent": {
+          "hello": 1,
+          "connect_system": 3,
+          "user_message": 3,
+          "confirm_decision": 2
+        },
+        "framesIn": 125
+      }
+    }
+  ],
+  "axe": {
+    "connect": [],
+    "lookup-answer": [],
+    "spirit-map": [],
+    "confirmation-modal": [],
+    "audit-drawer": []
+  },
+  "frames": {
+    "in": 125,
+    "types": {
+      "session_state": 7,
+      "ack": 8,
+      "audit_entry": 24,
+      "screen": 24,
+      "turn_started": 3,
+      "thinking": 3,
+      "tool_call": 3,
+      "field_focus": 20,
+      "tool_result": 3,
+      "assistant_delta": 18,
+      "assistant_message": 5,
+      "turn_finished": 3,
+      "confirmation_required": 2,
+      "confirmation_resolved": 2
+    }
+  },
+  "ids": [
+    [
+      "state",
+      "disconnected",
+      1
+    ],
+    [
+      "state",
+      "connecting",
+      3
+    ],
+    [
+      "state",
+      "connected",
+      5
+    ],
+    [
+      "turn",
+      "t_01",
+      8
+    ],
+    [
+      "tool_call",
+      "c_01",
+      10
+    ],
+    [
+      "message",
+      "m_03",
+      32
+    ],
+    [
+      "state",
+      "connecting",
+      35
+    ],
+    [
+      "state",
+      "connected",
+      37
+    ],
+    [
+      "turn",
+      "t_01",
+      40
+    ],
+    [
+      "message",
+      "m_02",
+      44
+    ],
+    [
+      "tool_call",
+      "c_01",
+      46
+    ],
+    [
+      "message",
+      "m_03",
+      78
+    ],
+    [
+      "state",
+      "connecting",
+      81
+    ],
+    [
+      "state",
+      "connected",
+      83
+    ],
+    [
+      "turn",
+      "t_01",
+      86
+    ],
+    [
+      "message",
+      "m_02",
+      90
+    ],
+    [
+      "tool_call",
+      "c_01",
+      92
+    ],
+    [
+      "message",
+      "m_03",
+      124
+    ]
+  ],
+  "sent": [
+    "hello",
+    "connect_system",
+    "user_message",
+    "connect_system",
+    "user_message",
+    "confirm_decision",
+    "connect_system",
+    "user_message",
+    "confirm_decision"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "finished": "2026-11-08T11:04:42.932Z"
+}

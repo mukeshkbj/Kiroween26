@@ -32,6 +32,8 @@ export interface UiState {
   tab: TabName;
   pane: PaneView;
   screenAsText: boolean;
+  /** The connect screen is open again while a system is connected (Change system, finding C-2). */
+  choosingSystem: boolean;
 }
 
 export interface SessionState {
@@ -136,6 +138,13 @@ export interface AppState {
    * generic tool error, and never retried. Cleared when a new session is connecting or connected.
    */
   ambiguousAck: boolean;
+  /**
+   * The server has answered this connection's `hello` (a `session_state` arrived since the socket opened). Until then a
+   * control message would be refused by the transport, so controls that send one stay disabled (finding C-3).
+   */
+  helloAcked: boolean;
+  /** Client message ids the server has answered (ack or error with a ref), newest last, bounded. */
+  answered: string[];
   ui: UiState;
 }
 
@@ -150,6 +159,7 @@ export const defaultUi: UiState = {
   tab: 'screen',
   pane: 'terminal',
   screenAsText: false,
+  choosingSystem: false,
 };
 
 const freshSession = (): SessionState => ({
@@ -185,6 +195,8 @@ export function initialState(ui: Partial<UiState> = {}): AppState {
     needsResume: false,
     unknownTypes: [],
     ambiguousAck: false,
+    helloAcked: false,
+    answered: [],
     ui: { ...defaultUi, ...ui },
   };
 }
@@ -202,6 +214,7 @@ export type Action =
   | { type: 'audit_loaded'; response: AuditResponse }
   | { type: 'map_loaded'; map: SpiritMapView | null }
   | { type: 'send_failed'; id: string }
+  | { type: 'stream_stuck' }
   | { type: 'ui'; patch: Partial<UiState> };
 
 // ---- helpers ---------------------------------------------------------------
@@ -276,6 +289,12 @@ export function mergeAudit(list: AuditEntry[], incoming: AuditEntry[]): AuditEnt
   return out.length > MAX_AUDIT ? out.slice(out.length - MAX_AUDIT) : out;
 }
 
+export const MAX_ANSWERED = 32;
+
+/** Record that the server answered a client message (ack or error carrying its id). */
+const remember = (s: AppState, ref: string): AppState =>
+  s.answered.includes(ref) ? s : { ...s, answered: [...s.answered, ref].slice(-MAX_ANSWERED) };
+
 const closedForDecision = (c: Confirmation): Confirmation =>
   c.phase === 'resolved' || c.phase === 'expired' ? c : { ...c, phase: 'expired' };
 
@@ -295,6 +314,10 @@ export function reduce(state: AppState, action: Action): AppState {
       if (state.messages.some((m) => m.id === action.id)) return state;
       return { ...state, messages: [...state.messages, { kind: 'user', id: action.id, text: action.text, status: 'sent' }] };
 
+    case 'stream_stuck':
+      // Resume requests made no progress. Stop asking (no storm) and say so; the user can reload.
+      return addSystem({ ...state, needsResume: false }, state.session.lastSeq, 'stuck', 'error', 'stream_stuck', strings.states.streamStuck);
+
     case 'send_failed': {
       // The transport could not send the message. It is NOT retried; mark it so the UI can say so.
       const i = state.messages.findIndex((m) => m.kind === 'user' && m.id === action.id);
@@ -305,7 +328,8 @@ export function reduce(state: AppState, action: Action): AppState {
     }
 
     case 'connection':
-      return state.connection === action.status ? state : { ...state, connection: action.status };
+      // Any change of socket (a new 'open' is a new connection) needs a fresh answer to its own hello.
+      return state.connection === action.status ? state : { ...state, connection: action.status, helloAcked: false };
 
     case 'resume_requested':
       return state.needsResume ? { ...state, needsResume: false } : state;
@@ -372,9 +396,13 @@ function reduceServer(prev: AppState, ev: ServerEvent, at: number): AppState {
   const isResync = ev.type === 'session_state' && ev.data.resync;
   if (ev.seq <= s.session.lastSeq && s.session.id === ev.session_id) return s;
 
-  // A fresh (or just reset) client has no baseline. A session starts at seq 1 or with a resync snapshot;
-  // anything else arriving first means we missed the start: do not guess, ask for a resume.
-  if (s.session.lastSeq === 0 && !(ev.seq === 1 || isResync)) {
+  // A fresh (or just reset) client has no baseline. The server's reply to `hello` is a `session_state`, and for a fresh
+  // hello (resume_from null) it is the CURRENT state at the current seq, not seq 1 (contracts 4.1/4.4; that is what the
+  // agent does once it has history). Accept that as the baseline at any seq. Anything else arriving first means we
+  // missed the start: do not guess, ask for a resume.
+  // (Found live on 2026-11-06: requiring seq 1 made every page load against a running agent loop hello -> resume
+  // -> hello about every 30 ms, and a click in that window was lost: integrator finding C-3.)
+  if (s.session.lastSeq === 0 && !(ev.seq === 1 || isResync || ev.type === 'session_state')) {
     return s.needsResume ? s : { ...s, needsResume: true };
   }
 
@@ -393,6 +421,7 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
       const d = ev.data;
       let next: AppState = {
         ...s,
+        helloAcked: true,
         observerOnly: !d.controller,
         session: {
           ...s.session,
@@ -423,11 +452,12 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
     }
 
     case 'ack': {
-      const i = s.messages.findIndex((m) => m.kind === 'user' && m.id === ev.data.ref);
-      if (i < 0) return s;
-      const messages = s.messages.slice();
+      const s1 = remember(s, ev.data.ref);
+      const i = s1.messages.findIndex((m) => m.kind === 'user' && m.id === ev.data.ref);
+      if (i < 0) return s1;
+      const messages = s1.messages.slice();
       messages[i] = { ...(messages[i] as Extract<Message, { kind: 'user' }>), status: 'acked' };
-      return { ...s, messages };
+      return { ...s1, messages };
     }
 
     case 'turn_started': {
@@ -612,7 +642,7 @@ function applyEvent(s: AppState, ev: ServerEvent, at: number): AppState {
 
     case 'error': {
       const d = ev.data;
-      let next = s;
+      let next = d.ref !== null ? remember(s, d.ref) : s;
       if (d.code === 'observer_only') next = { ...next, observerOnly: true };
       if (d.code === 'ambiguous_ack') next = { ...next, ambiguousAck: true };
       if (d.ref !== null) {
