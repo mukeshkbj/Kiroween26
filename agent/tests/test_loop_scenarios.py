@@ -260,6 +260,8 @@ async def test_business_error_summary_carries_the_real_message() -> None:
         park_off_map(h)
         out = await h.broker.call("update_policy", {"policy_number": "P0000003", "premium": "300"})
         assert out.status == "error" and out.error_code == "unknown_start"
-        assert out.summary.startswith("update_policy failed:") and "expected to start" in out.summary
+        # The summary carries the tool's own message, whatever B words it as (B-1 reworded it).
+        message = out.structured["error"]["message"]  # type: ignore[index]
+        assert message and out.summary == f"update_policy failed: {message[:300]}"
     finally:
         await cm.__aexit__(None, None, None)
