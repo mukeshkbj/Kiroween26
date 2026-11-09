@@ -17,11 +17,11 @@
     },
     {
       "app_id": "seance-insurance",
-      "name": "Seance Insurance (KICKS)",
+      "name": "Seance Insurance (COBOL on TK4-)",
       "kind": "live",
       "host_env": "TN3270_HOST",
-      "port_env": "TN3270_PORT",
-      "description": "The demo business app on the legacy system."
+      "port_env": "STANDIN_PORT",
+      "description": "Real COBOL on TK4-; the five screens are served by a labelled Python TN3270 stand-in."
     }
   ]
 }

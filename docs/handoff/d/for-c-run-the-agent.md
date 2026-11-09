@@ -79,3 +79,28 @@ Anthropic and Bedrock providers (section 7). With them missing, only `scripted` 
   `resume_from` stays an observer. (Keying it on the token alone would have broken you.)
 - Not checked: I have not run your reducer on my streams. That is the 8.2 run on the
   integration branch.
+
+## Update 2026-11-06: ran your client live against the agent (8.2)
+
+I ran your real `WebSocketTransport`, guards, `reduce` and `RestClient` (`origin/agent/c-seance-ui` at
+`d197091`) against a running agent with `fake-insurance`, from a scratch checkout outside both our trees.
+The check lives in `agent/scripts/c_live_check/` (in my folder; nothing was added to `web/`). It covers REST
+bodies through your guards, hello/connect, a read turn, approve, deny, and a reconnect with a fresh token.
+**Five runs in a row on one agent: 7/7 each.** Zero events were reported invalid or unknown by your guards.
+
+Your reducer was right every time it disagreed with me. The fixes were all on my side:
+
+- **A client with no history now gets a baseline.** You require seq 1 or a `resync` snapshot. A fresh `hello`
+  mid-session now gets the whole session replayed from seq 1 while the ring still holds it, otherwise
+  `session_state{resync:true}` plus `screen{snapshot}`. Expect a late tab to replay old turns and resolved
+  confirmations before the live ones.
+- **Ids are unique per `session_id`.** `t_`, `m_`, `c_` ids used to restart on every `connect_system`, which
+  attached a new confirmation to an old, finished turn in your state.
+- **A reload keeps control.** A tab without `resume_from` becomes the controller when no other tab is open.
+  The 60 s hold only applies while another tab is connected.
+
+One thing from B you will see in the UI until B changes `goto`: a business tool can fail with
+`unknown_start` when it does not begin on the main menu. The demo model then presses CLEAR and retries,
+so a commit turn may show an error line before the modal. Request: `docs/handoff/d/request-b-goto-navigates.md`.
+
+Not done: a click-through in a real browser. I only confirmed the dev server serves on 5173.

@@ -116,8 +116,9 @@ class GullibleLlm(ScriptedLlm):
 
 # ---------------------------------------------------------------- offline demo model
 
-_PREMIUM_RE = re.compile(r"premium\D{0,15}(\d{1,7})", re.IGNORECASE)
-_STATUS_RE = re.compile(r"status\D{0,15}\b([ALC])\b", re.IGNORECASE)
+# The amount after "to"/"=": "premium of policy P0000003 to 300" -> 300, never the policy digits.
+_PREMIUM_RE = re.compile(r"premium\b.*?(?:\bto\b|=|\bat\b)\s*(\d{1,7})(?:\.\d+)?\b", re.IGNORECASE)
+_STATUS_RE = re.compile(r"status\b.*?(?:\bto\b|=)\s*([ALC])\b", re.IGNORECASE)
 _STATUS_WORDS = {"active": "A", "lapsed": "L", "cancelled": "C", "canceled": "C"}
 
 
@@ -143,7 +144,7 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
         pol = _POLICY_RE.search(text)
         if "list" in low and "list_policies" in names:
             return ["Listing the policies.", ToolUse(f"demo_{n}", "list_policies", {})]
-        if pol and re.search(r"premium|status|update|change|set", low) and "update_policy" in names:
+        if pol and re.search(r"premium|status|update|change|set|mark", low) and "update_policy" in names:
             args: dict[str, Any] = {"policy_number": pol.group(0).upper()}
             if (pm := _PREMIUM_RE.search(text)):
                 args["premium"] = pm.group(1)
@@ -159,6 +160,9 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
             return [ToolUse(f"demo_{n}", "lookup_policy", {"policy_number": pol.group(0).upper()})]
         return ["I can look up a policy (for example P0000003), list policies, or prepare a change "
                 "that you then confirm."]
+    recover = _recover_unknown_start(messages)
+    if recover is not None:
+        return recover
     out: list[str] = []
     policy_no = _last_user_policy(messages)
     for m in reversed(messages):
@@ -170,7 +174,8 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
             continue
         res = j.get("result") or {}
         if j.get("trust") == "agent-notice":
-            out.append(str(res.get("notice", "")))
+            # Say the person-facing sentence; the rest of the notice is guidance for the model (D-5).
+            out.append(str(res.get("user") or res.get("notice", "")))
         elif res.get("status") == "error":
             out.append("That did not work: " + str((res.get("error") or {}).get("message", "error")))
         elif j.get("tool") == "lookup_policy":
@@ -184,6 +189,38 @@ def demo_responder(messages: list[Message], tools: list[ToolDef]) -> list[Item]:
         elif j.get("tool") == "update_policy":
             out.append("Done. The change was confirmed by you and sent to the system.")
     return [" ".join(reversed(out)) or "Done."]
+
+
+def _recover_unknown_start(messages: list[Message]) -> list[Item] | None:
+    """A business tool said it did not start on its home screen. Go back with CLEAR (not
+    commit-capable) and try that tool once more. Once per user message."""
+    since_user = []
+    for m in reversed(messages):
+        if m["role"] == "user":
+            break
+        since_user.append(m)
+    if any(u["name"] == "press_key" for m in since_user if m["role"] == "assistant" for u in m.get("tool_uses", [])):
+        return None
+    failed = None
+    for m in since_user:
+        if m["role"] != "tool":
+            break
+        try:
+            j = json.loads(m["content"])
+        except ValueError:
+            continue
+        err = (j.get("result") or {}).get("error") or {}
+        if err.get("code") == "unknown_start":
+            failed = j.get("tool")
+    if failed is None:
+        return None
+    for m in since_user:
+        if m["role"] == "assistant":
+            for u in m.get("tool_uses", []):
+                if u["name"] == failed:
+                    return ["Going back to the main menu first.", ToolUse("demo_clear", "press_key", {"key": "CLEAR"}),
+                            ToolUse("demo_retry", failed, dict(u["input"]))]
+    return None
 
 
 class DemoLlm(ScriptedLlm):

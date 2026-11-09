@@ -8,12 +8,11 @@ contracts 4.3 so the planchette can follow a multi-step recipe.
 The mapping is the one proven by ``seance_mcp.contracts.record`` (read as the
 worked example):
 
-* One ``screen{phase:before}`` per tool call, at the first operation that has a
-  ``screen_before``; a ``screen{phase:after}`` after every operation that
-  succeeded (``outcome == "ok"`` with a ``screen_after``). The last ``after`` is
-  the call's final screen.
-* ``field_focus`` when an operation *starts*: ``fill`` carries the field position;
-  ``key`` carries the key name and no position; ``read`` carries no position. An
+* One ``screen{phase:before}`` per tool call, before anything else for that call;
+  then per operation its ``field_focus`` and, if it succeeded, its
+  ``screen{phase:after}``. The last ``after`` is the call's final screen.
+* ``field_focus``: ``fill`` carries the field position; ``key`` the key name; ``read``
+  no position. Its ``screen_id`` is always the screen acted on, never empty. An
   operation refused before it chose a key (``key is None``) emits no focus.
 * ``audit_entry`` in the order entries were appended.
 
@@ -49,6 +48,7 @@ class CallScope:
     step: int = 0
     before_sent: bool = False
     cur_screen_id: str = ""
+    deferred: OpEvent | None = None  # a start that named no screen, held until its end
 
 
 class EventMapper:
@@ -84,22 +84,52 @@ class EventMapper:
     # -- mapping ----------------------------------------------------------
 
     def flush(self, scope: CallScope | None) -> None:
-        """Map everything buffered since the last flush into UI events."""
+        """Map everything buffered since the last flush into UI events.
+
+        Order per call (contracts 4.3, finding D-3): one ``screen{before}``, then for
+        each operation its ``field_focus`` followed by its ``screen{after}``.
+
+        Most operations name their screen at start (``screen_before``). A read
+        (``read_screen``, ``list_fields``) or an operation refused before it read the
+        screen does not, so its start is held until its end: a read does not change
+        the screen, so the screen it returns is the one it acted on. A failed one falls
+        back to the last screen seen; with no screen at all the focus is dropped (there
+        is nothing to point at), never sent with an empty ``screen_id``."""
         for kind, item in self.take_bus():
             if kind == "audit":
                 self._emit_audit(item)
                 continue
             ev: OpEvent = item
             if ev.tool == "connect":
-                # connect's screen is sent as a snapshot by the caller.
+                # connect's screen is sent as a snapshot by the caller; remember it.
+                if ev.phase == "end" and ev.outcome == "ok" and ev.screen_after is not None:
+                    self.last_screen = ev.screen_after
                 continue
             if ev.phase == "start":
-                if scope is not None and not scope.before_sent and ev.screen_before is not None:
-                    self._emit_screen("before", scope, ev.screen_before)
-                    scope.before_sent = True
-                self._emit_focus(scope, ev)
-            elif ev.outcome == "ok" and ev.screen_after is not None:
+                if ev.screen_before is None:
+                    if scope is not None:
+                        scope.deferred = ev
+                    continue
+                self._before_once(scope, ev.screen_before)
+                self._emit_focus(scope, ev, ev.screen_before.screen_id)
+                continue
+            if scope is not None and scope.deferred is not None:
+                held, scope.deferred = scope.deferred, None
+                acted = ev.screen_after if ev.outcome == "ok" and ev.screen_after is not None else self.last_screen
+                if acted is not None:
+                    self._before_once(scope, acted)
+                    self._emit_focus(scope, held, acted.screen_id)
+            if ev.outcome == "ok" and ev.screen_after is not None:
+                if scope is None:
+                    self.last_screen = ev.screen_after  # a screen event always belongs to a call
+                    continue
+                self._before_once(scope, ev.screen_after)  # only if nothing earlier named the screen
                 self._emit_screen("after", scope, ev.screen_after)
+
+    def _before_once(self, scope: CallScope | None, screen: Any) -> None:
+        if scope is not None and not scope.before_sent:
+            self._emit_screen("before", scope, screen)
+            scope.before_sent = True
 
     def _emit_screen(self, phase: Literal["before", "after", "snapshot"], scope: CallScope | None, screen: Any) -> None:
         self.last_screen = screen
@@ -110,13 +140,12 @@ class EventMapper:
             turn_id=self._turn_id(),
         )
 
-    def _emit_focus(self, scope: CallScope | None, ev: OpEvent) -> None:
-        if scope is None:
+    def _emit_focus(self, scope: CallScope | None, ev: OpEvent, sid: str) -> None:
+        if scope is None or not sid:
             return
         mode = {"fill_field": "fill", "press_key": "key", "confirm_action": "key"}.get(ev.tool, "read")
         if mode == "key" and ev.key is None:
             return  # refused before a key was chosen: nothing to point at
-        sid = ev.screen_before.screen_id if ev.screen_before else scope.cur_screen_id
         target = ev.target
         self._session.emit(
             FieldFocusData(

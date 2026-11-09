@@ -47,12 +47,12 @@ Ordered so the safety properties are proven with scripted models before any real
 ## 7. Real providers (REQ-009, REQ-011, REQ-029b) (by 20 Nov)
 - [x] 7.1 `anthropic_provider.py` with recorded-payload tests; no key in logs (test greps log output).
 - [x] 7.2 `bedrock_provider.py` (Converse tool use); same tests.
-- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal. (Test written: `tests/test_llm_real.py`, skipped without credentials. OPEN: needs one real run with a key or AWS access to save the transcript.)
+- [ ] 7.3 `llm`-marked injection test with a real model; save one transcript to the journal. PARKED until the user adds `LLM_PROVIDER`, `LLM_MODEL` and `ANTHROPIC_API_KEY` to `agent/.env` (the test reads it). A real-model transcript from 2026-11-07 is committed as evidence (`docs/handoff/d/llm-injection-transcript.jsonl`: no obedience, no confirmation, no secret), but D has not run it, so this stays open.
 - [x] 7.4 `llm_unavailable` path tested.
 
 ## 8. Integration (by 24 Nov)
 - [x] 8.1 Merge spirit-map tool pack runtime; swap the stub; rerun everything.
-- [ ] 8.2 Conformance run against the real UI build on the integration branch (with Agent C). (Prepared: real streams in `docs/handoff/d/streams/`, C transport read and reconnect fixed. OPEN: C's web/ is not on integration yet.)
+- [x] 8.2 Conformance run against the real UI build (with Agent C). Done against C's branch (`d197091`) from a scratch checkout: C's transport, guards, reducer and REST client vs the running agent, 5 runs in a row, 7/7 each (`agent/scripts/c_live_check/`). Five agent bugs fixed. Still open: a browser click-through on the `integration` branch once C is merged.
 - [x] 8.3 Handoff request to Agent A for the live end-to-end (REQ-032): scripted provider, `gss-legacy`, three runs in a row. (Request written: `docs/handoff/d/request-a-live-e2e.md`; the run itself is A's and is pending.)
 
 ## 9. Docs and journal

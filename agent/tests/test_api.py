@@ -253,35 +253,83 @@ def test_message_before_connect_and_bad_message() -> None:
 # ---------------------------------------------------------------- resume
 
 
-def test_controller_resumes_and_keeps_the_slot_for_its_token() -> None:
+def _controller_then_watcher(c, tok):
+    """Open the controller first, then an observer tab, then drop the controller."""
+    ctl_cm = open_ws(c, tok=tok)
+    ctl = ctl_cm.__enter__()
+    connect_fake(ctl)
+    watcher_cm = open_ws(c)
+    watcher = watcher_cm.__enter__()
+    assert watcher.until("session_state")["data"]["controller"] is False
+    last = ctl.seen[-1]["seq"]
+    ctl_cm.__exit__(None, None, None)
+    return watcher_cm, last
+
+
+def test_dropped_controller_keeps_its_slot_while_another_tab_is_open() -> None:
     with make_client() as c:
         tok = token(c)
-        with open_ws(c, tok=tok) as s:
-            connect_fake(s)
-            last = s.seen[-1]["seq"]
-        # The controller dropped. An observer arriving now must not take the slot...
-        with open_ws(c) as other:
-            assert other.until("session_state")["data"]["controller"] is False
-            last2 = other.seen[-1]["seq"]
-        # ...and the original controller resumes, receiving only newer events.
-        with open_ws(c, tok=tok, resume_from=last) as s2:
-            st = s2.until("session_state")
-            assert st["data"]["controller"] is True and st["seq"] > last
-            assert all(e["seq"] > last for e in s2.seen)
-        assert last2 >= last
+        watcher_cm, last = _controller_then_watcher(c, tok)
+        try:
+            with open_ws(c) as other:  # a new tab while another tab is open: observer
+                assert other.until("session_state")["data"]["controller"] is False
+            with open_ws(c, tok=tok, resume_from=last) as s2:  # same token, resuming: controller
+                st = s2.until("session_state")
+                assert st["data"]["controller"] is True and st["seq"] > last
+                assert all(e["seq"] > last for e in s2.seen)
+        finally:
+            watcher_cm.__exit__(None, None, None)
 
 
 def test_reconnect_with_a_fresh_token_still_reclaims_the_slot_when_resuming() -> None:
     """The web client fetches a NEW token on every reconnect (found by reading its transport)."""
     with make_client() as c:
-        with open_ws(c, tok=token(c)) as s:
-            connect_fake(s)
-            last = s.seen[-1]["seq"]
-        with open_ws(c, tok=token(c)) as fresh:          # a new tab, not resuming: observer
-            assert fresh.until("session_state")["data"]["controller"] is False
-        with open_ws(c, tok=token(c), resume_from=last) as back:  # new token, resuming: controller
-            assert back.until("session_state")["data"]["controller"] is True
+        watcher_cm, last = _controller_then_watcher(c, token(c))
+        try:
+            with open_ws(c, tok=token(c), resume_from=last) as back:
+                assert back.until("session_state")["data"]["controller"] is True
+        finally:
+            watcher_cm.__exit__(None, None, None)
 
+def test_ids_stay_unique_across_a_reconnect_of_the_system() -> None:
+    """Found running C's reducer live: turn/message/call ids restarted per connect_system,
+    so a client keyed on them attached a new confirmation to an old, finished turn."""
+    with make_client() as c, open_ws(c) as s:
+        connect_fake(s)
+        s.send(id="u1", type="user_message", text="Look up policy P0000003")
+        s.until("turn_finished")
+        s.send(id="c2", type="connect_system", app_id="fake-insurance")
+        s.until("session_state", lambda e: e["data"]["state"] == "connected" and e["seq"] > s.seen[-1]["seq"] - 1)
+        s.until("screen", lambda e: e["data"]["phase"] == "snapshot")
+        s.send(id="u2", type="user_message", text="Look up policy P0000004")
+        s.until("turn_finished", lambda e: e["data"]["reason"] and e["turn_id"] != s.seen[0].get("turn_id"))
+        turns = [e["turn_id"] for e in s.seen if e["type"] == "turn_started"]
+        calls = [e["data"]["tool_call_id"] for e in s.seen if e["type"] == "tool_call"]
+        msgs = [e["data"]["message_id"] for e in s.seen if e["type"] == "assistant_message"]
+        assert len(turns) == 2 and len(set(turns)) == 2
+        assert len(set(calls)) == len(calls) and len(set(msgs)) == len(msgs)
+        check_stream(s.seen)
+
+
+def test_page_reload_with_nothing_else_open_is_controller_at_once() -> None:
+    """Found running C's client live: a reload sends no resume_from and must not wait 60 s."""
+    with make_client() as c:
+        with open_ws(c) as s:
+            connect_fake(s)
+        with open_ws(c) as reloaded:
+            assert reloaded.until("session_state")["data"]["controller"] is True
+
+
+def test_a_late_fresh_client_gets_a_baseline_from_seq_1() -> None:
+    """Found running C's reducer live: a client with no history must start at seq 1 or a resync."""
+    with make_client() as c:
+        with open_ws(c) as s:
+            connect_fake(s)
+        with open_ws(c) as late:
+            first = late.recv()
+            assert first["seq"] == 1
+            late.until("screen", lambda e: e["data"]["phase"] == "snapshot")
+            check_stream(late.seen)
 
 def test_resume_outside_the_ring_resyncs_with_a_snapshot() -> None:
     with make_client() as c:

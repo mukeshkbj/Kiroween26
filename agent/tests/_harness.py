@@ -125,4 +125,9 @@ async def run_with_decision(h: Harness, loop: AgentLoop, text: str, decision: st
 
 
 def assert_stream_ok(h: Harness) -> None:
-    check_stream(events(h))
+    from ._stream import check_summaries, check_user_facing_text
+
+    evs = events(h)
+    check_stream(evs)
+    check_summaries(evs)
+    check_user_facing_text(evs)

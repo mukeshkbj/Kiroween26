@@ -26,7 +26,9 @@ must not try to find a way around it.
 propose it again, and do not argue. Tell the person plainly what happened.
 5. If a key press times out, it may or may not have been processed. Do not press it \
 again. Read the screen and decide only from fresh data.
-6. If you are unsure what the person wants, ask them.
+6. If a business tool fails with unknown_start, it was not on its starting screen. Return to \
+the main menu with a key that does not change data (for example CLEAR), then try that tool once more.
+7. If you are unsure what the person wants, ask them.
 Keep answers short and factual.
 """
 

@@ -163,3 +163,50 @@ Open: 7.3 needs one real run with credentials for the saved transcript (the test
 exists and skips honestly). 8.2 needs the integration branch with C's `web/`. 8.3
 is requested from A in `request-a-live-e2e.md`. mypy is not run yet (not in the
 dev extras).
+
+### 2026-11-06 — mypy, merge request, live run against C's client (task 8.2)
+
+- `mypy==2.4.1` is in the dev extras and `src` is clean (22 findings fixed: variable reuse, the memory-stream
+  types, an async generator typed as `Iterator`). No `# type: ignore` was added except one in the Bedrock
+  stream loop, where boto3's event stream is untyped.
+- Merge request to the integrator: `docs/handoff/d/request-integrator-merge-d.md` (filed in my folder, because
+  the ownership script allows D only `docs/handoff/d/`).
+
+Surprise (section 8 / integration): running C's real transport and reducer against the live agent found
+**five bugs in my code that 90 passing Python tests had not.** Every one was a place where my tests shared my
+assumptions:
+
+1. A late client got a mid-session `session_state` with no baseline. C's reducer, correctly, treated it as a
+   gap and applied nothing.
+2. Turn, message and call ids restarted on every `connect_system`, so two turns in one session had the
+   same id.
+3. A page reload, with nothing else open, became an observer for 60 s because of my reservation rule.
+4. My demo model read `premium of policy P0000003 to 300` as premium `0000003` (my API tests passed with
+   it, because the fake still reaches the confirm screen), and could not parse `status ... to L`.
+5. Business-tool errors were summarised as `update_policy ok`.
+
+It also surfaced one in B's runtime (`goto` asserts instead of navigating, contracts 6.2; request filed).
+The lesson for the write-up: contract examples and per-component tests agree with each other by
+construction. Two independently written implementations exercised against each other find the gaps.
+Doing it from a scratch worktree kept ownership intact.
+
+A process note: one "failure" was my own test racing a full replay, which contains old `connected` events.
+I read the agent's own event log (`AGENT_EVENT_LOG`) before changing any code. It showed the agent was right,
+so the fix went into the test (wait for the stream to settle).
+
+### 2026-11-07 — integrator e2e findings D-1 to D-5
+
+- D-1 and most of D-2 were already fixed on my branch (`1f60953`, `66be441`). The integrator's browser run used
+  `main` from before they landed. The rest is fixed in `b34e180` and `bfd5ecf`, tests first: 27 tests were red
+  before any code changed.
+
+Surprise (section 8 / protocol): the D-3 bug was invisible to every stream check I had, because my
+`check_stream` copy only checked what the contract examples needed (turns, call/result pairs). Adding the 4.3
+screen rules turned 12 previously green tests red at once. The root cause was a single assumption in the mapper:
+that every operation names its screen when it starts. Reads don't. Fixing it surfaced a second deviation the
+integrator had not listed (the step counter restarting at 0 after approval). The general lesson: a checker
+written to accept the examples cannot catch what the examples never exercise.
+
+Also: D-4 was more than a label. `seance-insurance` fell back to `TN3270_PORT` when `STANDIN_PORT` was unset, so
+it would have connected to TK4- under the stand-in's name. The test now pins `apps.json` to the JSON in
+`docs/contracts.md`.

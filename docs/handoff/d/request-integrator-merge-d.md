@@ -1,6 +1,6 @@
 # Request: Agent D to Integrator, merge `agent/d-seance-agent` into `integration` and `main`
 
-**From:** Agent D. **To:** Integrator. **Branch:** `agent/d-seance-agent` (pushed, tip `1065d73` or later).
+**From:** Agent D. **To:** Integrator. **Branch:** `agent/d-seance-agent` (pushed; merge the branch tip).
 Filed here because D may write only `docs/handoff/d/` (`scripts/check-ownership.ps1`); contracts section 12 names this form.
 
 ## Ask
@@ -9,13 +9,13 @@ Merge D into `integration`, then `main`. The seance-agent milestone is met excep
 
 ## Why it is safe to merge
 
-- `scripts/check-ownership.ps1 -Branch agent/d-seance-agent`: all 54 touched files are in `agent/`, `.kiro/specs/seance-agent/`, `docs/handoff/d/`.
-- `scripts/gate.ps1 -Only agent`: pass on the fixed Hypothesis seed and a random one. 81 passed, 1 skipped (live, A only), 1 deselected (`llm`, needs a key).
+- `scripts/check-ownership.ps1 -Branch agent/d-seance-agent`: every touched file is in `agent/`, `.kiro/specs/seance-agent/`, `docs/handoff/d/`.
+- `scripts/gate.ps1 -Only agent`: pass on the fixed Hypothesis seed and a random one. 90 passed, 1 skipped (live, A only), 1 deselected (`llm`, needs a key).
 - `mypy` (pinned 2.4.1, now in the dev extras): `Success: no issues found in 19 source files`.
 - `main` was merged into the branch on 2026-11-06; no conflicts. Nothing outside D's paths changed.
 - No new contract text is required to merge. Contract examples and the seven transcripts round-trip through the agent's event models (`tests/test_events_conformance.py`).
 
-## What it delivers (spec tasks 1 to 6, 7.1, 7.2, 7.4, 8.1, 8.3, 9)
+## What it delivers (spec tasks 1 to 6, 7.1, 7.2, 7.4, 8.1 to 8.3, 9)
 
 - `python -m seance_agent`: FastAPI REST (contracts 5) and `WS /ws/seance` (contracts 4), origin check (4403), token (4401), controller and observers, 1000-event resume ring.
 - In-process MCP server over an in-memory client, B's approved `fake-insurance` pack plus the four generic tools. `confirm_action`, `connect`, `get_audit_log` are never offered.
@@ -31,7 +31,7 @@ A separate `agent/.venv` (Python 3.12) with `pip install -e ..\bridge -e ..\mcp-
 | Item | State |
 |---|---|
 | 7.3 real-model injection test | Written (`agent/tests/test_llm_real.py`, marked `llm`). Skips without credentials. The user will supply a key later; then run `python -m pytest -m llm tests/test_llm_real.py` and keep the transcript it writes to `docs/handoff/d/llm-injection-transcript.jsonl`. |
-| 8.2 conformance with C's web app | In progress with C. Real agent streams are in `docs/handoff/d/streams/`. |
+| 8.2 conformance with C's web app | Done against C's branch: C's transport, guards and reducer vs the running agent, 5 runs in a row, 7/7 (`agent/scripts/c_live_check/`). Five agent-side bugs were fixed. Left for after the merge: a browser click-through on `integration`. Merge C and D together so the two halves land at once. |
 | 8.3 live end-to-end | Request to A: `docs/handoff/d/request-a-live-e2e.md`. A runs it after the merge. |
 
 ## Contract notes to consider (additive, `v: 1`; I did not change any contract text)
@@ -40,4 +40,5 @@ A separate `agent/.venv` (Python 3.12) with `pip install -e ..\bridge -e ..\mcp-
 2. A dropped controller keeps its slot 60 s; it is reclaimed by the same token or by any connection sending `resume_from` (C's client fetches a new token on each reconnect).
 3. `ack`, `pong` and session-level `error` are broadcast with a `seq`; an observer's rejected message appears to everyone as `error{code:"observer_only", ref}`.
 4. Websocket close codes beyond 4403: 4400 (first message not `hello`), 4401 (bad token), 4429 (client too slow or oversized frame). Worth listing in section 4.1.
-5. B's business tools return their envelope as JSON text with no structured content. The agent parses it; an `output_schema` with structured content would be cleaner for generated tools.
+5. A client with no history gets a baseline: a fresh `hello` mid-session replays from seq 1 while the ring holds it, else `resync:true` + snapshot (C's reducer requires this; 4.4 does not say it for a fresh `hello`). Ids `t_`/`m_`/`c_` are unique per `session_id`, across `connect_system`.
+6. B's business tools return their envelope as JSON text with no structured content. The agent parses it; an `output_schema` with structured content would be cleaner for generated tools. Also B's `goto` asserts instead of navigating (contracts 6.2); request to B: `request-b-goto-navigates.md`.
