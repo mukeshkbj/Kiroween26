@@ -1,0 +1,11 @@
+﻿
+=== gate summary ===
+ownership        skip  branch 'integration' is not an agent branch
+contracts        pass  fresh + valid
+bridge           pass  fixed seed 20261124: exit 0; random seed: exit 0
+mcp-server       pass  fixed seed 20261124: exit 0; random seed: exit 0
+spirit-map       pass  fixed seed 20261124: exit 0; random seed: exit 0
+agent            pass  fixed seed 20261124: exit 0; random seed: exit 0
+legacy           pass  TN3270 stand-in unit tests (no container needed)
+web              pass  tsc exit 0; vitest exit 0
+GATE: ok
