@@ -86,6 +86,11 @@ class BedrockProvider:
     def __repr__(self) -> str:
         return f"BedrockProvider(model={self.model!r})"
 
+    async def aclose(self) -> None:
+        close = getattr(self._client, "close", None)
+        if close is not None:
+            await anyio.to_thread.run_sync(close)
+
     async def stream(self, messages: list[Message], tools: list[ToolDef], system: str) -> AsyncIterator[LlmEvent]:
         kwargs: dict[str, Any] = {
             "modelId": self.model, "messages": to_converse_messages(messages),

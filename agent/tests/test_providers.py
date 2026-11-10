@@ -220,3 +220,32 @@ async def test_provider_failure_is_an_event_and_a_clean_turn_end(code) -> None:
         assert err["code"] == code and err["recoverable"] is True
         assert events(h, "turn_finished")[-1]["data"]["reason"] == "error"
         assert not h.app.pressed  # nothing was sent to the system
+
+
+# ---------------------------------------------------------------- closing the client (found running 7.3)
+
+
+class _Closable(_FakeAnthropic):
+    def __init__(self) -> None:
+        super().__init__()
+        self.closed = 0
+
+    async def close(self) -> None:
+        self.closed += 1
+
+
+async def test_anthropic_provider_closes_its_client() -> None:
+    client = _Closable()
+    await ap.AnthropicProvider(_settings(), client=client).aclose()
+    assert client.closed == 1
+
+
+async def test_hub_shutdown_closes_the_provider() -> None:
+    from seance_agent.apps import AppRegistry
+    from seance_agent.hub import SeanceHub
+
+    client = _Closable()
+    provider = ap.AnthropicProvider(_settings(), client=client)
+    hub = SeanceHub(_settings(), AppRegistry.load(), llm=(provider, True))
+    await hub.shutdown()
+    assert client.closed == 1

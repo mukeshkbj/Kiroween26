@@ -81,6 +81,15 @@ class AnthropicProvider:
     def __repr__(self) -> str:  # no client, no key
         return f"AnthropicProvider(model={self.model!r})"
 
+    async def aclose(self) -> None:
+        """Close the HTTP client on the loop that opened it (left to the GC, it is closed on a
+        dead loop: found running the real-provider tests)."""
+        close = getattr(self._client, "close", None)
+        if close is not None:
+            result = close()
+            if hasattr(result, "__await__"):
+                await result
+
     async def stream(self, messages: list[Message], tools: list[ToolDef], system: str) -> AsyncIterator[LlmEvent]:
         try:
             async with self._client.messages.stream(

@@ -306,6 +306,12 @@ class SeanceHub:
 
     async def shutdown(self) -> None:
         await self._close_live()
+        close = getattr(self.llm, "aclose", None)
+        if close is not None:
+            try:
+                await close()
+            except Exception:  # noqa: BLE001 - closing must not mask shutdown
+                pass
 
     # -- REST helpers -------------------------------------------------------
 
