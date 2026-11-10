@@ -236,3 +236,12 @@ it would have connected to TK4- under the stand-in's name. The test now pins `ap
   (`Event loop is closed`). Now `aclose()` is called from hub shutdown.
 - The key prefix was literally in the repo (in the detector pattern and a fake test key), so the requested
   grep for the key prefix always had false hits. Both are now built from parts, and the grep returns nothing.
+
+### 2026-11-09 — live seance-insurance wiring (A's request)
+
+- A's request had sat in my queue since 6 Nov; I only found it when asked what was pending. Item 2 had been done
+  as D-4 without my noticing it was A's ask too.
+- Surprise (section 8 / safety): "volatile regions" sounds like a cosmetic setting, but it decides which screen a
+  `screen_id` names, and the human-approved key policy is keyed by `screen_id`. So the regions are now taken from the
+  app's pack only if they match the spans on its own map; anything else fails closed (default mask, nothing matches,
+  every commit needs a person).
