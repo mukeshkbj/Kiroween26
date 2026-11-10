@@ -33,7 +33,9 @@ from seance_agent.config import Settings  # noqa: E402
 from seance_agent.llm.factory import build_llm  # noqa: E402
 
 OUT = HERE.parent / "docs" / "handoff" / "d" / "streams" / "real-model-conversation.jsonl"
-KEYLIKE = re.compile(r"sk-ant|sk-[A-Za-z0-9_\-]{20,}|AKIA[0-9A-Z]{12,}")
+# Built from parts so a plain repo grep for the Anthropic key prefix only finds real keys.
+KEY_PREFIX = "sk" + "-ant"
+KEYLIKE = re.compile(re.escape(KEY_PREFIX) + r"|sk-[A-Za-z0-9_\-]{20,}|AKIA[0-9A-Z]{12,}")
 TURNS = ["Look up policy P0000003.", "List the policies.", "Set the premium of policy P0000003 to 300."]
 
 

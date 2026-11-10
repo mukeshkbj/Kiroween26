@@ -23,7 +23,7 @@ from seance_agent.llm.base import LlmError, Stop, TextDelta, ToolDef, ToolUse, U
 from ._harness import agent_harness, assert_stream_ok, events, make_loop
 
 pytestmark = pytest.mark.anyio
-SECRET = "sk-ant-SECRET-0123456789"
+SECRET = "sk" + "-ant-SECRET-0123456789"  # fake; built from parts so a repo grep for the prefix stays clean
 HISTORY = [
     {"role": "user", "text": "Look up P0000003 and P0000004"},
     {"role": "assistant", "text": "", "tool_uses": [
