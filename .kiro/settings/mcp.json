@@ -1,47 +1,47 @@
 {
-    "mcpServers":  {
-                       "green-screen-seance":  {
-                                                   "command":  "mcp-server/.venv/Scripts/python.exe",
-                                                   "args":  [
-                                                                "-m",
-                                                                "seance_mcp"
-                                                            ],
-                                                   "env":  {
-                                                               "TN3270_HOST":  "127.0.0.1",
-                                                               "TN3270_PORT":  "3270",
-                                                               "SEANCE_ALLOW_COMMIT":  "0",
-                                                               "SEANCE_CONFIRM_MODE":  "elicit",
-                                                               "AUDIT_LOG_PATH":  "docs/audit/kiro-audit.jsonl"
-                                                           },
-                                                   "disabled":  false,
-                                                   "autoApprove":  [
-                                                                       "read_screen",
-                                                                       "list_fields",
-                                                                       "get_audit_log"
-                                                                   ]
-                                               },
-                       "gss-fake-insurance":  {
-                                                  "command":  "mcp-server/.venv/Scripts/python.exe",
-                                                  "args":  [
-                                                               "-m",
-                                                               "seance_mcp"
-                                                           ],
-                                                  "env":  {
-                                                              "SEANCE_APP":  "fake-insurance",
-                                                              "SEANCE_ALLOW_COMMIT":  "1",
-                                                              "SEANCE_CONFIRM_MODE":  "elicit",
-                                                              "AUDIT_LOG_PATH":  "docs/audit/fake-insurance-audit.jsonl",
-                                                              "GENERATED_TOOLS_PATH":  "docs/spirit-map/fake-insurance/tools.json",
-                                                              "KEY_POLICY_PATH":  "docs/spirit-map/fake-insurance/key-policy.json"
-                                                          },
-                                                  "disabled":  false,
-                                                  "autoApprove":  [
-                                                                      "read_screen",
-                                                                      "list_fields",
-                                                                      "get_audit_log",
-                                                                      "lookup_policy",
-                                                                      "list_policies"
-                                                                  ]
-                                              }
-                   }
+    "mcpServers": {
+        "green-screen-seance": {
+            "command": "mcp-server/.venv/Scripts/python.exe",
+            "args": [
+                "-m",
+                "seance_mcp"
+            ],
+            "env": {
+                "TN3270_HOST": "127.0.0.1",
+                "TN3270_PORT": "3270",
+                "SEANCE_ALLOW_COMMIT": "0",
+                "SEANCE_CONFIRM_MODE": "elicit",
+                "AUDIT_LOG_PATH": "docs/audit/kiro-audit.jsonl"
+            },
+            "disabled": true,
+            "autoApprove": [
+                "read_screen",
+                "list_fields",
+                "get_audit_log"
+            ]
+        },
+        "gss-fake-insurance": {
+            "command": "mcp-server/.venv/Scripts/python.exe",
+            "args": [
+                "-m",
+                "seance_mcp"
+            ],
+            "env": {
+                "SEANCE_APP": "fake-insurance",
+                "SEANCE_ALLOW_COMMIT": "1",
+                "SEANCE_CONFIRM_MODE": "elicit",
+                "AUDIT_LOG_PATH": "docs/audit/fake-insurance-audit.jsonl",
+                "GENERATED_TOOLS_PATH": "docs/spirit-map/fake-insurance/tools.json",
+                "KEY_POLICY_PATH": "docs/spirit-map/fake-insurance/key-policy.json"
+            },
+            "disabled": true,
+            "autoApprove": [
+                "read_screen",
+                "list_fields",
+                "get_audit_log",
+                "lookup_policy",
+                "list_policies"
+            ]
+        }
+    }
 }

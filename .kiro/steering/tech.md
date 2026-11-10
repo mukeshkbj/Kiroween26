@@ -1,5 +1,6 @@
 ---
-inclusion: always
+inclusion: fileMatch
+fileMatchPattern: ["bridge/**", "mcp-server/**", "agent/**", "spirit-map/**", "web/**", "scripts/**", "legacy/**"]
 ---
 
 # Tech — Green Screen Séance
