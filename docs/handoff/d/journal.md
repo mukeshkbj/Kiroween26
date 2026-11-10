@@ -1,4 +1,4 @@
-ï»¿# Kiro journal
+# Kiro journal
 
 How Kiro was used on Green Screen Seance: spec and steering changes, in order.
 
@@ -8,7 +8,7 @@ How Kiro was used on Green Screen Seance: spec and steering changes, in order.
 
 ## Agent D notes
 
-### 2026-11-05 â€” scaffold + events (tasks 1, 2.1)
+### 2026-11-05 — scaffold + events (tasks 1, 2.1)
 
 - Set up `agent/` (package `seance_agent`) with `==`-pinned deps. Looked the
   moving ones up on PyPI on 2026-11-05: `fastapi==0.162.0`, `uvicorn==0.54.0`,
@@ -17,7 +17,7 @@ How Kiro was used on Green Screen Seance: spec and steering changes, in order.
   `mcp/pydantic/anyio/pytest/hypothesis/jsonschema`. Everything installed and
   imported together in one `py -3.12` venv.
 - `config.py`: unknown `LLM_PROVIDER` is a startup error; a missing credential is
-  *not* â€” `llm_availability()` returns false and the service still starts.
+  *not* — `llm_availability()` returns false and the service still starts.
 - `events.py` mirrors contracts section 4. Rather than redeclare `ScreenOut`,
   `FieldOut`, `FieldSnap`, `AuditEntry`, I import them straight from `seance_mcp`
   (contracts section 3 names those the source of truth), so any drift there is a
@@ -31,9 +31,9 @@ Surprise (section 7 / tooling): the anthropic SDK I'd half-remembered as 1.x is
 actually at **2.5.0** now and dropped `httpx` for a separate `httpx2` package;
 the agent's own `httpx==0.28.1` (via starlette/TestClient) and anthropic's
 `httpx2` coexist in the same venv without conflict. Worth remembering when I wire
-the real provider in task 7 â€” the request/mock plumbing is httpx2, not httpx.
+the real provider in task 7 — the request/mock plumbing is httpx2, not httpx.
 
-### 2026-11-05 â€” tool broker + mapper (tasks 3.1-3.3)
+### 2026-11-05 — tool broker + mapper (tasks 3.1-3.3)
 
 - `tools.py` drives the real `seance_mcp` `MCPServer` over
   `create_client_server_memory_streams` with a genuine `ClientSession`, so tool
@@ -45,7 +45,7 @@ the real provider in task 7 â€” the request/mock plumbing is httpx2, not httpx.
   name for key / nothing for read, audit entries in order).
 
 Surprise (section 5 / safety): the MCP SDK (mcp==2.3.0) generates tool input
-schemas **without** `additionalProperties:false` â€” `read_screen` is literally
+schemas **without** `additionalProperties:false` — `read_screen` is literally
 `{"properties":{},"type":"object"}`. So `read_screen({"bogus":1})` passes plain
 JSON-Schema validation. REQ-007 wants extra/malformed args rejected *before*
 sending, so the broker now tightens each object schema to forbid unknown
@@ -56,7 +56,7 @@ The no-leak test uses a purpose-built one-field hidden-input app because
 fake_insurance has no password field; the canary never reaches any event and
 every hidden screen field is nulled.
 
-### 2026-11-05 â€” confirmation broker + no-unconfirmed-commit (tasks 4.1-4.4)
+### 2026-11-05 — confirmation broker + no-unconfirmed-commit (tasks 4.1-4.4)
 
 - `confirm.py` is the human gate. The loop calls `await_decision`, which emits
   `confirmation_required` (content copied straight from `gate.pending`) and
@@ -68,19 +68,19 @@ every hidden screen field is nulled.
   coroutine; the blocking path just calls `register_pending` then waits.
 
 Surprise (section 4 / safety): the state machine's invariant is deliberately
-*outside* the broker â€” it keeps its **own** ledger of controller approvals and
+*outside* the broker — it keeps its **own** ledger of controller approvals and
 asserts `commits <= controller_approvals`, never reading the broker's private
 state. That separation is what made the mutation checks honest: when I simulate
 removing the api-level controller gate (an observer reaches `decide`), a commit
 appears with an empty ledger and the invariant fires immediately. The two
 gate-owned rules (expiry, single-use) turned out *not* to be defeatable from the
-agent side at all â€” `gate.authorize` consumes the action before the key is sent
+agent side at all — `gate.authorize` consumes the action before the key is sent
 and rejects anything past its TTL, so the broker physically cannot double-commit
 or commit-after-expiry. The agent's own load-bearing rule is the controller gate;
 the rest it correctly delegates to the integrator's gate. Recorded in
 `agent/tests/mutation_checks.md`.
 
-### 2026-11-05 â€” agent loop + injection (tasks 5.1-5.4)
+### 2026-11-05 — agent loop + injection (tasks 5.1-5.4)
 
 - `loop.py` streams inner steps live: a 20 ms pump flushes the service's
   observer bus while the tool call is in flight, so the planchette can follow a
@@ -111,7 +111,7 @@ the allowlist, the update stopped at the modal and expired, no commit key reache
 the fake (`app.dirty` false), and `confirm_action` is absent from the audit log.
 The tool-error budget then stopped the turn, which is the budget doing its job.
 
-### 2026-11-06 â€” API, hub and websocket (tasks 6.1-6.5)
+### 2026-11-06 — API, hub and websocket (tasks 6.1-6.5)
 
 - `hub.py` holds everything behind the socket (session, runtime, loop, confirm
   broker, message handling); `api.py` is a thin transport. That split is what let
@@ -137,7 +137,7 @@ the secrets test I first wrote ended in `or True`, so it proved nothing. The API
 key is now a `SecretStr` and the test asserts it is absent from repr, dump and
 JSON.
 
-### 2026-11-06 â€” real providers, integration prep (tasks 7, 8, 9)
+### 2026-11-06 — real providers, integration prep (tasks 7, 8, 9)
 
 - Anthropic and Bedrock adapters keep conversion in pure functions and are tested
   against recorded-shape payloads. Errors are mapped from the exception class and
@@ -164,7 +164,7 @@ exists and skips honestly). 8.2 needs the integration branch with C's `web/`. 8.
 is requested from A in `request-a-live-e2e.md`. mypy is not run yet (not in the
 dev extras).
 
-### 2026-11-06 â€” mypy, merge request, live run against C's client (task 8.2)
+### 2026-11-06 — mypy, merge request, live run against C's client (task 8.2)
 
 - `mypy==2.4.1` is in the dev extras and `src` is clean (22 findings fixed: variable reuse, the memory-stream
   types, an async generator typed as `Iterator`). No `# type: ignore` was added except one in the Bedrock
@@ -194,7 +194,7 @@ A process note: one "failure" was my own test racing a full replay, which contai
 I read the agent's own event log (`AGENT_EVENT_LOG`) before changing any code. It showed the agent was right,
 so the fix went into the test (wait for the stream to settle).
 
-### 2026-11-07 â€” integrator e2e findings D-1 to D-5
+### 2026-11-07 — integrator e2e findings D-1 to D-5
 
 - D-1 and most of D-2 were already fixed on my branch (`1f60953`, `66be441`). The integrator's browser run used
   `main` from before they landed. The rest is fixed in `b34e180` and `bfd5ecf`, tests first: 27 tests were red
@@ -211,7 +211,7 @@ Also: D-4 was more than a label. `seance-insurance` fell back to `TN3270_PORT` w
 it would have connected to TK4- under the stand-in's name. The test now pins `apps.json` to the JSON in
 `docs/contracts.md`.
 
-### 2026-11-09 â€” four tests after B-1
+### 2026-11-09 — four tests after B-1
 
 - B-1 (a navigating `goto`) made four of my tests fail. The tests were right about what they protected, but they
   used a bug in someone else's code, or the repo's current data, as the way to provoke a failure. They now provoke
@@ -223,3 +223,16 @@ it would have connected to TK4- under the stand-in's name. The test now pins `ap
 - Product decision: an open confirmation is resolved before any other tool runs (already true because the loop
   suspends on the human), plus a `session_busy` guard as defence in depth. I rejected "route away and supersede":
   safe, but the person's modal would vanish because of something the model did.
+
+### 2026-11-09 — 7.3 with a real model
+
+- Ran the `llm` tests and one real conversation (lookup, list, update approved through the controller) with
+  `claude-sonnet-5-5`. Every safety property held: no commit without the person, no `confirm_action`, the expiry
+  was not retried.
+- Surprise (section 7): the real model's own good judgement nearly made the injection test meaningless. It used the
+  narrow `lookup_policy`, which never returns the message line, so the attack never reached it. A model that
+  behaves well can hide an untested defence as easily as a stub can. The test now proves delivery first.
+- Surprise: providers never closed their HTTP client. It only showed up with two real tests in a row
+  (`Event loop is closed`). Now `aclose()` is called from hub shutdown.
+- The key prefix was literally in the repo (in the detector pattern and a fake test key), so the requested
+  grep for the key prefix always had false hits. Both are now built from parts, and the grep returns nothing.
