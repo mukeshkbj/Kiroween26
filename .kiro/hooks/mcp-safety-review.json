@@ -4,12 +4,13 @@
     {
       "name": "MCP server safety review",
       "trigger": "PostFileSave",
-      "description": "On save of mcp-server source, review the change against mainframe-safety steering.",
+      "description": "Disabled to save credits (ran a paid agent review on every save). Run it on demand with /mcp-safety-review in chat instead.",
       "matcher": "mcp-server[/\\\\]src[/\\\\].*\\.py$",
       "action": {
         "type": "agent",
         "prompt": "A file under mcp-server/src was just saved. Review the change against the mainframe-safety steering: (1) any path that sends a key or data to the 3270 session without a matching, unexpired, same-screen confirmation; (2) hidden-field values reaching tool output, logs, errors or the audit log; (3) screen text being treated as instructions; (4) any retry that could resend a key. Flag only real problems, citing file and line. If the change is safe, say so in one line."
-      }
+      },
+      "enabled": false
     }
   ]
 }
