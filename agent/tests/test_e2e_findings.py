@@ -15,7 +15,7 @@ from seance_agent.llm.base import ToolDef, ToolUse
 from seance_agent.llm.scripted import DemoLlm, ScriptedLlm, demo_responder
 from seance_agent.tools import ToolBroker
 
-from ._harness import REPO_ROOT, agent_harness, events, make_loop, run_with_decision
+from ._harness import REPO_ROOT, agent_harness, events, make_loop, park_off_map, run_with_decision
 from ._stream import check_stream, check_summaries, check_user_facing_text
 
 pytestmark = pytest.mark.anyio
@@ -83,19 +83,19 @@ def test_d2_error_envelopes_are_never_summarised_as_ok(envelope: dict[str, Any])
 async def test_d2_a_failing_business_tool_reaches_the_ui_as_failed() -> None:
     cm, h = await _connected()
     try:
-        # The real pack refuses to start update_policy off the main menu (unknown_start).
-        await h.broker.call("lookup_policy", {"policy_number": "P0000003"})
-        h.mapper.take_bus()
+        # Off the map, a business tool must fail closed (unknown_start), independent of goto routing.
+        park_off_map(h)
         loop = make_loop(h, ScriptedLlm([[ToolUse("u1", "update_policy", {"policy_number": "P0000003", "premium": "300"})],
                                          ["Sorry."]]))
+        before = list(h.app.pressed)
         await loop.run_turn("x")
         res = events(h, "tool_result")[0]["data"]
         assert res["status"] == "error" and res["error_code"] == "unknown_start"
-        assert "failed" in res["summary"] and not res["summary"].endswith(" ok")
+        assert res["summary"].startswith("update_policy failed:") and not res["summary"].endswith(" ok")
         check_summaries(events(h))
+        assert h.app.pressed == before and h.service.gate.pending is None  # failed closed: nothing sent
     finally:
         await cm.__aexit__(None, None, None)
-
 
 # ---------------------------------------------------------------- D-3 event order (contracts 4.3)
 

@@ -28,12 +28,12 @@ URL = "/ws/seance"
 
 
 @contextmanager
-def make_client(*, llm=None, env=None, **settings_kw):
+def make_client(*, llm=None, env=None, registry=None, **settings_kw):
     tmp = Path(tempfile.mkdtemp())
     kw = dict(audit_log_path=tmp / "audit.jsonl", allow_commit=True, pending_ttl_s=300.0)
     kw.update(settings_kw)
     settings = Settings(**kw)
-    hub = SeanceHub(settings, AppRegistry.load(), session_id="s_test", env=env if env is not None else {},
+    hub = SeanceHub(settings, registry or AppRegistry.load(), session_id="s_test", env=env if env is not None else {},
                     llm=llm)
     with TestClient(create_app(settings, hub=hub), base_url="http://127.0.0.1:8000") as client:
         client.hub = hub  # type: ignore[attr-defined]
@@ -111,9 +111,26 @@ def test_apps_and_spirit_map_view_match_the_contract() -> None:
         view = c.get("/api/apps/fake-insurance/spirit-map")
         assert view.status_code == 200
         SpiritMapView.model_validate(view.json())
-        assert c.get("/api/apps/seance-insurance/spirit-map").status_code == 404
         assert c.get("/api/apps/..%2F..%2Fetc/spirit-map").status_code == 404
         assert c.get("/api/apps/nope/spirit-map").json() == {"error": "no_map"}
+        # seance-insurance has a map once B promotes A's live exploration; valid either way.
+        live = c.get("/api/apps/seance-insurance/spirit-map")
+        assert live.status_code in (200, 404)
+        if live.status_code == 200:
+            SpiritMapView.model_validate(live.json())
+
+
+def test_a_registered_app_without_a_map_is_404(tmp_path) -> None:
+    """Known app, no spirit-map.json: 404 no_map. Uses its own artefact dir, not repo data."""
+    from seance_agent.apps import AppEntry
+
+    entry = AppEntry(app_id="no-map-app", name="No map", kind="fake", fake="fake_insurance", description="test")
+    registry = AppRegistry(AppRegistry.load().all() + [entry], root=tmp_path)  # tmp root: no artefacts at all
+    with make_client(registry=registry) as c:
+        r = c.get("/api/apps/no-map-app/spirit-map")
+        assert r.status_code == 404 and r.json() == {"error": "no_map"}
+        info = {a["app_id"]: a for a in c.get("/api/apps").json()["apps"]}["no-map-app"]
+        assert info["has_map"] is False and info["tools"] == {"business": 0, "approved": 0}
 
 
 def test_audit_endpoint() -> None:

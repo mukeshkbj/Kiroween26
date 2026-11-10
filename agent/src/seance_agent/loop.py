@@ -238,6 +238,17 @@ class AgentLoop:
             if code and self.on_error_code:
                 self.on_error_code(code)
 
+        # An open confirmation is resolved before anything else runs. The loop already blocks on
+        # the human, so this only fires if some future path interleaves. Any other tool would
+        # navigate away (PF3/CLEAR cancels the review screen) and leave the modal showing an action
+        # the app had already dropped.
+        if self.confirm.pending_action_id is not None:
+            finish("error", "session_busy", "A change is waiting for your decision; decide on it first.", None)
+            return (prompts.agent_notice(use.name, "A change is waiting for the person's decision. "
+                                         "Nothing else runs until it is approved, denied or expires.",
+                                         user="A change is waiting for your decision; decide on it first."),
+                    "error", "session_busy")
+
         # A denied action is final within the turn; an action already proposed is not repeated (REQ-019).
         if key in denied:
             finish("error", "denied_by_user", "You already declined this change, so it was not proposed again.", None)
