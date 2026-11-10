@@ -12,6 +12,7 @@ service's own guard is a second layer. This module never probes a live host:
 from __future__ import annotations
 
 import json
+import logging
 import os
 from collections.abc import Mapping
 from dataclasses import dataclass
@@ -21,7 +22,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from seance_mcp import fake as fake_mod
-from seance_mcp.config import ConfirmMode, Settings as McpSettings
+from seance_mcp.config import TK4_CLOCK_REGIONS, ConfirmMode, Settings as McpSettings, parse_regions
 from seance_mcp.factory import build_service
 from seance_mcp.live import LIVE_REFUSAL, live_allowed
 from seance_mcp.paths import REPO_ROOT
@@ -30,6 +31,7 @@ from seance_mcp.service import SeanceService
 
 from .config import Settings
 
+log = logging.getLogger("seance_agent.apps")
 AGENT_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_APPS_FILE = AGENT_DIR / "apps.json"
 # Documented defaults per port variable (contracts section 8): TK4- 3270, the stand-in 3271.
@@ -172,6 +174,34 @@ class SystemRuntime:
     server: Any
     service: SeanceService
     commit_hints: dict[str, bool]
+    volatile_source: str = "fake"  # live: "pack" | "default" | "default:pack-map-mismatch" | "default:bad-pack-regions"
+
+
+Region = tuple[int, int, int]
+
+
+def pack_volatile_regions(art: Path) -> tuple[tuple[Region, ...] | None, str]:
+    """The volatile regions recommended by the app's tool pack (contracts 10.4), if trustworthy.
+
+    Volatile regions decide which screen a ``screen_id`` names, and the human-approved key
+    policy is keyed by ``screen_id``. A mask that hid too much could make two screens share an
+    id, so one screen's read-only keys would apply to another. The pack's regions are therefore
+    used only when they equal the spans B recorded on the map's own nodes (the ids the policy was
+    approved for were computed with exactly those). Anything else returns ``None``: the caller
+    keeps the default regions, ids do not match the policy, and every commit-capable key needs a
+    person (fail closed). Returns ``(regions_or_None, source)``."""
+    raw = _load(art / "tools.json").get("volatile_regions")
+    if not isinstance(raw, str) or not raw.strip():
+        return None, "default"
+    try:
+        regions = parse_regions(raw)
+    except ValueError:
+        return None, "default:bad-pack-regions"
+    spans = {tuple(int(x) for x in v) for n in _load(art / "spirit-map.json").get("nodes", [])
+             for v in (n.get("volatile") or []) if isinstance(v, list) and len(v) == 3}
+    if set(regions) != spans:
+        return None, "default:pack-map-mismatch"
+    return regions, "pack"
 
 
 def build_runtime(
@@ -195,6 +225,7 @@ def build_runtime(
         tool_approvals_path=settings.tool_approvals_path or (approvals if approvals.is_file() else None),
     )
     port: Any = None
+    volatile_source = "fake"
     if entry.kind == "fake":
         factory = getattr(fake_mod, entry.fake or "", None)
         if factory is None:
@@ -212,7 +243,15 @@ def build_runtime(
         ) or DEFAULT_PORTS.get(entry.port_env or "")
         if not host or not tport:
             raise GateError("unknown_app", f"{entry.app_id}: set {entry.host_env} and {entry.port_env}")
-        mcp = mcp.model_copy(update={"host": host, "port": int(tport)})
+        regions, volatile_source = pack_volatile_regions(art)
+        update: dict[str, Any] = {"host": host, "port": int(tport)}
+        # Per-app masks (A's request-d-seance-insurance-wiring): seance-insurance needs the
+        # demo spans of contracts 10.4; tk4-builtins has no pack and keeps the TK4- clock mask.
+        update["volatile_regions"] = regions if regions is not None else TK4_CLOCK_REGIONS
+        if volatile_source.startswith("default:"):
+            log.warning("%s: pack volatile regions not used (%s); every commit needs confirmation",
+                        entry.app_id, volatile_source)
+        mcp = mcp.model_copy(update=update)
     else:
         raise GateError("unknown_app", f"{entry.app_id}: unsupported kind {entry.kind!r}")
     server, service = build_service(mcp, port, audit_path=audit_path)
@@ -222,7 +261,7 @@ def build_runtime(
             hints[t["name"]] = t.get("kind") == "commit"
     except (OSError, ValueError, KeyError):
         pass
-    return SystemRuntime(entry.app_id, server, service, hints)
+    return SystemRuntime(entry.app_id, server, service, hints, volatile_source)
 
 
 __all__ = ["AppEntry", "AppRegistry", "SystemRuntime", "build_runtime", "live_allowed"]
