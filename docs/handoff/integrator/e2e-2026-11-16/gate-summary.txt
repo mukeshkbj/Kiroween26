@@ -1,0 +1,10 @@
+=== gate summary (integration 2026-11-16, after merging D 43d6abd and A 786f7b2) ===
+ownership        skip  branch 'integration' is not an agent branch (check-ownership run per branch: D ok 19 files, A ok 4 files)
+contracts        pass  fresh + valid
+bridge           pass  fixed seed 20261124: exit 0; random seed: exit 0
+mcp-server       pass  159 passed, 2 skipped, x2
+spirit-map       pass  143 passed, 1 deselected, x2
+agent            pass  130 passed, 1 skipped, 3 deselected, x2
+legacy           pass  24 passed
+web              FAIL in the full run: tsc exit 0, vitest exit 1: 30 "Timeout waiting for worker to respond" at worker start (machine under load, Python suites just finished, many Chrome processes). No test assertion failed.
+web (rerun alone, -Only web)  pass  tsc exit 0; vitest 30 files, 422 tests
