@@ -46,6 +46,7 @@ def check_stream(events: list[dict[str, Any]]) -> None:
     pending: dict[str, int] = {}    # action_id -> resolutions so far
     finished_turns: set[str] = set()
     message_turn: dict[str, str | None] = {}  # message_id -> the turn it belongs to
+    call_screens: dict[str, list[str]] = {}   # tool_call_id -> screen phases so far
     for e in events:
         if e["seq"] != last_seq + 1:
             raise ContractError(f"seq gap or repeat: {last_seq} -> {e['seq']}")
@@ -88,9 +89,40 @@ def check_stream(events: list[dict[str, Any]]) -> None:
                 raise ContractError(f"message_id {d['message_id']} reused in turn {turn} (first in {owner}; contracts 4.2)")
         if t in ("tool_call", "tool_result", "thinking", "assistant_delta", "assistant_message") and turn is None:
             raise ContractError(f"{t} outside a turn")
+        _check_call_screens(e, calls, call_screens)
     if open_turn is not None:
         raise ContractError(f"turn {open_turn} never finished")
 
+
+def _check_call_screens(e: dict[str, Any], calls: dict[str, int], call_screens: dict[str, list[str]]) -> None:
+    """Contracts 4.3 screen/focus rules (agent D's stricter copy, findings D-3):
+    * a call's ``screen``/``field_focus`` events arrive between its ``tool_call`` and its ``tool_result``;
+    * its first ``screen`` event is ``phase: before``, and there is exactly one ``before``;
+    * ``snapshot`` screens never carry a tool call; ``after``/``before`` always do;
+    * ``field_focus.screen_id`` names a real screen (never empty).
+    """
+    t, d = e["type"], e["data"]
+    if t not in ("screen", "field_focus"):
+        return
+    cid = d.get("tool_call_id")
+    if cid is None:
+        if t == "screen" and d["phase"] != "snapshot":
+            raise ContractError(f"seq {e['seq']}: screen{{{d['phase']}}} without a tool_call_id")
+        return
+    if calls.get(cid) != 0:
+        raise ContractError(f"seq {e['seq']}: {t} for {cid} outside its tool_call..tool_result")
+    if t == "field_focus":
+        if not d["screen_id"]:
+            raise ContractError(f"seq {e['seq']}: field_focus for {cid} has an empty screen_id")
+        return
+    phases = call_screens.setdefault(cid, [])
+    if not phases and d["phase"] != "before":
+        raise ContractError(f"seq {e['seq']}: first screen of {cid} is {d['phase']!r}, not 'before'")
+    if phases and d["phase"] == "before":
+        raise ContractError(f"seq {e['seq']}: second screen{{before}} for {cid}")
+    if d["phase"] == "snapshot":
+        raise ContractError(f"seq {e['seq']}: snapshot inside tool call {cid}")
+    phases.append(d["phase"])
 
 def _no_hidden_values(obj: Any, where: str) -> None:
     """A screen field flagged hidden must carry value null."""

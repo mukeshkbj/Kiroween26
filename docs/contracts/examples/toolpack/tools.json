@@ -7,6 +7,57 @@
   },
   "home": "n_ba02cc6364",
   "map_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "navigation": {
+    "edges": [
+      {
+        "from": "n_419888f22d",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_419888f22d",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_483e5fe116",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_96fa848aaa",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "CLEAR",
+        "to": "n_ba02cc6364"
+      },
+      {
+        "from": "n_c5d11dedae",
+        "key": "PF3",
+        "to": "n_ba02cc6364"
+      }
+    ],
+    "nodes": [
+      "n_419888f22d",
+      "n_483e5fe116",
+      "n_96fa848aaa",
+      "n_ba02cc6364",
+      "n_c5d11dedae"
+    ]
+  },
   "schema": "gss.toolpack/1",
   "tools": [
     {

@@ -71,6 +71,61 @@ def test_check_stream_rejects_broken_streams():
         check_stream(twice)
 
 
+def test_check_stream_enforces_the_screen_and_focus_rules():
+    """Contracts 4.3, rules taken over from agent D (findings D-3)."""
+    ev = [x["event"] for x in events_of("lookup") if x["dir"] == "server"]
+    in_call = [e for e in ev if e["type"] == "screen" and e["data"].get("tool_call_id")]
+    assert in_call and in_call[0]["data"]["phase"] == "before"
+    # the first screen of a call must be 'before'
+    first = copy.deepcopy(ev)
+    next(e for e in first if e["type"] == "screen" and e["data"].get("tool_call_id"))["data"]["phase"] = "after"
+    with pytest.raises(ContractError, match="not 'before'"):
+        check_stream(first)
+    # a second 'before' for the same call
+    second = copy.deepcopy(ev)
+    i = second.index(next(e for e in second if e["type"] == "screen" and e["data"].get("tool_call_id")))
+    second.insert(i + 1, copy.deepcopy(second[i]))
+    with pytest.raises(ContractError, match="second screen"):
+        check_stream(_renumber(second))
+    # a screen event of a call arriving after its tool_result
+    late = copy.deepcopy(ev)
+    res = next(e for e in late if e["type"] == "tool_result")
+    stray = copy.deepcopy(in_call[0])
+    late.insert(late.index(res) + 1, stray)
+    stray["data"]["tool_call_id"] = res["data"]["tool_call_id"]
+    with pytest.raises(ContractError, match="outside its tool_call"):
+        check_stream(_renumber(late))
+    # an in-call screen without a tool_call_id
+    orphan = copy.deepcopy(ev)
+    next(e for e in orphan if e["type"] == "screen" and e["data"].get("tool_call_id"))["data"]["tool_call_id"] = None
+    with pytest.raises(ContractError, match="without a tool_call_id"):
+        check_stream(orphan)
+    # field_focus must name a screen
+    focus = copy.deepcopy(ev)
+    ff = next((e for e in focus if e["type"] == "field_focus"), None)
+    if ff is not None:
+        ff["data"]["screen_id"] = ""
+        with pytest.raises(ContractError, match="empty screen_id"):
+            check_stream(focus)
+
+
+def test_toolpack_navigation_is_optional_and_checked():
+    from jsonschema import Draft202012Validator
+    schema = json.loads((generate.CONTRACTS / "schemas" / "toolpack.schema.json").read_text(encoding="utf-8"))
+    pack = json.loads((EXAMPLES / "toolpack" / "tools.json").read_text(encoding="utf-8"))
+    nav = pack["navigation"]
+    assert nav["edges"] and set(nav["nodes"]) >= {e["from"] for e in nav["edges"]} | {e["to"] for e in nav["edges"]}
+    Draft202012Validator(schema).validate(pack)
+    without = {k: v for k, v in pack.items() if k != "navigation"}
+    Draft202012Validator(schema).validate(without)
+    bad = copy.deepcopy(pack)
+    del bad["navigation"]["edges"][0]["key"]
+    with pytest.raises(Exception, match="key"):
+        Draft202012Validator(schema).validate(bad)
+    # navigation never changes a tool hash
+    assert [t["def_hash"] for t in pack["tools"]] == [t["def_hash"] for t in without["tools"]]
+
+
 def test_hidden_field_with_a_value_is_rejected():
     _no_hidden_values({"fields": [{"hidden": True, "value": None}]}, "x")
     with pytest.raises(ContractError):
@@ -265,7 +320,7 @@ def test_check_stream_rejects_ids_reused_within_a_session():
     # only a message_id reused in another turn
     again3 = copy.deepcopy(again2)
     for e in again3:
-        if e["type"] in ("tool_call", "tool_result"):
+        if e["data"].get("tool_call_id"):
             e["data"]["tool_call_id"] = e["data"]["tool_call_id"] + "_b"
         if "message_id" in e["data"]:
             e["data"]["message_id"] = e["data"]["message_id"][:-2]

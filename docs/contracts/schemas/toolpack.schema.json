@@ -152,6 +152,53 @@
       "title": "Limits",
       "type": "object"
     },
+    "NavEdge": {
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "key",
+        "to"
+      ],
+      "title": "NavEdge",
+      "type": "object"
+    },
+    "Navigation": {
+      "properties": {
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/NavEdge"
+          },
+          "title": "Edges",
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Nodes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "nodes",
+        "edges"
+      ],
+      "title": "Navigation",
+      "type": "object"
+    },
     "Press": {
       "properties": {
         "expect": {
@@ -388,6 +435,17 @@
     "map_hash": {
       "title": "Map Hash",
       "type": "string"
+    },
+    "navigation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Navigation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "schema": {
       "const": "gss.toolpack/1",

@@ -430,6 +430,19 @@ class Tool(_M):
     def_hash: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
 
 
+class NavEdge(_M):
+    from_: str = Field(alias="from")
+    key: str
+    to: str
+
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
+
+
+class Navigation(_M):
+    nodes: list[str]
+    edges: list[NavEdge]
+
+
 class ToolPack(_M):
     schema_: Literal["gss.toolpack/1"] = Field(alias="schema")
     app_id: str
@@ -438,6 +451,7 @@ class ToolPack(_M):
     generator: dict[str, str]
     home: str
     volatile_regions: str | None = None
+    navigation: Navigation | None = None
     tools: list[Tool]
 
     model_config = ConfigDict(extra="ignore", populate_by_name=True)

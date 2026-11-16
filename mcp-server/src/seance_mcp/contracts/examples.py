@@ -105,8 +105,17 @@ def toolpack(app: FakeApp | None = None) -> dict[str, Any]:
         "generated_at": GENERATED_AT, "generator": {"name": "seance_spirit", "version": "0.1.0"},
         "home": _ids(app)["menu"],
         "volatile_regions": ";".join(f"{r},{c},{n}" for r, c, n in DEMO_VOLATILE_REGIONS),
+        "navigation": _navigation(app),
         "tools": tools(app),
     }
+
+
+def _navigation(app: FakeApp) -> dict[str, Any]:
+    """Read-only, fill-free routes back to the menu (contracts 6): keys the golden policy lets through."""
+    n = _ids(app)
+    others = sorted(v for k, v in n.items() if k != "menu")
+    return {"nodes": sorted(n.values()),
+            "edges": [{"from": o, "key": k, "to": n["menu"]} for o in others for k in ("CLEAR", "PF3")]}
 
 
 def approvals(app: FakeApp | None = None) -> dict[str, Any]:
