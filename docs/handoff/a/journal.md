@@ -363,3 +363,18 @@ apostrophe fell in column 72 -> IEF629I; shortened the PARM.)
   requests for A. B's second run is answered; C has no live request; D's live
   e2e is answered, with its seance-insurance re-run waiting on D's wiring fix
   (request-d-seance-insurance-wiring.md).
+
+## 2026-11-10 D's seance-insurance e2e: pre-merge preview PASS (real run waits for d-5)
+
+- D's request asks for the run after d-5 is merged into integration. It isn't
+  yet (`integration` = `f49121d`). So I ran a preview on a local throwaway
+  merge, integration + D `43d6abd`. It merged cleanly; D's suite there gave 130
+  passed.
+- Live: D's test 3/3 PASS. The lookup of P0000003 returned A. ROSE / ACTIVE /
+  250.00 from COBOL (job 270). Business tools 3, menu `ba02cc6364` = fake (was
+  `cf68541fac`), no "regions not used" warning, no confirmation, no update job.
+  The wiring gap I reported on 2026-11-06 is closed by D's fix.
+- Surprise: the stand-in had quietly died with the previous IDE session, and
+  the pre-flight caught it (port 3271 had no listener). Now that the live work
+  is regular, a stand-in that stays up (e.g. a compose service) is worth doing.
+- Re-run on integration after the d-5 merge.

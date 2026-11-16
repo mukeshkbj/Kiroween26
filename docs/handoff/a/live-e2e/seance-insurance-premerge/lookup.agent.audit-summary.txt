@@ -1,0 +1,9 @@
+   1 11:19:49 toolpack    loaded          key=-      field=-   screen=-
+   2 11:19:50 connect     ok              key=-      field=-   screen=ba02cc6364
+   3 11:19:50 read_screen ok              key=-      field=-   screen=ba02cc6364
+   4 11:19:51 fill_field  ok              key=-      field=1   screen=ba02cc6364
+   5 11:19:52 press_key   ok              key=Enter  field=-   screen=ba02cc6364
+   6 11:19:52 fill_field  ok              key=-      field=1   screen=419888f22d
+   7 11:19:57 press_key   ok              key=Enter  field=-   screen=419888f22d
+   8 11:19:57 disconnect  ok              key=-      field=-   screen=-
+# 8 entries; outcomes={'loaded': 1, 'ok': 7}; keys={'Enter': 2}; hash chain linked: True
