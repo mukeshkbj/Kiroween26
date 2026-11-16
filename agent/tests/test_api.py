@@ -240,7 +240,19 @@ def test_read_only_server_shows_blocked_not_silent() -> None:
         assert not c.hub.live.rt.service.port.dirty
 
 
-def test_live_app_refused_without_permission() -> None:
+def _marker_root(monkeypatch, root) -> None:
+    """Make the live permission depend on ``root`` instead of this checkout. A's worktree has the
+    real ``.gss-live-ok`` marker, which used to make this test fail there (A's request, item 3)."""
+    import functools
+
+    import seance_agent.apps as apps_mod
+    from seance_mcp.live import live_allowed as real_live_allowed
+
+    monkeypatch.setattr(apps_mod, "live_allowed", functools.partial(real_live_allowed, root=root))
+
+
+def test_live_app_refused_without_permission(monkeypatch, tmp_path) -> None:
+    _marker_root(monkeypatch, tmp_path)  # no marker, and make_client passes an empty env: no permission
     with make_client() as c, open_ws(c) as s:
         s.until("session_state")
         s.send(id="c1", type="connect_system", app_id="tk4-builtins")
@@ -248,6 +260,22 @@ def test_live_app_refused_without_permission() -> None:
         assert c.hub.live is None and c.hub.state == "disconnected"
         s.send(id="c2", type="connect_system", app_id="nope")
         assert s.until("error", lambda e: e["data"]["ref"] == "c2")["data"]["code"] == "unknown_app"
+
+
+def test_the_marker_is_what_grants_live_permission(monkeypatch, tmp_path) -> None:
+    """The other half of the rule, without connecting anywhere: a marker in the root (and no
+    GSS_LIVE_OK) passes the permission check, so the refusal above is about permission."""
+    from seance_agent.apps import build_runtime
+
+    _marker_root(monkeypatch, tmp_path)
+    reg = AppRegistry.load()
+    env = {"TN3270_HOST": "127.0.0.1", "TN3270_PORT": "3270"}
+    with pytest.raises(Exception) as refused:
+        build_runtime(reg.get("tk4-builtins"), reg, Settings(), env=env, audit_path=tmp_path / "a.jsonl")
+    assert getattr(refused.value, "code", None) == "live_not_allowed"
+    (tmp_path / ".gss-live-ok").write_text("", encoding="utf-8")
+    rt = build_runtime(reg.get("tk4-builtins"), reg, Settings(), env=env, audit_path=tmp_path / "b.jsonl")
+    assert rt.service.port.connected is False  # built, never connected
 
 
 def test_llm_unavailable_is_an_event_not_a_crash() -> None:
